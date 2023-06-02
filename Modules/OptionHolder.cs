@@ -741,6 +741,7 @@ public static class Options
             .SetValueFormat(OptionFormat.Seconds);
         ImperiusCurseShapeshiftCooldown = FloatOptionItem.Create(902435, "ShapeshiftCooldown", new(1f, 999f, 1f), 15f, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.ImperiusCurse])
             .SetValueFormat(OptionFormat.Seconds);
+        ImperiusCurse.SetupCustomOption();
         QuickShooter.SetupCustomOption();
         Hangman.SetupCustomOption();
         SetupRoleOptions(180000, TabGroup.ImpostorRoles, CustomRoles.ImpostorTOHE);
@@ -890,6 +891,7 @@ public static class Options
     //        .SetColor(Color.green);
         Juggernaut.SetupCustomOption();
         Infectious.SetupCustomOption();
+        Virus.SetupCustomOption();
 
         // Add-Ons
         AddBracketsToAddons = BooleanOptionItem.Create(6050512, "BracketAddons", false, TabGroup.Addons, false)

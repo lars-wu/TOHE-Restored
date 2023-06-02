@@ -83,6 +83,8 @@ enum CustomRPC
     SyncTotocalcioTargetAndTimes,
     SetSuccubusCharmLimit,
     SetInfectiousBiteLimit,
+    SetVirusInfectLimit,
+    SetJackalRecruitLimit,
 
     //SoloKombat
     SyncKBPlayer,
@@ -348,6 +350,9 @@ internal class RPCHandlerPatch
             case CustomRPC.SetGangsterRecruitLimit:
                 Gangster.ReceiveRPC(reader);
                 break;
+            case CustomRPC.SetJackalRecruitLimit:
+                Jackal.ReceiveRPC(reader);
+                break;
             case CustomRPC.PlayCustomSound:
                 CustomSoundsManager.ReceiveRPC(reader);
                 break;
@@ -446,6 +451,9 @@ internal class RPCHandlerPatch
                 break;
             case CustomRPC.SetInfectiousBiteLimit:
                 Infectious.ReceiveRPC(reader);
+                break;
+            case CustomRPC.SetVirusInfectLimit:
+                Virus.ReceiveRPC(reader);
                 break;
         }
     }
@@ -768,6 +776,9 @@ internal static class RPC
                 break;
             case CustomRoles.Infectious:
                 Infectious.Add(targetId);
+                break;
+            case CustomRoles.Virus:
+                Virus.Add(targetId);
                 break;
         }
         HudManager.Instance.SetHudActive(true);

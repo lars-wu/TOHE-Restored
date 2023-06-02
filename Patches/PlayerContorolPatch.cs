@@ -288,6 +288,13 @@ class CheckMurderPatch
                 case CustomRoles.Infectious:
                     Infectious.OnCheckMurder(killer, target);
                     return false;
+                case CustomRoles.Virus:
+                    Virus.OnCheckMurder(killer, target);
+                    break;
+                case CustomRoles.Jackal:
+                    if (Jackal.OnCheckMurder(killer, target))
+                        return false;
+                    break;
 
                 //==========船员职业==========//
                 case CustomRoles.Sheriff:
@@ -811,18 +818,7 @@ class ShapeshiftPatch
                 Assassin.OnShapeshift(shapeshifter, shapeshifting);
                 break;
             case CustomRoles.ImperiusCurse:
-                if (shapeshifting)
-                {
-                    new LateTask(() =>
-                    {
-                        if (!(!GameStates.IsInTask || !shapeshifter.IsAlive() || !target.IsAlive() || shapeshifter.inVent || target.inVent))
-                        {
-                            var originPs = target.GetTruePosition();
-                            Utils.TP(target.NetTransform, shapeshifter.GetTruePosition());
-                            Utils.TP(shapeshifter.NetTransform, originPs);
-                        }
-                    }, 1.5f, "ImperiusCurse TP");
-                }
+                ImperiusCurse.OnShapeshift(shapeshifter, target, shapeshifting);
                 break;
             case CustomRoles.QuickShooter:
                 QuickShooter.OnShapeshift(shapeshifter, shapeshifting);
@@ -1003,6 +999,11 @@ class ReportDeadBodyPatch
                     Main.DetectiveNotify.Add(player.PlayerId, msg);
                 }
             }
+        }
+
+        if (Main.InfectedBodies.Contains(target.PlayerId))
+        {
+            Virus.OnKilledBodyReport(player);
         }
 
         Main.ArsonistTimer.Clear();
@@ -1530,6 +1531,7 @@ class FixedUpdatePatch
                 else if (Totocalcio.KnowRole(PlayerControl.LocalPlayer, __instance)) RoleText.enabled = true;
                 else if (Succubus.KnowRole(PlayerControl.LocalPlayer, __instance)) RoleText.enabled = true;
                 else if (Infectious.KnowRole(PlayerControl.LocalPlayer, __instance)) RoleText.enabled = true;
+                else if (Virus.KnowRole(PlayerControl.LocalPlayer, __instance)) RoleText.enabled = true;
                 else if (PlayerControl.LocalPlayer.Is(CustomRoles.God)) RoleText.enabled = true;
                 else if (PlayerControl.LocalPlayer.Is(CustomRoles.GM)) RoleText.enabled = true;
                 else if (Totocalcio.KnowRole(PlayerControl.LocalPlayer, __instance)) RoleText.enabled = true;

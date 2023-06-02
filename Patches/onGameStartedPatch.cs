@@ -59,6 +59,8 @@ internal class ChangeRoleSettings
             Main.BoobyTrapBody = new();
             Main.KillerOfBoobyTrapBody = new();
             Main.CleanerBodies = new();
+            Main.InfectedBodies = new();
+            Main.VirusNotify = new();
 
             Main.LastEnteredVent = new();
             Main.LastEnteredVentLocation = new();
@@ -210,6 +212,7 @@ internal class ChangeRoleSettings
             Totocalcio.Init();
             Succubus.Init();
             Infectious.Init();
+            Virus.Init();
 
             SoloKombatManager.Init();
             CustomWinnerHolder.Reset();
@@ -552,6 +555,9 @@ internal class SelectRolesPatch
                         break;
                     case CustomRoles.Infectious:
                         Infectious.Add(pc.PlayerId);
+                        break;
+                    case CustomRoles.Virus:
+                        Virus.Add(pc.PlayerId);
                         break;
                     case CustomRoles.Wildling:
                         Wildling.Add(pc.PlayerId);
