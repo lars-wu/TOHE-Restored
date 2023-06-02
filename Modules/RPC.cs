@@ -82,6 +82,9 @@ enum CustomRPC
     SetBKTimer,
     SyncTotocalcioTargetAndTimes,
     SetSuccubusCharmLimit,
+    SetInfectiousBiteLimit,
+    SetVirusInfectLimit,
+    SetJackalRecruitLimit,
 
     //SoloKombat
     SyncKBPlayer,
@@ -347,6 +350,9 @@ internal class RPCHandlerPatch
             case CustomRPC.SetGangsterRecruitLimit:
                 Gangster.ReceiveRPC(reader);
                 break;
+            case CustomRPC.SetJackalRecruitLimit:
+                Jackal.ReceiveRPC(reader);
+                break;
             case CustomRPC.PlayCustomSound:
                 CustomSoundsManager.ReceiveRPC(reader);
                 break;
@@ -385,9 +391,6 @@ internal class RPCHandlerPatch
                 break;
             case CustomRPC.SetMarkedPlayer:
                 Assassin.ReceiveRPC(reader);
-                break;
-            case CustomRPC.SetConcealerTimer:
-                Concealer.ReceiveRPC(reader);
                 break;
             case CustomRPC.SetMedicalerProtectList:
                 Medicaler.ReceiveRPCForProtectList(reader);
@@ -445,6 +448,12 @@ internal class RPCHandlerPatch
                 break;
             case CustomRPC.SetSuccubusCharmLimit:
                 Succubus.ReceiveRPC(reader);
+                break;
+            case CustomRPC.SetInfectiousBiteLimit:
+                Infectious.ReceiveRPC(reader);
+                break;
+            case CustomRPC.SetVirusInfectLimit:
+                Virus.ReceiveRPC(reader);
                 break;
         }
     }
@@ -717,9 +726,6 @@ internal static class RPC
             case CustomRoles.CursedWolf:
                 Main.CursedWolfSpellCount[targetId] = Options.GuardSpellTimes.GetInt();
                 break;
-            case CustomRoles.Concealer:
-                Concealer.Add(targetId);
-                break;
             case CustomRoles.Eraser:
                 Eraser.Add(targetId);
                 break;
@@ -767,6 +773,12 @@ internal static class RPC
                 break;
             case CustomRoles.Succubus:
                 Succubus.Add(targetId);
+                break;
+            case CustomRoles.Infectious:
+                Infectious.Add(targetId);
+                break;
+            case CustomRoles.Virus:
+                Virus.Add(targetId);
                 break;
         }
         HudManager.Instance.SetHudActive(true);

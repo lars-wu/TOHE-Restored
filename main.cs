@@ -104,6 +104,7 @@ public class Main : BasePlugin
     public static List<byte> BoobyTrapBody = new();
     public static Dictionary<byte, byte> KillerOfBoobyTrapBody = new();
     public static Dictionary<byte, string> DetectiveNotify = new();
+    public static Dictionary<byte, string> VirusNotify = new();
     public static List<byte> OverDeadPlayerList = new();
     public static bool DoBlockNameChange = false;
     public static int updateTime;
@@ -113,6 +114,7 @@ public class Main : BasePlugin
     public static Dictionary<byte, float> AllPlayerSpeed = new();
     public const float MinSpeed = 0.0001f;
     public static List<byte> CleanerBodies = new();
+    public static List<byte> InfectedBodies = new();
     public static List<byte> BrakarVoteFor = new();
     public static Dictionary<byte, (byte, float)> BitPlayers = new();
     public static Dictionary<byte, float> WarlockTimer = new();
@@ -275,7 +277,7 @@ public class Main : BasePlugin
                 {CustomRoles.Needy, "#a4dffe"},
                 {CustomRoles.SabotageMaster, "#3333ff"},
                 {CustomRoles.Snitch, "#b8fb4f"},
-                {CustomRoles.Marshall, "#1E90FF"},
+                {CustomRoles.Marshall, "#5573aa"},
                 {CustomRoles.Mayor, "#204d42"},
                 {CustomRoles.Paranoia, "#c993f5"},
                 {CustomRoles.Psychic, "#6F698C"},
@@ -332,6 +334,10 @@ public class Main : BasePlugin
                 {CustomRoles.NSerialKiller, "#233fcc"},
                 {CustomRoles.BloodKnight, "#630000"},
                 {CustomRoles.Juggernaut, "#A41342"},
+                {CustomRoles.Parasite, "#ff1919"},
+                {CustomRoles.Crewpostor, "#ff1919"},
+                {CustomRoles.Infectious, "#7B8968"},
+                {CustomRoles.Virus, "#D2B48C"},
                 // GM
                 {CustomRoles.GM, "#ff5b70"},
                 //サブ役職
@@ -349,18 +355,21 @@ public class Main : BasePlugin
                 {CustomRoles.Bewilder, "#c894f5"},
                 {CustomRoles.Workhorse, "#00ffff"},
                 {CustomRoles.Fool, "#e6e7ff"},
-                {CustomRoles.Avanger, "#ffab1b"},
+                {CustomRoles.Avanger, "#ffab1c"},
                 {CustomRoles.Youtuber, "#fb749b"},
                 {CustomRoles.Egoist, "#5600ff"},
                 {CustomRoles.TicketsStealer, "#ff1919"},
                 {CustomRoles.DualPersonality, "#3a648f"},
                 {CustomRoles.Mimic, "#ff1919"},
-                {CustomRoles.Guesser, "#FFFF00"},
+                {CustomRoles.Guesser, "#ffb347"},
                 {CustomRoles.Necroview, "#663399"},
                 {CustomRoles.Reach, "#74ba43"},
                 {CustomRoles.Charmed, "#cf6acd"},
                 {CustomRoles.Bait, "#00f7ff"},
                 {CustomRoles.Trapper, "#5a8fd0"},
+                {CustomRoles.Infected, "#7B8968"},
+                {CustomRoles.Onbound, "#BAAAE9"},
+                {CustomRoles.Contagious, "#D2B48C"},
                 //SoloKombat
                 {CustomRoles.KB_Normal, "#f55252"}
             };
@@ -416,6 +425,7 @@ public enum CustomRoles
     ScientistTOHE,
     GuardianAngelTOHE,
     ShapeshifterTOHE,
+    ImpostorTOHE,
     //Impostor
     BountyHunter,
     FireWorks,
@@ -452,7 +462,6 @@ public enum CustomRoles
     CursedWolf,
     ImperiusCurse,
     QuickShooter,
-    Concealer,
     Eraser,
     OverKiller,
     Hangman,
@@ -460,6 +469,8 @@ public enum CustomRoles
     Trickster,
     Swooper,
     Crewpostor,
+    Disperser,
+    Camouflager,
     //Crewmate(Vanilla)
     Engineer,
     GuardianAngel,
@@ -513,6 +524,8 @@ public enum CustomRoles
     Revolutionist,
     NSerialKiller,
     Juggernaut,
+    Parasite,
+    Infectious,
     FFF,
     Konan,
     Gamer,
@@ -525,6 +538,7 @@ public enum CustomRoles
     Wraith,
     Totocalcio,
     Succubus,
+    Virus,
 
     //SoloKombat
     KB_Normal,
@@ -560,6 +574,9 @@ public enum CustomRoles
     Charmed,
     Bait,
     Trapper,
+    Infected,
+    Contagious,
+    Onbound
 }
 //WinData
 public enum CustomWinner
@@ -597,6 +614,8 @@ public enum CustomWinner
     SerialKiller = CustomRoles.NSerialKiller,
     Witch = CustomRoles.NWitch,
     Juggernaut = CustomRoles.Juggernaut,
+    Infectious = CustomRoles.Infectious,
+    Virus = CustomRoles.Virus
 }
 public enum AdditionalWinners
 {

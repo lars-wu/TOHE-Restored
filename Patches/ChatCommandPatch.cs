@@ -525,6 +525,7 @@ internal class ChatCommands
             "船鬼" => GetString("Crewpostor"),
             "嗜血騎士" or "血骑" or "骑士" or "bk" => GetString("BloodKnight"),
             "賭徒" => GetString("Totocalcio"),
+            "分散机" => GetString("Disperser"),
             "持槍" or "持械" or "手长" => GetString("Reach"),
             _ => text,
         };
@@ -581,20 +582,23 @@ internal class ChatCommands
             return;
         }
 
-        string[] param = role.Split(' ');
-        if (param.Length == 2)
+        if (isUp)
         {
-            if (!int.TryParse(param[0], out int assignPlayer))
+            string[] param = role.Split(' ');
+            if (param.Length == 2 || param.Length == 3)
             {
-                return;
-            }
+                if (!int.TryParse(param[0], out int assignPlayer))
+                {
+                    return;
+                }
 
-            playerId = (byte)assignPlayer;
-            role = param[1];
-        }
-        else
-        {
-            role = param[0];
+                playerId = (byte)assignPlayer;
+                role = param[1] + (param.Length == 3 ? " " + param[2] : string.Empty);
+            }
+            else
+            {
+                role = param[0];
+            }
         }
 
         role = FixRoleNameInput(role).ToLower().Trim().Replace(" ", string.Empty);
