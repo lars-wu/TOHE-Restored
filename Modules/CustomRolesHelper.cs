@@ -42,6 +42,7 @@ internal static class CustomRolesHelper
                 CustomRoles.SpeedBooster => CustomRoles.Crewmate,
                 CustomRoles.Dictator => CustomRoles.Crewmate,
                 CustomRoles.Mare => CustomRoles.Impostor,
+                CustomRoles.Inhibitor => CustomRoles.Impostor,
                 CustomRoles.Doctor => CustomRoles.Scientist,
                 CustomRoles.ScientistTOHE => CustomRoles.Scientist,
                 CustomRoles.Puppeteer => CustomRoles.Impostor,
@@ -105,6 +106,7 @@ internal static class CustomRolesHelper
                 CustomRoles.Virus => CustomRoles.Virus,
                 CustomRoles.Disperser => CustomRoles.Shapeshifter,
                 CustomRoles.Camouflager => CustomRoles.Shapeshifter,
+                CustomRoles.Monarch => CustomRoles.Impostor,
                 _ => role.IsImpostor() ? CustomRoles.Impostor : CustomRoles.Crewmate,
             };
     }
@@ -116,6 +118,7 @@ internal static class CustomRolesHelper
             CustomRoles.KB_Normal => RoleTypes.Impostor,
             //Standard
             CustomRoles.Sheriff => RoleTypes.Impostor,
+            CustomRoles.Monarch => RoleTypes.Impostor,
             CustomRoles.Arsonist => RoleTypes.Impostor,
             CustomRoles.Jackal => RoleTypes.Impostor,
        //     CustomRoles.Sidekick => RoleTypes.Impostor,
@@ -162,6 +165,7 @@ internal static class CustomRolesHelper
             CustomRoles.Oblivious or
             CustomRoles.Guesser or
             CustomRoles.Bewilder or
+            CustomRoles.Knighted or
             CustomRoles.Workhorse or
             CustomRoles.Fool or
             CustomRoles.Necroview or
@@ -278,6 +282,7 @@ internal static class CustomRolesHelper
             CustomRoles.Escapee or
             CustomRoles.SerialKiller or
             CustomRoles.Mare or
+            CustomRoles.Inhibitor or
             CustomRoles.Puppeteer or
             CustomRoles.TimeThief or
             CustomRoles.Trickster or
@@ -348,6 +353,15 @@ internal static class CustomRolesHelper
             CustomRoles.Totocalcio or
             CustomRoles.Virus or
             CustomRoles.Succubus;
+    }
+    public static bool IsNotKnightable(this CustomRoles role)
+    {
+        return role is
+            CustomRoles.Mayor or
+            CustomRoles.Vindicator or
+            CustomRoles.Dictator or
+            CustomRoles.Knighted or
+            CustomRoles.TicketsStealer;
     }
     public static bool CheckAddonConfilct(CustomRoles role, PlayerControl pc)
     {

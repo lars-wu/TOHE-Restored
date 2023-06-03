@@ -303,6 +303,7 @@ public class Main : BasePlugin
                 {CustomRoles.Mortician, "#333c49"},
                 {CustomRoles.Mediumshiper, "#a200ff"},
                 {CustomRoles.Observer, "#a8e0fa"},
+                {CustomRoles.Monarch, "#FFA500"},
                 //第三陣営役職
                 {CustomRoles.Arsonist, "#ff6633"},
                 {CustomRoles.Jester, "#ec62a5"},
@@ -369,6 +370,7 @@ public class Main : BasePlugin
                 {CustomRoles.Trapper, "#5a8fd0"},
                 {CustomRoles.Infected, "#7B8968"},
                 {CustomRoles.Onbound, "#BAAAE9"},
+                {CustomRoles.Knighted, "#FFA500"},
                 {CustomRoles.Contagious, "#D2B48C"},
                 //SoloKombat
                 {CustomRoles.KB_Normal, "#f55252"}
@@ -446,6 +448,7 @@ public enum CustomRoles
     Miner,
     Escapee,
     Mare,
+    Inhibitor,
     Puppeteer,
     TimeThief,
     EvilTracker,
@@ -506,6 +509,7 @@ public enum CustomRoles
     Mortician,
     Mediumshiper,
     Observer,
+    Monarch,
     //Neutral
     Arsonist,
     HexMaster,
@@ -575,8 +579,9 @@ public enum CustomRoles
     Bait,
     Trapper,
     Infected,
-    Contagious,
-    Onbound
+    Onbound,
+    Knighted,
+    Contagious
 }
 //WinData
 public enum CustomWinner

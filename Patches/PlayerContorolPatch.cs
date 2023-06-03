@@ -288,6 +288,9 @@ class CheckMurderPatch
                 case CustomRoles.Infectious:
                     Infectious.OnCheckMurder(killer, target);
                     return false;
+                case CustomRoles.Monarch:
+                    Monarch.OnCheckMurder(killer, target);
+                    return false;
                 case CustomRoles.Virus:
                     Virus.OnCheckMurder(killer, target);
                     break;
