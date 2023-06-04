@@ -341,7 +341,7 @@ public class Main : BasePlugin
                 {CustomRoles.Crewpostor, "#ff1919"},
                 {CustomRoles.Infectious, "#7B8968"},
                 {CustomRoles.Virus, "#2E8B57"},
-                {CustomRoles.Farseer, "#4682B4"},
+                {CustomRoles.Farseer, "#BA55D3"},
                 // GM
                 {CustomRoles.GM, "#ff5b70"},
                 //サブ役職
