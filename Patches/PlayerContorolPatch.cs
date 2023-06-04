@@ -1007,11 +1007,11 @@ class ReportDeadBodyPatch
                     Main.DetectiveNotify.Add(player.PlayerId, msg);
                 }
             }
-        }
 
-        if (Main.InfectedBodies.Contains(target.PlayerId))
-        {
-            Virus.OnKilledBodyReport(player);
+            if (Main.InfectedBodies.Contains(target.PlayerId))
+            {
+                Virus.OnKilledBodyReport(player);
+            }
         }
 
         Main.ArsonistTimer.Clear();
