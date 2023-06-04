@@ -291,9 +291,6 @@ class CheckMurderPatch
                 case CustomRoles.Monarch:
                     Monarch.OnCheckMurder(killer, target);
                     return false;
-                case CustomRoles.Virus:
-                    Virus.OnCheckMurder(killer, target);
-                    break;
                 case CustomRoles.Jackal:
                     if (Jackal.OnCheckMurder(killer, target))
                         return false;
@@ -321,6 +318,12 @@ class CheckMurderPatch
         // 击杀前检查
         if (!killer.RpcCheckAndMurder(target, true))
             return false;
+
+        // Don't infect when Shielded
+        if (killer.Is(CustomRoles.Virus))
+        {
+            Virus.OnCheckMurder(killer, target);
+        }
 
         // 清道夫清理尸体
         if (killer.Is(CustomRoles.Scavenger))
