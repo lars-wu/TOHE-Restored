@@ -423,11 +423,8 @@ public enum CustomRoles
     Impostor,
     Shapeshifter,
     // Vanilla Remakes
-    EngineerTOHE,
-    ScientistTOHE,
-    GuardianAngelTOHE,
-    ShapeshifterTOHE,
     ImpostorTOHE,
+    ShapeshifterTOHE,
     //Impostor
     BountyHunter,
     FireWorks,
@@ -478,6 +475,10 @@ public enum CustomRoles
     Engineer,
     GuardianAngel,
     Scientist,
+    // Vanilla Remakes
+    EngineerTOHE,
+    GuardianAngelTOHE,
+    ScientistTOHE,
     //Crewmate
     Luckey,
     Needy,
