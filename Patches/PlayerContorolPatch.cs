@@ -1,12 +1,12 @@
-using AmongUs.GameOptions;
-using HarmonyLib;
-using Hazel;
-using InnerNet;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AmongUs.GameOptions;
+using HarmonyLib;
+using Hazel;
+using InnerNet;
 using TOHE.Modules;
 using TOHE.Roles.AddOns.Crewmate;
 using TOHE.Roles.Crewmate;
@@ -177,7 +177,7 @@ class CheckMurderPatch
                     Utils.NotifyRoles(SpecifySeer: killer);
                     return false;
                 case CustomRoles.NWitch:
-                  //  if (target.Is(CustomRoles.Needy)) return false;
+                    //  if (target.Is(CustomRoles.Needy)) return false;
                     Main.TaglockedList[target.PlayerId] = killer.PlayerId;
                     killer.SetKillCooldown();
                     Utils.NotifyRoles(SpecifySeer: killer);
@@ -242,6 +242,15 @@ class CheckMurderPatch
                         Main.RevolutionistTimer.TryAdd(killer.PlayerId, (target, 0f));
                         Utils.NotifyRoles(SpecifySeer: __instance);
                         RPC.SetCurrentDrawTarget(killer.PlayerId, target.PlayerId);
+                    }
+                    return false;
+                case CustomRoles.Farseer:
+                    Farseer.SetCooldown(killer.PlayerId);
+                    if (!Main.isRevealed[(killer.PlayerId, target.PlayerId)] && !Main.FarseerTimer.ContainsKey(killer.PlayerId))
+                    {
+                        Main.FarseerTimer.TryAdd(killer.PlayerId, (target, 0f));
+                        Utils.NotifyRoles(SpecifySeer: __instance);
+                        RPC.SetCurrentRevealTarget(killer.PlayerId, target.PlayerId);
                     }
                     return false;
                 case CustomRoles.Innocent:
@@ -946,7 +955,7 @@ class ReportDeadBodyPatch
                     return false;
                 }
 
-                if (target.Object.Is(CustomRoles.Unreportable)) return false; 
+                if (target.Object.Is(CustomRoles.Unreportable)) return false;
             }
 
             if (Options.SyncButtonMode.GetBool() && target == null)
@@ -1015,6 +1024,7 @@ class ReportDeadBodyPatch
         }
 
         Main.ArsonistTimer.Clear();
+        Main.FarseerTimer.Clear();
         Main.PuppeteerList.Clear();
         Main.LastVotedPlayerInfo = null;
         Main.GuesserGuessed.Clear();
@@ -1309,6 +1319,54 @@ class FixedUpdatePatch
             }
             #endregion
 
+            #region farseer
+            if (GameStates.IsInTask && Main.FarseerTimer.ContainsKey(player.PlayerId))//アーソニストが誰かを塗っているとき
+            {
+                if (!player.IsAlive() || Pelican.IsEaten(player.PlayerId))
+                {
+                    Main.FarseerTimer.Remove(player.PlayerId);
+                    Utils.NotifyRoles(__instance);
+                    RPC.ResetCurrentRevealTarget(player.PlayerId);
+                }
+                else
+                {
+                    var ar_target = Main.FarseerTimer[player.PlayerId].Item1;//塗られる人
+                    var ar_time = Main.FarseerTimer[player.PlayerId].Item2;//塗った時間
+                    if (!ar_target.IsAlive())
+                    {
+                        Main.FarseerTimer.Remove(player.PlayerId);
+                    }
+                    else if (ar_time >= Farseer.FarseerRevealTime.GetFloat())//時間以上一緒にいて塗れた時
+                    {
+                        player.SetKillCooldown();
+                        Main.FarseerTimer.Remove(player.PlayerId);//塗が完了したのでDictionaryから削除
+                        Main.isRevealed[(player.PlayerId, ar_target.PlayerId)] = true;//塗り完了
+                        player.RpcSetRevealtPlayer(ar_target, true);
+                        Utils.NotifyRoles(player);//名前変更
+                        RPC.ResetCurrentRevealTarget(player.PlayerId);
+                    }
+                    else
+                    {
+
+                        float range = NormalGameOptionsV07.KillDistances[Mathf.Clamp(player.Is(CustomRoles.Reach) ? 2 : Main.NormalOptions.KillDistance, 0, 2)] + 0.5f;
+                        float dis = Vector2.Distance(player.transform.position, ar_target.transform.position);//距離を出す
+                        if (dis <= range)//一定の距離にターゲットがいるならば時間をカウント
+                        {
+                            Main.FarseerTimer[player.PlayerId] = (ar_target, ar_time + Time.fixedDeltaTime);
+                        }
+                        else//それ以外は削除
+                        {
+                            Main.FarseerTimer.Remove(player.PlayerId);
+                            Utils.NotifyRoles(player);
+                            RPC.ResetCurrentRevealTarget(player.PlayerId);
+
+                            Logger.Info($"Canceled: {player.GetNameWithRole()}", "Arsonist");
+                        }
+                    }
+                }
+            }
+            #endregion
+
             if (!lowLoad)
             {
                 //检查老兵技能是否失效
@@ -1376,18 +1434,18 @@ class FixedUpdatePatch
                             if (player.Is(CustomRoles.Sidekick))
                             {
                                 if (target.PlayerId != player.PlayerId && !target.Is(CustomRoles.Sidekick) && !target.Is(CustomRoles.Jackal))
-                            {
-                                dis = Vector2.Distance(puppeteerPos, target.transform.position);
-                                targetDistance.Add(target.PlayerId, dis);
-                            }
+                                {
+                                    dis = Vector2.Distance(puppeteerPos, target.transform.position);
+                                    targetDistance.Add(target.PlayerId, dis);
+                                }
                             }
                             if (!player.Is(CustomRoles.Sidekick))
                             {
                                 if (target.PlayerId != player.PlayerId && !target.Is(CustomRoleTypes.Impostor))
-                            {
-                                dis = Vector2.Distance(puppeteerPos, target.transform.position);
-                                targetDistance.Add(target.PlayerId, dis);
-                            }
+                                {
+                                    dis = Vector2.Distance(puppeteerPos, target.transform.position);
+                                    targetDistance.Add(target.PlayerId, dis);
+                                }
                             }
                         }
                         if (targetDistance.Count() != 0)
@@ -1427,18 +1485,18 @@ class FixedUpdatePatch
                             if (player.Is(CustomRoles.Sidekick))
                             {
                                 if (target.PlayerId != player.PlayerId && !target.Is(CustomRoles.NWitch) && !target.Is(CustomRoles.Sidekick) && !target.Is(CustomRoles.Jackal))
-                            {
-                                dis = Vector2.Distance(puppeteerPos, target.transform.position);
-                                targetDistance.Add(target.PlayerId, dis);
-                            }
+                                {
+                                    dis = Vector2.Distance(puppeteerPos, target.transform.position);
+                                    targetDistance.Add(target.PlayerId, dis);
+                                }
                             }
                             if (!player.Is(CustomRoles.Sidekick))
                             {
                                 if (target.PlayerId != player.PlayerId && !target.Is(CustomRoles.NWitch))
-                            {
-                                dis = Vector2.Distance(puppeteerPos, target.transform.position);
-                                targetDistance.Add(target.PlayerId, dis);
-                            }
+                                {
+                                    dis = Vector2.Distance(puppeteerPos, target.transform.position);
+                                    targetDistance.Add(target.PlayerId, dis);
+                                }
                             }
                         }
                         if (targetDistance.Count() != 0)
@@ -1540,6 +1598,7 @@ class FixedUpdatePatch
                 else if (Succubus.KnowRole(PlayerControl.LocalPlayer, __instance)) RoleText.enabled = true;
                 else if (Infectious.KnowRole(PlayerControl.LocalPlayer, __instance)) RoleText.enabled = true;
                 else if (Virus.KnowRole(PlayerControl.LocalPlayer, __instance)) RoleText.enabled = true;
+                else if (PlayerControl.LocalPlayer.IsRevealedPlayer(__instance)) RoleText.enabled = true;
                 else if (PlayerControl.LocalPlayer.Is(CustomRoles.God)) RoleText.enabled = true;
                 else if (PlayerControl.LocalPlayer.Is(CustomRoles.GM)) RoleText.enabled = true;
                 else if (Totocalcio.KnowRole(PlayerControl.LocalPlayer, __instance)) RoleText.enabled = true;
@@ -1559,13 +1618,13 @@ class FixedUpdatePatch
                 var target = __instance;
 
                 string RealName;
-            //    string SeerRealName;
+                //    string SeerRealName;
                 Mark.Clear();
                 Suffix.Clear();
 
                 //名前変更
                 RealName = target.GetRealName();
-             //   SeerRealName = seer.GetRealName();
+                //   SeerRealName = seer.GetRealName();
 
                 //名前色変更処理
                 //自分自身の名前の色を変更
@@ -1577,7 +1636,7 @@ class FixedUpdatePatch
                         RealName = Utils.ColorString(Utils.GetRoleColor(CustomRoles.Revolutionist), string.Format(GetString("EnterVentWinCountDown"), Main.RevolutionistCountdown.TryGetValue(seer.PlayerId, out var x) ? x : 10));
                     if (Pelican.IsEaten(seer.PlayerId))
                         RealName = Utils.ColorString(Utils.GetRoleColor(CustomRoles.Pelican), GetString("EatenByPelican"));
-                     
+
                     if (Options.CurrentGameMode == CustomGameMode.SoloKombat)
                         SoloKombatManager.GetNameNotify(target, ref RealName);
                     if (NameNotifyManager.GetNameNotify(target, out var name))
@@ -1593,27 +1652,27 @@ class FixedUpdatePatch
                         Mark.Append(Utils.ColorString(Utils.GetRoleColor(CustomRoles.Impostor), "★")); //targetにマーク付与
                 }
                 if (seer.GetCustomRole().IsCrewmate()) //seerがインポスター
-                {  
+                {
                     if (target.Is(CustomRoles.Marshall) && target.GetPlayerTaskState().IsTaskFinished) //targetがタスクを終わらせたマッドスニッチ
                         Mark.Append(Utils.ColorString(Utils.GetRoleColor(CustomRoles.Marshall), "★")); //targetにマーク付与
                 }
                 if (seer.Is(CustomRoles.Jackal)) //seerがインポスター
-                {  
+                {
                     if (target.Is(CustomRoles.Sidekick)) //targetがタスクを終わらせたマッドスニッチ
                         Mark.Append(Utils.ColorString(Utils.GetRoleColor(CustomRoles.Jackal), " ♥")); //targetにマーク付与
                 }
-                
+
                 if (seer.Is(CustomRoles.Sidekick)) //seerがインポスター
-                {  
+                {
                     if (target.Is(CustomRoles.Sidekick) && Options.SidekickKnowOtherSidekick.GetBool()) //targetがタスクを終わらせたマッドスニッチ
                         Mark.Append(Utils.ColorString(Utils.GetRoleColor(CustomRoles.Jackal), " ♥")); //targetにマーク付与
                 }
                 if (seer.GetCustomRole().IsCrewmate() && seer.Is(CustomRoles.Madmate) && Marshall.OptionMadmateCanFindMarshall.GetBool()) //seerがインポスター
-                {  
+                {
                     if (target.Is(CustomRoles.Marshall) && target.GetPlayerTaskState().IsTaskFinished) //targetがタスクを終わらせたマッドスニッチ
                         Mark.Append(Utils.ColorString(Utils.GetRoleColor(CustomRoles.Marshall), "★")); //targetにマーク付与
                 }
-                
+
                 //インポスター/キル可能なニュートラルがタスクが終わりそうなSnitchを確認できる
                 Mark.Append(Snitch.GetWarningMark(seer, target));
                 Mark.Append(Marshall.GetWarningMark(seer, target));
@@ -1644,6 +1703,20 @@ class FixedUpdatePatch
                     )
                     {
                         Mark.Append($"<color={Utils.GetRoleColorCode(CustomRoles.Revolutionist)}>○</color>");
+                    }
+                }
+                if (seer.Is(CustomRoles.Farseer))
+                {
+                    if (seer.IsRevealedPlayer(target))
+                    {
+                        //Mark.Append($"<color={Utils.GetRoleColorCode(CustomRoles.Farseer)}>●</color>");
+                    }
+                    else if (
+                        Main.currentDrawTarget != byte.MaxValue &&
+                        Main.currentDrawTarget == target.PlayerId
+                    )
+                    {
+                        Mark.Append($"<color={Utils.GetRoleColorCode(CustomRoles.Farseer)}>○</color>");
                     }
                 }
 
