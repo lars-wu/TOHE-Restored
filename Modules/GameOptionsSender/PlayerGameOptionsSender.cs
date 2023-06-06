@@ -121,8 +121,12 @@ public class PlayerGameOptionsSender : GameOptionsSender
             case CustomRoles.Medicaler:
             case CustomRoles.Provocateur:
             case CustomRoles.Monarch:
+      //      case CustomRoles.Farseer:
             case CustomRoles.Counterfeiter:
                 opt.SetVision(false);
+                break;
+            case CustomRoles.Virus:
+                opt.SetVision(Virus.ImpostorVision.GetBool());
                 break;
             case CustomRoles.Zombie:
                 opt.SetFloat(FloatOptionNames.ImpostorLightMod, 0.2f);
@@ -133,14 +137,14 @@ public class PlayerGameOptionsSender : GameOptionsSender
                 break;
             case CustomRoles.Mayor:
                 AURoleOptions.EngineerCooldown =
-                    Main.MayorUsedButtonCount.TryGetValue(player.PlayerId, out var count) && count < Options.MayorNumOfUseButton.GetInt()
+                    !Main.MayorUsedButtonCount.TryGetValue(player.PlayerId, out var count) || count < Options.MayorNumOfUseButton.GetInt()
                     ? opt.GetInt(Int32OptionNames.EmergencyCooldown)
                     : 300f;
                 AURoleOptions.EngineerInVentMaxTime = 1;
                 break;
             case CustomRoles.Paranoia:
                 AURoleOptions.EngineerCooldown =
-                    Main.ParaUsedButtonCount.TryGetValue(player.PlayerId, out var count2) && count2 < Options.ParanoiaNumOfUseButton.GetInt()
+                    !Main.ParaUsedButtonCount.TryGetValue(player.PlayerId, out var count2) || count2 < Options.ParanoiaNumOfUseButton.GetInt()
                     ? Options.ParanoiaVentCooldown.GetFloat()
                     : 300f;
                 AURoleOptions.EngineerInVentMaxTime = 1;
@@ -152,9 +156,12 @@ public class PlayerGameOptionsSender : GameOptionsSender
                 EvilTracker.ApplyGameOptions(player.PlayerId);
                 break;
             case CustomRoles.ShapeshifterTOHE:
-            case CustomRoles.Wildling:
             AURoleOptions.ShapeshifterCooldown = Options.ShapeshiftCD.GetFloat();
             AURoleOptions.ShapeshifterDuration = Options.ShapeshiftDur.GetFloat();
+            break;
+            case CustomRoles.Wildling:
+            AURoleOptions.ShapeshifterCooldown = Wildling.ShapeshiftCD.GetFloat();
+            AURoleOptions.ShapeshifterDuration = Wildling.ShapeshiftDur.GetFloat();
             break;
             case CustomRoles.Jackal:
        //     case CustomRoles.Sidekick:
@@ -164,7 +171,10 @@ public class PlayerGameOptionsSender : GameOptionsSender
                 Poisoner.ApplyGameOptions(opt);
                 break;
             case CustomRoles.Veteran:
-                AURoleOptions.EngineerCooldown = Options.VeteranSkillCooldown.GetFloat();
+                AURoleOptions.EngineerCooldown =
+                    !Main.VeteranNumOfUsed.TryGetValue(player.PlayerId, out var count3) || count3 > 0
+                    ? Options.VeteranSkillCooldown.GetFloat()
+                    : 300f;
                 AURoleOptions.EngineerInVentMaxTime = 1;
                 break;
             case CustomRoles.Grenadier:
@@ -234,6 +244,13 @@ public class PlayerGameOptionsSender : GameOptionsSender
                 break;
             case CustomRoles.BloodKnight:
                 BloodKnight.ApplyGameOptions(opt);
+                break;
+            case CustomRoles.DovesOfNeace:
+                AURoleOptions.EngineerCooldown =
+                    !Main.DovesOfNeaceNumOfUsed.TryGetValue(player.PlayerId, out var count4) || count4 > 0
+                    ? Options.DovesOfNeaceCooldown.GetFloat()
+                    : 300f;
+                AURoleOptions.EngineerInVentMaxTime = 1;
                 break;
             case CustomRoles.Disperser:
                 Disperser.ApplyGameOptions();
