@@ -988,7 +988,7 @@ public static class Utils
             if (player.AmOwner)
             {
                 if (GameStates.IsOnlineGame)
-                    name = $"<color=#902efd>Host</color>|<color=#4bf4ff>" + name + "</color>";
+                    name = $"<color=#902efd>Host</color><color=#4bf4ff>♥</color>" + name;
                 if (Options.CurrentGameMode == CustomGameMode.SoloKombat)
                     name = $"<color=#f55252><size=1.7>{GetString("ModeSoloKombat")}</size></color>\r\n" + name;
             }
@@ -1290,6 +1290,8 @@ public static class Utils
                         (seer.Is(CustomRoles.Sidekick) && target.Is(CustomRoles.Jackal))||
                         (target.Is(CustomRoles.Workaholic) && Options.WorkaholicVisibleToEveryone.GetBool()) ||
                         (Totocalcio.KnowRole(seer, target)) ||
+                        (Lawyer.KnowRole(seer, target)) ||
+                        (Executioner.KnowRole(seer, target)) ||
                         (Succubus.KnowRole(seer, target)) ||
                         (Infectious.KnowRole(seer, target)) ||
                         (Virus.KnowRole(seer, target)) ||
@@ -1366,13 +1368,14 @@ public static class Utils
 
                 TargetMark.Append(Executioner.TargetMark(seer, target));
 
-                TargetMark.Append(Lawyer.TargetMark(seer, target));
+             //   TargetMark.Append(Lawyer.TargetMark(seer, target));
 
                 TargetMark.Append(Gamer.TargetMark(seer, target));
 
                 TargetMark.Append(Medicaler.TargetMark(seer, target));
 
                 TargetMark.Append(Totocalcio.TargetMark(seer, target));
+                TargetMark.Append(Lawyer.LawyerMark(seer, target));
 
                 //KB目标玩家名字后缀
                 TargetSuffix.Clear();
@@ -1416,8 +1419,8 @@ public static class Utils
         BountyHunter.AfterMeetingTasks();
         EvilTracker.AfterMeetingTasks();
         SerialKiller.AfterMeetingTasks();
-        if (Options.AirShipVariableElectrical.GetBool())
-            AirShipElectricalDoors.Initialize();
+        if (Options.AirshipVariableElectrical.GetBool())
+            AirshipElectricalDoors.Initialize();
     }
     public static void AfterPlayerDeathTasks(PlayerControl target, bool onMeeting = false)
     {
