@@ -17,6 +17,7 @@ public static class Succubus
     public static OptionItem KnowTargetRole;
     public static OptionItem TargetKnowOtherTarget;
     public static OptionItem CharmedCountMode;
+    public static OptionItem CanCharmNeutral;
 
     public static readonly string[] charmedCountMode =
     {
@@ -106,7 +107,6 @@ public static class Succubus
     public static string GetCharmLimit() => Utils.ColorString(CharmLimit >= 1 ? Utils.GetRoleColor(CustomRoles.Succubus) : Color.gray, $"({CharmLimit})");
     public static bool CanBeCharmed(this PlayerControl pc)
     {
-        return pc != null && (pc.GetCustomRole().IsCrewmate() || pc.GetCustomRole().IsImpostor()) && !pc.Is(CustomRoles.Charmed);
         if (pc == null)
         {
             return false;
