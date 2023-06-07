@@ -31,15 +31,15 @@ namespace TOHE.Roles.Impostor
         public static void SetupCustomOption()
         {
             SetupRoleOptions(Id, TabGroup.ImpostorRoles, CustomRoles.SkinEater);
-            DefaultKillCooldown = FloatOptionItem.Create(Id + 10, "SansDefaultKillCooldown", new(0f, 180f, 2.5f), 25f, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.SkinEater])
+            DefaultKillCooldown = FloatOptionItem.Create(Id + 10, "SansDefaultKillCooldown", new(0f, 180f, 2.5f), 30f, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.SkinEater])
                 .SetValueFormat(OptionFormat.Seconds);
             ReduceKillCooldown = FloatOptionItem.Create(Id + 11, "SansReduceKillCooldown", new(0f, 180f, 2.5f), 5f, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.SkinEater])
                 .SetValueFormat(OptionFormat.Seconds);
-            MinKillCooldown = FloatOptionItem.Create(Id + 12, "SansMinKillCooldown", new(0f, 180f, 2.5f), 2.5f, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.SkinEater])
+            MinKillCooldown = FloatOptionItem.Create(Id + 12, "SansMinKillCooldown", new(0f, 180f, 2.5f), 10f, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.SkinEater])
                 .SetValueFormat(OptionFormat.Seconds);
             ShapeshiftCooldown = FloatOptionItem.Create(Id + 14, "ShapeshiftCooldown", new(0f, 180f, 2.5f), 30f, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.SkinEater])
                 .SetValueFormat(OptionFormat.Seconds);
-            ShapeshiftDuration = FloatOptionItem.Create(Id + 15, "ShapeshiftDuration", new(0f, 180f, 2.5f), 15f, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.SkinEater])
+            ShapeshiftDuration = FloatOptionItem.Create(Id + 15, "ShapeshiftDuration", new(0f, 180f, 2.5f), 20f, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.SkinEater])
                 .SetValueFormat(OptionFormat.Seconds);
         }
         public static void Init()
@@ -67,18 +67,23 @@ namespace TOHE.Roles.Impostor
         {
             if (!pc.IsAlive() || Pelican.IsEaten(pc.PlayerId)) return;
 
-            SetConsumedSkin(target);
-            target.Notify(ColorString(GetRoleColor(CustomRoles.SkinEater), string.Format(GetString("SkinEaterCosumeSkin"), target.GetRealName())));
-
             if (!PlayerSkinsCosumed[pc.PlayerId].Contains(target.PlayerId))
             {
+                if (!Camouflage.IsCamouflage)
+                {
+                    SetConsumedSkin(target);
+                }
+
                 PlayerSkinsCosumed[pc.PlayerId].Add(target.PlayerId);
+                Camouflage.PlayerSkins[target.PlayerId] = CosumedOutfit;
+
+                target.Notify(ColorString(GetRoleColor(CustomRoles.SkinEater), string.Format(GetString("SkinEaterCosumeSkin"), target.GetRealName())));
+
+                float cdReduction = ReduceKillCooldown.GetFloat() * PlayerSkinsCosumed[pc.PlayerId].Count;
+                float cd = DefaultKillCooldown.GetFloat() - cdReduction;
+
+                NowCooldown[pc.PlayerId] = cd < MinKillCooldown.GetFloat() ? MinKillCooldown.GetFloat() : cd;
             }
-
-            float cdReduction = ReduceKillCooldown.GetFloat() * PlayerSkinsCosumed[pc.PlayerId].Count;
-            float cd = DefaultKillCooldown.GetFloat() - cdReduction;
-
-            NowCooldown[pc.PlayerId] = cd < MinKillCooldown.GetFloat() ? MinKillCooldown.GetFloat() : cd;
         }
 
         private static void SetConsumedSkin(PlayerControl target)
