@@ -90,6 +90,7 @@ enum CustomRPC
     SetCurrentRevealTarget,
     SyncPuppeteerList,
     SetJackalRecruitLimit,
+    SetBloodhoundArrow,
 
     //SoloKombat
     SyncKBPlayer,
@@ -480,12 +481,15 @@ internal class RPCHandlerPatch
                 for (int i = 0; i < pcount; i++)
                     Main.PuppeteerList.Add(reader.ReadByte(), reader.ReadByte());
                 break;
-            /*case CustomRPC.SyncCurseAndKill:
-                int ccount = reader.ReadInt32();
-                Main.isCurseAndKill = new();
-                for (int i = 0; i < ccount; i++)
-                    Main.isCurseAndKill.Add(reader.ReadByte(), reader.ReadBoolean());
-                break;*/
+            case CustomRPC.SetBloodhoundArrow:
+                Bloodhound.ReceiveRPC(reader);
+                break;
+                /*case CustomRPC.SyncCurseAndKill:
+                    int ccount = reader.ReadInt32();
+                    Main.isCurseAndKill = new();
+                    for (int i = 0; i < ccount; i++)
+                        Main.isCurseAndKill.Add(reader.ReadByte(), reader.ReadBoolean());
+                    break;*/
         }
     }
 }
@@ -819,6 +823,9 @@ internal static class RPC
                 break;
             case CustomRoles.SkinEater:
                 SkinEater.Add(targetId);
+                break;
+            case CustomRoles.Bloodhound:
+                Bloodhound.Add(targetId); 
                 break;
         }
         HudManager.Instance.SetHudActive(true);

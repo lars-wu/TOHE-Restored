@@ -218,6 +218,7 @@ internal class ChangeRoleSettings
             Monarch.Init();
             Virus.Init();
             SkinEater.Init();
+            Bloodhound.Init();
 
             SoloKombatManager.Init();
             CustomWinnerHolder.Reset();
@@ -579,6 +580,9 @@ internal class SelectRolesPatch
                         break;
                     case CustomRoles.SkinEater:
                         SkinEater.Add(pc.PlayerId);
+                        break;
+                    case CustomRoles.Bloodhound:
+                        Bloodhound.Add(pc.PlayerId);
                         break;
                 }
                 foreach (var subRole in pc.GetCustomSubRoles())
