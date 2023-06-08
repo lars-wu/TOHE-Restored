@@ -943,6 +943,21 @@ class ReportDeadBodyPatch
             }
             else //报告尸体事件
             {
+                if (Bloodhound.UnreportablePlayers.Contains(target.PlayerId)) return false;
+
+                if (__instance.Is(CustomRoles.Bloodhound))
+                {
+                    if (killer != null)
+                    {
+                        Bloodhound.OnReportDeadBody(__instance, target, killer);
+                    }
+                    else
+                    {
+                        __instance.Notify(GetString("BloodhoundNoTrack"));
+                    }
+                    
+                    return false;
+                }
 
                 // 清洁工来扫大街咯
                 if (__instance.Is(CustomRoles.Cleaner))
@@ -983,14 +998,6 @@ class ReportDeadBodyPatch
                 }
 
                 if (target.Object.Is(CustomRoles.Unreportable)) return false;
-
-                if (Bloodhound.UnreportablePlayers.Contains(target.PlayerId)) return false;
-
-                if (killer != null && __instance.Is(CustomRoles.Bloodhound))
-                {
-                    Bloodhound.OnReportDeadBody(__instance, target, killer);
-                    return false;
-                }
             }
 
             if (Options.SyncButtonMode.GetBool() && target == null)
@@ -1824,6 +1831,8 @@ class FixedUpdatePatch
                 Suffix.Append(Mortician.GetTargetArrow(seer, target));
 
                 Suffix.Append(EvilTracker.GetTargetArrow(seer, target));
+
+                Suffix.Append(Bloodhound.GetTargetArrow(seer, target));
 
                 if (GameStates.IsInTask && seer.Is(CustomRoles.AntiAdminer))
                 {
