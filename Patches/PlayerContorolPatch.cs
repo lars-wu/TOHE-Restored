@@ -1089,6 +1089,7 @@ class ReportDeadBodyPatch
         Hacker.OnReportDeadBody();
         Judge.OnReportDeadBody();
         Greedier.OnReportDeadBody();
+        Tracker.OnReportDeadBody();
 
         Mortician.OnReportDeadBody(player, target);
         Mediumshiper.OnReportDeadBody(target);
@@ -1796,6 +1797,7 @@ class FixedUpdatePatch
 
                 }
                 if (seer.Is(CustomRoles.EvilTracker)) Mark.Append(EvilTracker.GetTargetMark(seer, target));
+                if (seer.Is(CustomRoles.Tracker)) Mark.Append(Tracker.GetTargetMark(seer, target));
                 //タスクが終わりそうなSnitchがいるとき、インポスター/キル可能なニュートラルに警告が表示される
                 Mark.Append(Snitch.GetWarningArrow(seer, target));
 
@@ -1833,6 +1835,8 @@ class FixedUpdatePatch
                 Suffix.Append(EvilTracker.GetTargetArrow(seer, target));
 
                 Suffix.Append(Bloodhound.GetTargetArrow(seer, target));
+
+                Suffix.Append(Tracker.GetTrackerArrow(seer, target));
 
                 if (GameStates.IsInTask && seer.Is(CustomRoles.AntiAdminer))
                 {

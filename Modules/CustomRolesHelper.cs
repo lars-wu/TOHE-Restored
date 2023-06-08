@@ -110,6 +110,7 @@ internal static class CustomRolesHelper
                 CustomRoles.Monarch => CustomRoles.Impostor,
                 CustomRoles.SkinEater => CustomRoles.Shapeshifter,
                 CustomRoles.Bloodhound => CustomRoles.Crewmate,
+                CustomRoles.Tracker => CustomRoles.Crewmate,
                 _ => role.IsImpostor() ? CustomRoles.Impostor : CustomRoles.Crewmate,
             };
     }

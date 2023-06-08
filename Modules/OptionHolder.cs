@@ -922,6 +922,8 @@ public static class Options
         Farseer.SetupCustomOption();
         Bloodhound.SetupCustomOption();
 
+        Tracker.SetupCustomOption();
+
         // Neutral
         TextOptionItem.Create(909094_0, "RoleType.NeutralBenign", TabGroup.NeutralRoles)
             .SetGameMode(CustomGameMode.Standard)
