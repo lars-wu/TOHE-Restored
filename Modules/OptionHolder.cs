@@ -874,6 +874,7 @@ public static class Options
         TransporterTasks = OverrideTasksData.Create(8021119, TabGroup.CrewmateRoles, CustomRoles.Transporter);
         Bloodhound.SetupCustomOption();
         Tracker.SetupCustomOption();
+        Merchant.SetupCustomOption();
 
         TextOptionItem.Create(909092_5, "RoleType.CrewKilling", TabGroup.CrewmateRoles)
             .SetGameMode(CustomGameMode.Standard)
