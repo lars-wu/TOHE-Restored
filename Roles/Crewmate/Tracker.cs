@@ -76,8 +76,6 @@
                 {
                     msgToSend.Add(pc, string.Format(Translator.GetString("TrackerLastRoomMessage"), room));
                 }
-
-                
             }
         }
 
