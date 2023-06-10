@@ -822,12 +822,11 @@ public static class Options
             .SetParent(CustomRoleSpawnChances[CustomRoles.Crewpostor]);
         CrewpostorTasks = OverrideTasksData.Create(9079094, TabGroup.ImpostorRoles, CustomRoles.Crewpostor);
         SetupSingleRoleOptions(6050720, TabGroup.ImpostorRoles, CustomRoles.Parasite, 1, zeroOne: false);
-        SkinEater.SetupCustomOption();
-        //==================================================================================================================================//
         ParasiteCD = FloatOptionItem.Create(6050725, "KillCooldown", new(0f, 999f, 2.5f), 30f, TabGroup.ImpostorRoles, false)
         .SetParent(CustomRoleSpawnChances[CustomRoles.Parasite])
             .SetValueFormat(OptionFormat.Seconds);
-//==================================================================================================================================//
+        SkinEater.SetupCustomOption();
+        //==================================================================================================================================//
 
         // Crewmate
         TextOptionItem.Create(909092_4, "RoleType.CrewSupport", TabGroup.CrewmateRoles)
@@ -903,8 +902,6 @@ public static class Options
         .SetParent(CustomRoleSpawnChances[CustomRoles.Transporter])
             .SetValueFormat(OptionFormat.Times);
         TransporterTasks = OverrideTasksData.Create(8021119, TabGroup.CrewmateRoles, CustomRoles.Transporter);
-        Bloodhound.SetupCustomOption();
-        Tracker.SetupCustomOption();
         Merchant.SetupCustomOption();
 
         TextOptionItem.Create(909092_5, "RoleType.CrewKilling", TabGroup.CrewmateRoles)
