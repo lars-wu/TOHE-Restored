@@ -168,7 +168,7 @@
 "Observer","观察者","Observer","Аудитор","窺視者",""
 "Monarch","","Monarch","Монарх","",""
 "Farseer","","Overseer","Смотритель","",""
-"Bloodhound","","Coroner","","",""
+"Bloodhound","","Bloodhound","","",""
 "Tracker","","Tracker","","",""
 "Merchant","","Merchant","","",""
 
@@ -563,7 +563,7 @@
 "MonarchInfoLong","","(Crewmates):\nAs the Monarch, you can knight players to give them an extra vote.\n\nYou cannot knight someone who already have extra votes.","(Член Экипажа):\nМонарх может посвятить игроков, чтобы дать им дополнительный голос.\n\nОн не может посвятить того, у кого уже есть дополнительные голоса.","",""
 "DovesOfNeaceInfoLong","(船员阵营):\n当和平之鸽可以通过使用通风管道进行歌颂，在场所有拥有击杀键的玩家的击杀/技能冷却时间会被重置。当和平之鸽成为叛徒时歌颂只对船员生效。","(Crewmates):\nWhen the Pacifist vents, they will reset the kill cooldown for every player with a kill button. When they become a Madmate, this ability will only work on Crewmates.","(Член Экипажа):\nКогда Пацифист использует вентиляцию, время перезарядки убийства/навыков всех игроков с кнопкой убийства будет сброшено. Когда Пацифист становится предателем, навык действует только на Членов Экипажа.",""(船員陣營):\n和平之鴿可以通過進入通風管來進行歌頌，",""
 "FarseerInfoLong","","(Crewmates):\nAs a Overseer you have very limited vision but you can use your kill button to reveal the role of a nearby player. Use the kill button to start the reveal, a 「○」 will be displayed next to the reveal target. Stay near the target for a defined time to reveal his role, if you move too far away from the target the reveal will be aborted.","(Член Экипажа):\nУ Смотрителя ограниченный обзор, но вы можете использовать кнопку убийства, чтобы показать роль ближайшего игрока. У этого игрока будет отображаться 「○」 рядом с никнеймом. Оставайтесь рядом с целью в течение определенного времени, чтобы раскрыть его роль, если вы отойдете слишком далеко от цели, раскрытие будет прервано.","",""
-"BloodhoundInfoLong","","(Crewmates):\nAs a Coroner you can't report corpses, instead after trying to report the corpse you will see an arrow leading you to the killer. If a meeting is called, the arrows disappear. Depending on the setting, the body you found cannot be reported.","","",""
+"BloodhoundInfoLong","","(Crewmates):\nAs a Bloodhound you can't report corpses, instead after trying to report the corpse you will see an arrow leading you to the killer. If a meeting is called, the arrows disappear. Depending on the setting, the body you found cannot be reported.","","",""
 "TrackerInfoLong","","(Crewmates):\nAs a tracker, you can vote for a player in the meeting, which will mark their position for you in the game with arrows. In addition, at the beginning of a meeting you will be shown in which room the player was last, if the option is activated.","","",""
 "MerchantInfoLong","","(Crewmates):\As a merchant, you sell a random add-on to a random player for each task you complete. Each add-on sold earns you money. If you have a certain amount of money, you can avert the next kill attempt against you by bribing the murderer. The bribed player won't be able to kill you, but you don't know who it is. The bribe money used is lost and is not available for additional bribes.","","",""
 
@@ -1227,7 +1227,7 @@
 "DovesOfNeaceCooldown","歌颂冷却时间","Ability Cooldown","Откат способности","歌頌冷卻時間",""
 "DovesOfNeaceMaxOfUseage","歌颂次数上限","Max Number of Ability Uses","Количество способностей","歌頌次數上限",""
 "BloodhoundArrowsPointingToDeadBody","","Arrows pointing to dead bodies","","",""
-"BloodhoundLeaveDeadBodyUnreportable","","Bodies the Coroner uses can't be reported","","",""
+"BloodhoundLeaveDeadBodyUnreportable","","Bodies the Bloodhound uses can't be reported","","",""
 "TrackerHideVote","","Hide <color=#3CB371>Tracker</color> Votes","","",""
 "LuckyProbability","触发挡伤的概率","Probability of surviving a kill","Вероятность остаться в живых","觸發擋傷的機率","触发挡伤的概率"
 "ImpCanBeLucky","","<color=#ff1919>Impostors</color> can become <color=#b8d7a3>Lucky</color>","","",""
