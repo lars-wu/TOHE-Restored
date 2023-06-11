@@ -680,7 +680,8 @@ public enum SuffixModes
     RoomHost,
     OriginalName,
     DoNotKillMe,
-    NoAndroidPlz
+    NoAndroidPlz,
+    AutoHost
 }
 public enum VoteMode
 {
