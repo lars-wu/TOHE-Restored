@@ -345,6 +345,7 @@ public class Main : BasePlugin
                 {CustomRoles.Virus, "#2E8B57"},
                 {CustomRoles.Farseer, "#BA55D3"},
                 {CustomRoles.Pursuer, "#617218"},
+                {CustomRoles.Amor, "#ee3377"},
                 // GM
                 {CustomRoles.GM, "#ff5b70"},
                 //サブ役職
@@ -572,6 +573,7 @@ public enum CustomRoles
     Succubus,
     Virus,
     Pursuer,
+    Amor,
 
     //SoloKombat
     KB_Normal,
@@ -670,6 +672,7 @@ public enum AdditionalWinners
     Jackal = CustomRoles.Jackal,
     Sidekick = CustomRoles.Sidekick,
     Pursuer = CustomRoles.Pursuer,
+    Amor = CustomRoles.Amor
 }
 public enum SuffixModes
 {

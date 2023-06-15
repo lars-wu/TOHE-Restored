@@ -334,6 +334,9 @@ class CheckMurderPatch
                     if (Pursuer.CanBeClient(target) && Pursuer.CanSeel(killer.PlayerId))
                         Pursuer.SeelToClient(killer, target);
                     return false;
+                case CustomRoles.Amor:
+                    Amor.OnCheckMurder(killer, target);
+                    return false;
             }
         }
 
@@ -1474,7 +1477,11 @@ class FixedUpdatePatch
 
                 if (GameStates.IsInTask && player.IsAlive() && Options.LadderDeath.GetBool()) FallFromLadder.FixedUpdate(player);
 
-                if (GameStates.IsInGame) LoversSuicide();
+                if (GameStates.IsInGame)
+                {
+                    LoversSuicide();
+                    Amor.CheckLoversSuicide();
+                }
 
                 #region 傀儡师处理
                 if (GameStates.IsInTask && Main.PuppeteerList.ContainsKey(player.PlayerId))
@@ -1662,6 +1669,7 @@ class FixedUpdatePatch
                 else if (Succubus.KnowRole(PlayerControl.LocalPlayer, __instance)) RoleText.enabled = true;
                 else if (Infectious.KnowRole(PlayerControl.LocalPlayer, __instance)) RoleText.enabled = true;
                 else if (Virus.KnowRole(PlayerControl.LocalPlayer, __instance)) RoleText.enabled = true;
+                else if (Amor.KnowRole(PlayerControl.LocalPlayer, __instance)) RoleText.enabled = true;
                 else if (PlayerControl.LocalPlayer.IsRevealedPlayer(__instance)) RoleText.enabled = true;
                 else if (PlayerControl.LocalPlayer.Is(CustomRoles.God)) RoleText.enabled = true;
                 else if (PlayerControl.LocalPlayer.Is(CustomRoles.GM)) RoleText.enabled = true;
@@ -1826,6 +1834,8 @@ class FixedUpdatePatch
                 }
                 if (seer.Is(CustomRoles.EvilTracker)) Mark.Append(EvilTracker.GetTargetMark(seer, target));
                 if (seer.Is(CustomRoles.Tracker)) Mark.Append(Tracker.GetTargetMark(seer, target));
+                if (seer.Is(CustomRoles.Amor)) Mark.Append(Amor.GetLoversMark(seer, target));
+                
                 //タスクが終わりそうなSnitchがいるとき、インポスター/キル可能なニュートラルに警告が表示される
                 Mark.Append(Snitch.GetWarningArrow(seer, target));
 

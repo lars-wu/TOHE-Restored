@@ -447,6 +447,10 @@ class CheckForEndVotingPatch
             //Loversの後追い
             if (CustomRoles.Lovers.IsEnable() && !Main.isLoversDead && Main.LoversPlayers.Find(lp => lp.PlayerId == playerId) != null)
                 FixedUpdatePatch.LoversSuicide(playerId, true);
+
+            if (CustomRoles.Amor.IsEnable() && Amor.Lovers.Any(lp => lp.PlayerId == playerId))
+                Amor.CheckLoversSuicide(playerId, true);
+
             //道連れチェック
             RevengeOnExile(playerId, deathReason);
         }
@@ -699,6 +703,7 @@ class MeetingHudStartPatch
                 (Succubus.KnowRole(PlayerControl.LocalPlayer, pc)) ||
                 (Infectious.KnowRole(PlayerControl.LocalPlayer, pc)) ||
                 (Virus.KnowRole(PlayerControl.LocalPlayer, pc)) ||
+                (Amor.KnowRole(PlayerControl.LocalPlayer, pc)) ||
                 PlayerControl.LocalPlayer.IsRevealedPlayer(pc) ||
                 PlayerControl.LocalPlayer.Is(CustomRoles.God) ||
                 PlayerControl.LocalPlayer.Is(CustomRoles.GM) ||
@@ -884,6 +889,9 @@ class MeetingHudStartPatch
                     break;
                 case CustomRoles.Tracker:
                     sb.Append(Tracker.GetTargetMark(seer, target));
+                    break;
+                case CustomRoles.Amor:
+                    sb.Append(Amor.GetLoversMark(seer, target));
                     break;
             }
 

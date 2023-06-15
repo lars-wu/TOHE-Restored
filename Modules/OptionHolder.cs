@@ -985,6 +985,7 @@ public static class Options
         Lawyer.SetupCustomOption();
         SetupRoleOptions(50100, TabGroup.NeutralRoles, CustomRoles.Opportunist);
         Pursuer.SetupCustomOption();
+        Amor.SetupCustomOption();
 
         TextOptionItem.Create(909094_1, "RoleType.NeutralEvil", TabGroup.NeutralRoles)
             .SetGameMode(CustomGameMode.Standard)
@@ -1056,8 +1057,7 @@ public static class Options
         .SetParent(CustomRoleSpawnChances[CustomRoles.NWitch])
             .SetValueFormat(OptionFormat.Seconds);
         Wraith.SetupCustomOption();
-
-
+        
 
 
         // Add-Ons

@@ -431,6 +431,7 @@ public static class Utils
             case CustomRoles.Farseer:
             case CustomRoles.Counterfeiter:
             case CustomRoles.Pursuer:
+            case CustomRoles.Amor:
                 hasTasks = false;
                 break;
             case CustomRoles.Workaholic:
@@ -591,6 +592,9 @@ public static class Utils
             case CustomRoles.Jackal:
                 if (Jackal.CanRecruitSidekick.GetBool())
                 ProgressText.Append(Jackal.GetRecruitLimit(playerId));
+                break;
+            case CustomRoles.Amor:
+                ProgressText.Append(Amor.GetMatchmakeLimit());
                 break;
             default:
                 //タスクテキスト
@@ -1316,6 +1320,7 @@ public static class Utils
                         (Succubus.KnowRole(seer, target)) ||
                         (Infectious.KnowRole(seer, target)) ||
                         (Virus.KnowRole(seer, target)) ||
+                        (Amor.KnowRole(seer, target)) ||
                         (seer.IsRevealedPlayer(target) && !target.Is(CustomRoles.Trickster)) ||
                         (seer.Is(CustomRoles.God)) ||
                         (target.Is(CustomRoles.GM))
@@ -1342,6 +1347,11 @@ public static class Utils
                     TargetMark.Append(Tracker.GetTargetMark(seer, target));
                     if (isForMeeting && Tracker.IsTrackTarget(seer, target) && Tracker.CanSeeLastRoomInMeeting)
                         TargetRoleText = $"<size={fontSize}>{Tracker.GetArrowAndLastRoom(seer, target)}</size>\r\n";
+                }
+
+                if (seer.Is(CustomRoles.Amor))
+                {
+                    TargetMark.Append(Amor.GetLoversMark(seer, target));
                 }
 
                 //RealNameを取得 なければ現在の名前をRealNamesに書き込む
@@ -1535,6 +1545,7 @@ public static class Utils
             Lawyer.ChangeRoleByTarget(target);
 
         FixedUpdatePatch.LoversSuicide(target.PlayerId, onMeeting);
+        Amor.CheckLoversSuicide(target.PlayerId, onMeeting);
     }
     public static void ChangeInt(ref int ChangeTo, int input, int max)
     {
