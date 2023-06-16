@@ -19,7 +19,7 @@ namespace TOHE.Roles.Crewmate
         private static readonly List<CustomRoles> helpfulAddons = new List<CustomRoles>
         {
             CustomRoles.Watcher,
-            CustomRoles.Lighter,
+            //CustomRoles.Lighter,
             CustomRoles.Seer,
             CustomRoles.Bait,
             CustomRoles.Trapper,
@@ -36,7 +36,7 @@ namespace TOHE.Roles.Crewmate
         {
             CustomRoles.Oblivious,
             CustomRoles.Bewilder,
-            CustomRoles.Workhorse,
+            //CustomRoles.Workhorse,
             CustomRoles.Fool,
             //CustomRoles.Avanger,
             CustomRoles.Unreportable
