@@ -899,6 +899,10 @@ class ShapeshiftPatch
                 if (shapeshifting)
                     Dazzler.OnShapeshift(shapeshifter, target);
                 break;
+            case CustomRoles.Deathpact:
+                if (shapeshifting) 
+                    Deathpact.OnShapeshift(shapeshifter, target);
+                break;
         }
 
     End:
@@ -1432,6 +1436,7 @@ class FixedUpdatePatch
             #endregion
 
             Farseer.OnPostFix(player);
+            Deathpact.OnFixedUpdate(player);
 
             if (!lowLoad)
             {
@@ -1720,7 +1725,8 @@ class FixedUpdatePatch
                         RealName = Utils.ColorString(Utils.GetRoleColor(CustomRoles.Revolutionist), string.Format(GetString("EnterVentWinCountDown"), Main.RevolutionistCountdown.TryGetValue(seer.PlayerId, out var x) ? x : 10));
                     if (Pelican.IsEaten(seer.PlayerId))
                         RealName = Utils.ColorString(Utils.GetRoleColor(CustomRoles.Pelican), GetString("EatenByPelican"));
-
+                    if (Deathpact.IsInActiveDeathpact(seer))
+                        RealName = Deathpact.GetDeathpactString(seer);
                     if (Options.CurrentGameMode == CustomGameMode.SoloKombat)
                         SoloKombatManager.GetNameNotify(target, ref RealName);
                     if (NameNotifyManager.GetNameNotify(target, out var name))
@@ -1866,8 +1872,7 @@ class FixedUpdatePatch
                 {
                     Mark.Append($"<color={Utils.GetRoleColorCode(CustomRoles.Lovers)}>♡</color>");
                 }
-
-
+                
                 //矢印オプションありならタスクが終わったスニッチはインポスター/キル可能なニュートラルの方角がわかる
                 Suffix.Append(Snitch.GetSnitchArrow(seer, target));
 
@@ -1880,6 +1885,9 @@ class FixedUpdatePatch
                 Suffix.Append(Bloodhound.GetTargetArrow(seer, target));
 
                 Suffix.Append(Tracker.GetTrackerArrow(seer, target));
+
+                Suffix.Append(Deathpact.GetDeathpactPlayerArrow(seer));
+                Suffix.Append(Deathpact.GetDeathpactMark(seer, target));
 
                 if (GameStates.IsInTask && seer.Is(CustomRoles.AntiAdminer))
                 {

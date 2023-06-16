@@ -137,6 +137,7 @@
 "Inhibitor","","Inhibitor","Тугодум","",""
 "SkinEater","","Devourer","","",""
 "Dazzler","","Dazzler","","",""
+"Deathpact","","Deathpact","","",""
 
 "# 船员阵营 / Crewmates"
 "Luckey","幸运儿","Luckey","Удачник","幸運兒","Suertudo"
@@ -365,6 +366,7 @@
 "InhibitorInfo","","You cannot kill during sabotages","Вы не можете убивать во время саботажей","",""
 "SkinEaterInfo","","Devour their skins","","",""
 "DazzlerInfo","","Take away their vision","","",""
+"DeathpactInfo","","Assign players to a death pact","","",""
 
 "# 船员阵营 / Crewmate descriptions"
 "LuckeyInfo","你擅长治疗内鬼的低血压","Your Killer may Miss the Kill","Убийца может промазать по вам","是生是死，看你是歐還是非","你擅长治疗内鬼的低血压"
@@ -535,6 +537,7 @@
 "InhibitorInfoLong","","(Impostors):\nAs the Inhibitor, you can only kill when there is not a critical sabotage active.\n\nIf a critical sabotage is active (eg Lights or Reactor), you cannot kill.","(Предатель):\Ингибитор не может убивать только тогда, когда работает один из критических саботажей.\n\nЕсли активен критический саботаж (например, Свет или Реактор), вы не можете убивать","",""
 "SkinEaterInfoLong","","(Impostors):\nAs the Devourer, you use your shapeshift to permanently change the appearance of the target of the shapeshift. Additionally, for each player's appearance changed, your kill cooldown is reduced by a defined number of seconds. If the Devourer dies or gets voted out during a meeting, the player's appearance will change back to their normal appearance.","","",""
 "DazzlerInfoLong","","(Impostors):\nAs the Dazzler, you can reduce the vision of the target of your Shapeshift permanently. When you die, their vision will turn back to normal.","","",""
+"DeathpactInfoLong","","(Impostors):\nAs a deathpact, the targets of your shapeshifting are marked for a deathpact. If enough players are marked for a death pact, the marked players must meet within a defined period of time; if they fail to do so, they die. If a marked player dies before the death pact is completed, the pact is withdrawn.","","",""
 
 
 "# 船员阵营 / Crewmates descriptions"
@@ -1461,6 +1464,10 @@
 "AmorPlayerAlreadyInLove","","Player is already in Love","","",""
 "AmorPlayerFellInLove","","You fell in Love","","",""
 "AmorMadePlayerFallInLove","","You made 2 players fall in Love","","",""
+"DeathpactActiveDeathpact","","Find【{0}】in【{1}】seconds.","","",""
+"DeathpactComplete","","Death pact was concluded.","","",""
+"DeathpactExecuted","","Death pact was executed.","","",""
+"DeathpactAverted","","Death pact was averted.","","",""
 
 "MonarchKnightCooldown","","Knight Cooldown","Откат посвящения","",""
 "MonarchKnightMax","","Maximum Knights","Максимум просвящений","",""
@@ -1486,6 +1493,11 @@
 "MerchantSellNeutral","","Can sell <color=#7f8c8d>neutral</color> Add-ons","","",""
 "MerchantSellHarmfulToEvil","","Can sell <color=#ff1919>harmful</color> Add-ons only to <color=#ff1919>Evil</color>","","",""
 "MerchantSellHelpfulToCrew","","Can sell <color=#8cffff>helpful</color> Add-ons only to <color=#8cffff>Crew</color>","","",""
+"DeathpactDuration","","<color=#ff1919>Death pact</color> duration","","",""
+"DeathpactNumberOfPlayersInPact","","Number of players in <color=#ff1919>Death pact</color>","","",""
+"DeathpactShowArrowsToOtherPlayersInPact","","Show arrows leading to other players in <color=#ff1919>Death pact</color>","","",""
+"DeathpactReduceVisionWhileInPact","","Reduce vision for players in <color=#ff1919>Death pact</color>","","",""
+"DeathpactVisionWhileInPact","","Vision for players in <color=#ff1919>Death pact</color>","","",""
 
 "## 信息 / Message"
 "Message.SetToSeconds","信息发送冷却时间为【{0}】秒","Set to 【{0}】 seconds.","Установлен на 【{0}】 секунды","訊息傳送冷卻時間設為【{0}】秒","信息发送冷却时间为【{0}】秒"

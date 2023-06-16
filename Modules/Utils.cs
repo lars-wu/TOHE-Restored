@@ -1145,6 +1145,8 @@ public static class Utils
                 SelfSuffix.Append(Tracker.GetTrackerArrow(seer));
             }
 
+            SelfSuffix.Append(Deathpact.GetDeathpactPlayerArrow(seer));
+
             //タスクを終えたSnitchがインポスター/キル可能なニュートラルの方角を確認できる
             SelfSuffix.Append(Snitch.GetSnitchArrow(seer));
 
@@ -1170,9 +1172,10 @@ public static class Utils
                 SelfName = $"{ColorString(seer.GetRoleColor(), GetString("EnterVentToWin"))}";
             if (seer.Is(CustomRoles.Revolutionist) && seer.IsDrawDone())
                 SelfName = $">{ColorString(seer.GetRoleColor(), string.Format(GetString("EnterVentWinCountDown"), Main.RevolutionistCountdown.TryGetValue(seer.PlayerId, out var x) ? x : 10))}";
-            
             if (Pelican.IsEaten(seer.PlayerId))
                 SelfName = $"{ColorString(GetRoleColor(CustomRoles.Pelican), GetString("EatenByPelican"))}";
+            if (Deathpact.IsInActiveDeathpact(seer))
+                SelfName = Deathpact.GetDeathpactString(seer);
             if (NameNotifyManager.GetNameNotify(seer, out var name))
                 SelfName = name;
 
@@ -1446,6 +1449,7 @@ public static class Utils
 
                 TargetMark.Append(Totocalcio.TargetMark(seer, target));
                 TargetMark.Append(Lawyer.LawyerMark(seer, target));
+                TargetMark.Append(Deathpact.GetDeathpactMark(seer, target));
 
                 //KB目标玩家名字后缀
                 TargetSuffix.Clear();

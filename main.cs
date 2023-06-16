@@ -495,6 +495,7 @@ public enum CustomRoles
     Camouflager,
     SkinEater,
     Dazzler,
+    Deathpact,
     //Crewmate(Vanilla)
     Engineer,
     GuardianAngel,

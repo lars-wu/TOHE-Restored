@@ -275,6 +275,9 @@ public class PlayerGameOptionsSender : GameOptionsSender
             case CustomRoles.Dazzler:
                 Dazzler.ApplyGameOptions();
                 break;
+            case CustomRoles.Deathpact:
+                Deathpact.ApplyGameOptions();
+                break;
         }
 
         // Ϊ�Ի��ߵ�����
@@ -302,6 +305,7 @@ public class PlayerGameOptionsSender : GameOptionsSender
         }
 
         Dazzler.SetDazzled(player, opt);
+        Deathpact.SetDeathpactVision(player, opt);
 
         foreach (var subRole in Main.PlayerStates[player.PlayerId].SubRoles)
         {

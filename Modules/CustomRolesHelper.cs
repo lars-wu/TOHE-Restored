@@ -114,6 +114,7 @@ internal static class CustomRolesHelper
                 CustomRoles.Merchant => CustomRoles.Crewmate,
                 CustomRoles.Amor => CustomRoles.Amor,
                 CustomRoles.Dazzler => CustomRoles.Shapeshifter,
+                CustomRoles.Deathpact => CustomRoles.Shapeshifter,
                 _ => role.IsImpostor() ? CustomRoles.Impostor : CustomRoles.Crewmate,
             };
     }
@@ -417,7 +418,8 @@ internal static class CustomRolesHelper
             CustomRoles.Disperser or
             CustomRoles.Camouflager or
             CustomRoles.SkinEater or
-            CustomRoles.Dazzler;
+            CustomRoles.Dazzler or
+            CustomRoles.Deathpact;
     }
     public static bool IsNeutral(this CustomRoles role) // �Ƿ�����
     {
