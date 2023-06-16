@@ -1115,6 +1115,7 @@ class ReportDeadBodyPatch
         Judge.OnReportDeadBody();
         Greedier.OnReportDeadBody();
         Tracker.OnReportDeadBody();
+        Deathpact.OnReportDeadBody();
 
         Mortician.OnReportDeadBody(player, target);
         Mediumshiper.OnReportDeadBody(target);
