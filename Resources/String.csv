@@ -1468,6 +1468,7 @@
 "DeathpactComplete","","Death pact was concluded.","","",""
 "DeathpactExecuted","","Death pact was executed.","","",""
 "DeathpactAverted","","Death pact was averted.","","",""
+"DazzlerDazzled","","You got dazzled","","",""
 
 "MonarchKnightCooldown","","Knight Cooldown","Откат посвящения","",""
 "MonarchKnightMax","","Maximum Knights","Максимум просвящений","",""
