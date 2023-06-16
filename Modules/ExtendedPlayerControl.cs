@@ -686,6 +686,9 @@ static class ExtendedPlayerControl
             case CustomRoles.Amor:
                 Amor.SetCooldown(player.PlayerId);
                 break;
+            case CustomRoles.Dazzler:
+                Dazzler.SetKillCooldown(player.PlayerId);
+                break;
         }
         if (player.PlayerId == LastImpostor.currentId)
             LastImpostor.SetKillCooldown();

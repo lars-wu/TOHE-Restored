@@ -224,6 +224,7 @@ internal class ChangeRoleSettings
             Tracker.Init();
             Merchant.Init();
             Amor.Init();
+            Dazzler.Init();
 
             SoloKombatManager.Init();
             CustomWinnerHolder.Reset();
@@ -603,6 +604,9 @@ internal class SelectRolesPatch
                         break;
                     case CustomRoles.Amor:
                         Amor.Add(pc.PlayerId);
+                        break;
+                    case CustomRoles.Dazzler:
+                        Dazzler.Add(pc.PlayerId);
                         break;
                 }
                 foreach (var subRole in pc.GetCustomSubRoles())

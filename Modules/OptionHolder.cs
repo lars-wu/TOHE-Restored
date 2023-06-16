@@ -828,6 +828,7 @@ public static class Options
             .SetParent(CustomRoleSpawnChances[CustomRoles.Warlock]);
         Wildling.SetupCustomOption();
         SkinEater.SetupCustomOption();
+        Dazzler.SetupCustomOption();
         TextOptionItem.Create(909090_3, "RoleType.Madmate", TabGroup.ImpostorRoles)
             .SetGameMode(CustomGameMode.Standard)
             .SetColor(new Color32(255, 25, 25, byte.MaxValue));

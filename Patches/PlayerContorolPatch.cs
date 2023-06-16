@@ -895,6 +895,10 @@ class ShapeshiftPatch
                 if (shapeshifting) 
                     SkinEater.OnShapeshift(shapeshifter, target);
                 break;
+            case CustomRoles.Dazzler:
+                if (shapeshifting)
+                    Dazzler.OnShapeshift(shapeshifter, target);
+                break;
         }
 
     End:

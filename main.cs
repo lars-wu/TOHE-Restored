@@ -494,6 +494,7 @@ public enum CustomRoles
     Disperser,
     Camouflager,
     SkinEater,
+    Dazzler,
     //Crewmate(Vanilla)
     Engineer,
     GuardianAngel,
