@@ -537,7 +537,7 @@
 "InhibitorInfoLong","","(Impostors):\nAs the Inhibitor, you can only kill when there is not a critical sabotage active.\n\nIf a critical sabotage is active (eg Lights or Reactor), you cannot kill.","(Предатель):\Ингибитор не может убивать только тогда, когда работает один из критических саботажей.\n\nЕсли активен критический саботаж (например, Свет или Реактор), вы не можете убивать","",""
 "SkinEaterInfoLong","","(Impostors):\nAs the Devourer, you use your shapeshift to permanently change the appearance of the target of the shapeshift. Additionally, for each player's appearance changed, your kill cooldown is reduced by a defined number of seconds. If the Devourer dies or gets voted out during a meeting, the player's appearance will change back to their normal appearance.","","",""
 "DazzlerInfoLong","","(Impostors):\nAs the Dazzler, you can reduce the vision of the target of your Shapeshift permanently. When you die, their vision will turn back to normal.","","",""
-"DeathpactInfoLong","","(Impostors):\nAs a deathpact, the targets of your shapeshifting are marked for a deathpact. If enough players are marked for a death pact, the marked players must meet within a defined period of time; if they fail to do so, they die. If a marked player dies before the death pact is completed, the pact is withdrawn.","","",""
+"DeathpactInfoLong","","(Impostors):\nAs the Deathpact, the targets of your shapeshifting are marked for a deathpact. If enough players are marked for a death pact, the marked players must meet within a defined period of time; if they fail to do so, they die. If a marked player dies before the death pact is completed, the pact is withdrawn.","","",""
 
 
 "# 船员阵营 / Crewmates descriptions"
