@@ -1029,6 +1029,7 @@
 "PsychicCanSeeNum","可以看到几个红名","Max number of red names","Максимальное количество красных имен","可以看到幾個紅名","可以看到几个红名"
 "PsychicFresh","每次会议刷新红名","New red names every meeting","Красный никнейм меняется на каждой встрече","每次會議重新顯示紅名","每次会议刷新红名"
 "DetectiveCanknowKiller","可以知道凶手的职业","Can find the killer's role","Может знать роль убийцы","可以知道兇手的職業","可以知道凶手的职业"
+"DetectiveKnowsKillerRole","","Show killer's role in meeting","","",""
 "ParanoiaVentCooldown","召开会议冷却时间","Vent Cooldown","Откат вентиляции","召開會議冷卻時間","召开会议冷却时间"
 "ParanoiaNumOfUseButton","召开会议次数上限","Max number of portable buttons","Количество портативных кнопок","召開會議次數上限","召开会议次数上限"
 "EveryOneKnowSuperStar","所有人知道谁是明星","Everyone knows the <color=#f6f657>Super Star</color>","Все знают кто является <color=#f6f657>Супер Звездой</color>","所有人知道誰是大明星","所有人知道谁是明星"

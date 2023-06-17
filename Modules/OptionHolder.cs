@@ -185,7 +185,7 @@ public static class Options
     public static OptionItem GlitchCanVote;
     public static OptionItem TrapperBlockMoveTime;
     public static OptionItem DetectiveCanknowKiller;
-    public static OptionItem DetectiveAlwaysknowKiller;
+    public static OptionItem DetectiveKnowsKillerRole;
     public static OptionItem TransporterTeleportMax;
     public static OptionItem CanTerroristSuicideWin;
     public static OptionItem InnocentCanWinByImp;
@@ -870,7 +870,7 @@ public static class Options
         SetupRoleOptions(8021015, TabGroup.CrewmateRoles, CustomRoles.Detective);
         DetectiveCanknowKiller = BooleanOptionItem.Create(8021017, "DetectiveCanknowKiller", true, TabGroup.CrewmateRoles, false)
             .SetParent(CustomRoleSpawnChances[CustomRoles.Detective]);
-        DetectiveAlwaysknowKiller = BooleanOptionItem.Create(8021018, "DetectiveAlwaysknowKiller", true, TabGroup.CrewmateRoles, false)
+        DetectiveKnowsKillerRole = BooleanOptionItem.Create(8021018, "DetectiveKnowsKillerRole", true, TabGroup.CrewmateRoles, false)
             .SetParent(CustomRoleSpawnChances[CustomRoles.Detective]);
         SetupRoleOptions(20700, TabGroup.CrewmateRoles, CustomRoles.Doctor);
         DoctorTaskCompletedBatteryCharge = FloatOptionItem.Create(20710, "DoctorTaskCompletedBatteryCharge", new(0f, 250f, 1f), 50f, TabGroup.CrewmateRoles, false)

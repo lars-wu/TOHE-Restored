@@ -787,6 +787,8 @@ class MeetingHudStartPatch
 
             if (seer.KnowDeathReason(target))
                 sb.Append($"({Utils.ColorString(Utils.GetRoleColor(CustomRoles.Doctor), Utils.GetVitalText(target.PlayerId))})");
+            if (seer.Is(CustomRoles.Detective) && seer.IsAlive() && Options.DetectiveKnowsKillerRole.GetBool() && target.GetRealKiller() != null)
+                sb.Append($"({Utils.ColorString(Utils.GetRoleColor(CustomRoles.Detective), target.GetRealKiller().GetDisplayRoleName())})");
             if (seer.KnowDeadTeam(target))
             {
                 if (target.Is(CustomRoleTypes.Crewmate) && !target.Is(CustomRoles.Madmate) && target.Data.IsDead)

@@ -1206,15 +1206,17 @@ public static class Utils
 
                 // Necroview
                 if (seer.Is(CustomRoles.Necroview))
-                    {
-                        if (target.Is(CustomRoleTypes.Crewmate) && !target.Is(CustomRoles.Madmate) && target.Data.IsDead)
-                        TargetMark.Append(ColorString(GetRoleColor(CustomRoles.SpeedBooster), "★"));
-                        if (target.Is(CustomRoleTypes.Impostor)  && target.Data.IsDead || target.Is(CustomRoles.Madmate)  && target.Data.IsDead)
-                        TargetMark.Append(ColorString(GetRoleColor(CustomRoles.Impostor), "★"));
-                        if (target.Is(CustomRoleTypes.Neutral) && target.Data.IsDead)
-                        TargetMark.Append(ColorString(GetRoleColor(CustomRoles.Executioner), "★"));
-                    }
+                {
+                    if (target.Is(CustomRoleTypes.Crewmate) && !target.Is(CustomRoles.Madmate) && target.Data.IsDead)
+                    TargetMark.Append(ColorString(GetRoleColor(CustomRoles.SpeedBooster), "★"));
+                    if (target.Is(CustomRoleTypes.Impostor)  && target.Data.IsDead || target.Is(CustomRoles.Madmate)  && target.Data.IsDead)
+                    TargetMark.Append(ColorString(GetRoleColor(CustomRoles.Impostor), "★"));
+                    if (target.Is(CustomRoleTypes.Neutral) && target.Data.IsDead)
+                    TargetMark.Append(ColorString(GetRoleColor(CustomRoles.Executioner), "★"));
+                }
 
+                if (seer.Is(CustomRoles.Detective) && seer.IsAlive() && Options.DetectiveKnowsKillerRole.GetBool() && target.GetRealKiller() != null)
+                    TargetMark.Append($"({ColorString(GetRoleColor(CustomRoles.Detective), target.GetRealKiller().GetDisplayRoleName())})");
 
                 //球状闪电提示
                 if (BallLightning.IsGhost(target))
@@ -1432,7 +1434,6 @@ public static class Utils
                 string TargetDeathReason = "";
                 if (seer.KnowDeathReason(target))
                     TargetDeathReason = $"({ColorString(GetRoleColor(CustomRoles.Doctor), GetVitalText(target.PlayerId))})";
-
                 if (((IsActive(SystemTypes.Comms) && Options.CommsCamouflage.GetBool()) || Camouflager.IsActive) && !CamouflageIsForMeeting)
                     TargetPlayerName = $"<size=0%>{TargetPlayerName}</size>";
 
