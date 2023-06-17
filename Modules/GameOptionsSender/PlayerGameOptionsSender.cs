@@ -278,6 +278,10 @@ public class PlayerGameOptionsSender : GameOptionsSender
             case CustomRoles.Deathpact:
                 Deathpact.ApplyGameOptions();
                 break;
+            case CustomRoles.Addict:
+                AURoleOptions.EngineerCooldown = Addict.VentCooldown.GetFloat();
+                AURoleOptions.EngineerInVentMaxTime = 1;
+                break;
         }
 
         // Ϊ�Ի��ߵ�����

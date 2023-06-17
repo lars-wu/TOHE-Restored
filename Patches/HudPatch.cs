@@ -227,6 +227,9 @@ class HudManagerPatch
                     case CustomRoles.Amor:
                         __instance.KillButton.OverrideText(GetString("AmorKillButtonText"));
                         break;
+                    case CustomRoles.Addict:
+                        __instance.AbilityButton.OverrideText(GetString("AddictVentButtonText"));
+                        break;
                 }
 
                 //バウンティハンターのターゲットテキスト

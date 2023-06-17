@@ -125,7 +125,8 @@ class CheckMurderPatch
         // 赝品检查
         if (Counterfeiter.OnClientMurder(killer)) return false;
         if (Pursuer.OnClientMurder(killer)) return false;
-        
+        if (Addict.IsImmortal(target)) return false;
+
         //判定凶手技能
         if (killer.PlayerId != target.PlayerId)
         {
@@ -1117,6 +1118,7 @@ class ReportDeadBodyPatch
         Greedier.OnReportDeadBody();
         Tracker.OnReportDeadBody();
         Deathpact.OnReportDeadBody();
+        Addict.OnReportDeadBody();
 
         Mortician.OnReportDeadBody(player, target);
         Mediumshiper.OnReportDeadBody(target);
@@ -1439,6 +1441,7 @@ class FixedUpdatePatch
 
             Farseer.OnPostFix(player);
             Deathpact.OnFixedUpdate(player);
+            Addict.FixedUpdate(player);
 
             if (!lowLoad)
             {
@@ -2054,6 +2057,7 @@ class EnterVentPatch
 
         Swooper.OnEnterVent(pc, __instance);
         Wraith.OnEnterVent(pc, __instance);
+        Addict.OnEnterVent(pc, __instance);
 
         if (pc.Is(CustomRoles.Veteran))
         {
