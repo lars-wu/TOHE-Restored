@@ -1465,6 +1465,7 @@
 "AmorPlayerFellInLove","","You fell in Love","","",""
 "AmorMadePlayerFallInLove","","You made 2 players fall in Love","","",""
 "DeathpactActiveDeathpact","","Find【{0}】in【{1}】seconds.","","",""
+"DeathpactCouldNotAddTarget","","Target can't be added to death pact.","","",""
 "DeathpactComplete","","Death pact was concluded.","","",""
 "DeathpactExecuted","","Death pact was executed.","","",""
 "DeathpactAverted","","Death pact was averted.","","",""
