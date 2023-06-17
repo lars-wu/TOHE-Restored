@@ -1264,6 +1264,7 @@
 "NeutralCanBeFool","","<color=#7f8c8d>Neutrals</color> can become <color=#e6e7ff>Fool</color>","<color=#7f8c8d>Нейтралы</color> могут стать <color=#e6e7ff>Глупцом</color>","",""
 "DazzlerCauseVision","","Reduced vision","","",""
 "DazzlerDazzleLimit","","Max number of players affected by reduced vision","","",""
+"DazzlerResetDazzledVisionOnDeath","","Reset vision of dazzled players on death/eject","","",""
 
 "## Moderation for Auto-Hosters"
 "ApplyModeratorList","","Apply Moderator List","Применить список модераторов","",""
@@ -1453,7 +1454,7 @@
 "BeRecruitedByJackal","","You have been recruited by the Jackal","Вы были завербованы Шакалом","",""
 "BloodhoundTrackRecorded","","Track recorded","Трек активирован","",""
 "BloodhoundNoTrack","","Nothing to track","Нечего отслеживать","",""
-"TrackerLastRoomMessage","","The evaluation of your tracking showed that the last room in which your target was located was \"{0}\".".","","",""
+"TrackerLastRoomMessage","","The evaluation of your tracking showed that the last room in which your target was located was:【{0}】","Оценка вашего отслеживания показала, что последняя локация в которой находилась ваша цель, была:【{0}】","",""
 "MerchantAddonDelivered","","Add-on sold","","",""
 "MerchantAddonSell","","The Merchant sold you a new Add-on","","",""
 "MerchantAddonSellFail","","Could not sell an Add-on","","",""
