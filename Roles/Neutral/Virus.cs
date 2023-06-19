@@ -66,6 +66,7 @@ namespace TOHE.Roles.Neutral
                 Main.ResetCamPlayerList.Add(playerId);
         }
 
+        public static bool IsEnable => playerIdList.Count > 0;
         public static void SetKillCooldown(byte id) => Main.AllPlayerKillCooldown[id] = KillCooldown.GetFloat();
 
         private static void SendRPC()
