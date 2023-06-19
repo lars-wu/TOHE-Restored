@@ -862,7 +862,7 @@ internal class ChatCommands
                 }
 
                 // Kick the specified player
-                AmongUsClient.Instance.KickPlayer(kickedPlayer.GetClientId(), true);
+                AmongUsClient.Instance.KickPlayer(kickedPlayer.GetClientId(), false);
                 string kickedPlayerName = kickedPlayer.GetRealName();
                 string textToSend = $"{kickedPlayerName} {GetString("KickCommandKicked")}";
                 if (GameStates.IsInGame)
