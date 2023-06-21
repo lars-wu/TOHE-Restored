@@ -57,6 +57,17 @@ public class PlayerState
     {
         MainRole = role;
         countTypes = role.GetCountTypes();
+        if (role == CustomRoles.DarkHide)
+        {
+            if (!DarkHide.SnatchesWin.GetBool())
+            {
+                countTypes = CountTypes.DarkHide;
+            }
+            if (DarkHide.SnatchesWin.GetBool())
+            {
+                countTypes = CountTypes.Crew;
+            }
+        }
     }
     public void SetSubRole(CustomRoles role, bool AllReplace = false)
     {

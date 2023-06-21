@@ -46,6 +46,7 @@ internal class ChatCommands
         if (Judge.TrialMsg(PlayerControl.LocalPlayer, text)) goto Canceled;
         if (Mediumshiper.MsMsg(PlayerControl.LocalPlayer, text)) goto Canceled;
         if (MafiaRevengeManager.MafiaMsgCheck(PlayerControl.LocalPlayer, text)) goto Canceled;
+        if (RetributionistRevengeManager.RetributionistMsgCheck(PlayerControl.LocalPlayer, text)) goto Canceled;
         switch (args[0])
         {
             case "/dump":
@@ -705,6 +706,7 @@ internal class ChatCommands
         if (Judge.TrialMsg(player, text)) { canceled = true; return; }
         if (Mediumshiper.MsMsg(player, text)) return;
         if (MafiaRevengeManager.MafiaMsgCheck(player, text)) return;
+        if (RetributionistRevengeManager.RetributionistMsgCheck(player, text)) return;
         switch (args[0])
         {
             case "/l":
