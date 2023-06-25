@@ -2265,7 +2265,7 @@ public static class PlayerPhysicsFixedUpdate
         if (__instance.AmOwner &&
             GameData.Instance &&
             AmongUsClient.Instance &&
-            AmongUsClient.Instance.GameState == InnerNet.InnerNetClient.GameStates.Started &&
+            AmongUsClient.Instance.GameState == InnerNetClient.GameStates.Started &&
             !__instance.myPlayer.Data.IsDead &&
             __instance.myPlayer.CanMove &&
             __instance.myPlayer.Is(CustomRoles.Confused))
