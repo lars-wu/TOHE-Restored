@@ -751,9 +751,9 @@ class ShapeshiftPatch
 
         if (Options.HideShapeshifterName.GetBool())
         {
-            foreach (var player in Main.AllAlivePlayerControls)
+            if (shapeshifting)
             {
-                if (shapeshifting)
+                foreach (var player in Main.AllAlivePlayerControls)
                 {
                     if (player.PlayerId == target.PlayerId)
                     {
@@ -769,7 +769,10 @@ class ShapeshiftPatch
                     //target.cosmetics.nameText.text = hideName;
                     target.RpcSetNamePrivate(hideName, true, player, force: true);
                 }
-                else
+            }
+            else
+            {
+                foreach (var player in Main.AllAlivePlayerControls)
                 {
                     foreach (var item in PlayerOriginalName)
                     {
@@ -781,9 +784,9 @@ class ShapeshiftPatch
                         //item.Key.cosmetics.nameText.text = item.Value;
                         item.Key.RpcSetNamePrivate(item.Value, true, player, force: true);
                     }
-
-                    PlayerOriginalName.Clear();
                 }
+
+                PlayerOriginalName.Clear();
             }
         }
 
