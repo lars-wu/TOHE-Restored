@@ -229,6 +229,7 @@ internal class ChangeRoleSettings
             Dazzler.Init();
             Deathpact.Init();
             Addict.Init();
+            Confuser.Init();
 
             SoloKombatManager.Init();
             CustomWinnerHolder.Reset();

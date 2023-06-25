@@ -161,6 +161,7 @@ public static class Divinator
                 CustomRoles.NWitch or
                 CustomRoles.ShapeMaster or
                 CustomRoles.ShapeshifterTOHE or
+                CustomRoles.Confuser or
                 CustomRoles.Paranoia or
                 CustomRoles.Psychic or
                 CustomRoles.Executioner or

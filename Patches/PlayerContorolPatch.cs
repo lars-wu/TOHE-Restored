@@ -715,6 +715,7 @@ class MurderPlayerPatch
         target.SetRealKiller(killer, true); //既に追加されてたらスキップ
         Utils.CountAlivePlayers(true);
 
+        Confuser.isDead(target);
         Camouflager.isDead(target);
         Utils.TargetDies(__instance, target);
 
@@ -910,6 +911,9 @@ class ShapeshiftPatch
             case CustomRoles.Deathpact:
                 if (shapeshifting) 
                     Deathpact.OnShapeshift(shapeshifter, target);
+                break;
+            case CustomRoles.Confuser:
+                Confuser.OnShapeshift(shapeshifter, shapeshifting);
                 break;
         }
 
@@ -1120,6 +1124,7 @@ class ReportDeadBodyPatch
         Divinator.didVote.Clear();
         Bloodhound.Clear();
 
+        Confuser.OnReportDeadBody();
         Camouflager.OnReportDeadBody();
         Psychic.OnReportDeadBody();
         BountyHunter.OnReportDeadBody();
@@ -2332,5 +2337,22 @@ class PlayerControlSetRolePatch
             }
         }
         return true;
+    }
+}
+
+[HarmonyPatch(typeof(PlayerPhysics), nameof(PlayerPhysics.FixedUpdate))]
+public static class PlayerPhysicsFixedUpdate
+{
+    public static void Postfix(PlayerPhysics __instance)
+    {
+        if (__instance.AmOwner &&
+            GameData.Instance &&
+            AmongUsClient.Instance &&
+            AmongUsClient.Instance.GameState == InnerNet.InnerNetClient.GameStates.Started &&
+            !__instance.myPlayer.Data.IsDead &&
+            __instance.myPlayer.CanMove &&
+            Confuser.ConfuseActive &&
+            !Confuser.playerIdList.Contains(__instance.myPlayer.PlayerId))
+            __instance.body.velocity *= -1;
     }
 }

@@ -111,6 +111,7 @@ internal static class CustomRolesHelper
                 CustomRoles.Camouflager => CustomRoles.Shapeshifter,
                 CustomRoles.Monarch => CustomRoles.Impostor,
                 CustomRoles.SkinEater => CustomRoles.Shapeshifter,
+                CustomRoles.Confuser => CustomRoles.Shapeshifter,
                 CustomRoles.Bloodhound => CustomRoles.Crewmate,
                 CustomRoles.Tracker => CustomRoles.Crewmate,
                 CustomRoles.Merchant => CustomRoles.Crewmate,
@@ -428,7 +429,8 @@ internal static class CustomRolesHelper
             CustomRoles.Camouflager or
             CustomRoles.SkinEater or
             CustomRoles.Dazzler or
-            CustomRoles.Deathpact;
+            CustomRoles.Deathpact or
+            CustomRoles.Confuser;
     }
     public static bool IsNeutral(this CustomRoles role) // �Ƿ�����
     {

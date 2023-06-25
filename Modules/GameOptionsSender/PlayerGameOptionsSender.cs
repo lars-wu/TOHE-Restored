@@ -283,6 +283,9 @@ public class PlayerGameOptionsSender : GameOptionsSender
                 AURoleOptions.EngineerCooldown = Addict.VentCooldown.GetFloat();
                 AURoleOptions.EngineerInVentMaxTime = 1;
                 break;
+            case CustomRoles.Confuser:
+                Confuser.ApplyGameOptions();
+                break;
         }
 
         // Ϊ�Ի��ߵ�����
