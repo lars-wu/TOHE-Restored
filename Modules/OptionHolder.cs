@@ -496,6 +496,7 @@ public static class Options
     // その他
     public static OptionItem FixFirstKillCooldown;
     public static OptionItem ShieldPersonDiedFirst;
+    public static OptionItem HideShapeshifterName;
     public static OptionItem GhostCanSeeOtherRoles;
     public static OptionItem GhostCanSeeOtherVotes;
     public static OptionItem GhostCanSeeDeathReason;
@@ -2001,6 +2002,10 @@ public static class Options
            .SetColor(new Color32(193, 255, 209, byte.MaxValue))
             .SetValueFormat(OptionFormat.Seconds)
             .SetGameMode(CustomGameMode.Standard);
+
+        HideShapeshifterName = BooleanOptionItem.Create(90010, "HideShapeshifterName", false, TabGroup.GameSettings, false)
+            .SetGameMode(CustomGameMode.Standard)
+            .SetColor(new Color32(193, 255, 209, byte.MaxValue));
 
         // 幽灵相关设定
         TextOptionItem.Create(66_123_124, "MenuTitle.Ghost", TabGroup.GameSettings)
