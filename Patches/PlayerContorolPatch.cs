@@ -2255,3 +2255,20 @@ class PlayerControlSetRolePatch
         return true;
     }
 }
+
+
+[HarmonyPatch(typeof(PlayerPhysics), nameof(PlayerPhysics.FixedUpdate))]
+public static class PlayerPhysicsFixedUpdate
+{
+    public static void Postfix(PlayerPhysics __instance)
+    {
+        if (__instance.AmOwner &&
+            GameData.Instance &&
+            AmongUsClient.Instance &&
+            AmongUsClient.Instance.GameState == InnerNet.InnerNetClient.GameStates.Started &&
+            !__instance.myPlayer.Data.IsDead &&
+            __instance.myPlayer.CanMove &&
+            __instance.myPlayer.Is(CustomRoles.Confused))
+            __instance.body.velocity *= -1;
+    }
+}
