@@ -2351,8 +2351,12 @@ public static class PlayerPhysicsFixedUpdate
             AmongUsClient.Instance.GameState == InnerNet.InnerNetClient.GameStates.Started &&
             !__instance.myPlayer.Data.IsDead &&
             __instance.myPlayer.CanMove &&
-            Confuser.ConfuseActive &&
-            !Confuser.playerIdList.Contains(__instance.myPlayer.PlayerId))
+            (
+            __instance.myPlayer.Is(CustomRoles.Confused)
+            || 
+            (Confuser.ConfuseActive &&
+            !Confuser.playerIdList.Contains(__instance.myPlayer.PlayerId)
+            )))
             __instance.body.velocity *= -1;
     }
 }
