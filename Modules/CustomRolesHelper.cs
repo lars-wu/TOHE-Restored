@@ -232,7 +232,8 @@ internal static class CustomRolesHelper
             CustomRoles.Guesser or
             CustomRoles.Rogue or
             CustomRoles.Unreportable or
-            CustomRoles.Lucky;
+            CustomRoles.Lucky or 
+            CustomRoles.Confused;
     }
     public static bool IsNonNK(this CustomRoles role) // ROLE ASSIGNING, NOT NEUTRAL TYPE
     {

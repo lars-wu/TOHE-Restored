@@ -266,6 +266,9 @@ public static class Options
     public static OptionItem ImpCanBeLucky;
     public static OptionItem CrewCanBeLucky;
     public static OptionItem NeutralCanBeLucky;
+    public static OptionItem ImpCanBeConfused;
+    public static OptionItem CrewCanBeConfused;
+    public static OptionItem NeutralCanBeConfused;
     public static OptionItem ControlCooldown;
     public static OptionItem InhibitorCD;
     public static OptionItem JesterVision;
@@ -1205,6 +1208,13 @@ public static class Options
         ObliviousBaitImmune = BooleanOptionItem.Create(6050376, "ObliviousBaitImmune", false, TabGroup.Addons, false)
         .SetParent(CustomRoleSpawnChances[CustomRoles.Oblivious]);
         Workhorse.SetupCustomOption();
+        SetupAdtRoleOptions(6050380, CustomRoles.Confused, canSetNum: true);
+        ImpCanBeConfused = BooleanOptionItem.Create(6050381, "ImpCanBeConfused", true, TabGroup.Addons, false)
+            .SetParent(CustomRoleSpawnChances[CustomRoles.Confused]);
+        CrewCanBeConfused = BooleanOptionItem.Create(6050382, "CrewCanBeConfused", true, TabGroup.Addons, false)
+            .SetParent(CustomRoleSpawnChances[CustomRoles.Confused]);
+        NeutralCanBeConfused = BooleanOptionItem.Create(6050383, "NeutralCanBeConfused", true, TabGroup.Addons, false)
+            .SetParent(CustomRoleSpawnChances[CustomRoles.Confused]);
         TextOptionItem.Create(909096_3, "RoleType.Impostor", TabGroup.Addons) // IMPOSTOR
             .SetGameMode(CustomGameMode.Standard)
             .SetColor(new Color32(255, 25, 25, byte.MaxValue));

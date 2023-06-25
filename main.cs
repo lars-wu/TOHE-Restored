@@ -382,6 +382,7 @@ public class Main : BasePlugin
                 {CustomRoles.Unreportable, "#FF6347"},
                 {CustomRoles.Rogue, "#696969"},
                 {CustomRoles.Lucky, "#b8d7a3"},
+                {CustomRoles.Confused, "#9933ff"},
                 //SoloKombat
                 {CustomRoles.KB_Normal, "#f55252"}
             };
@@ -616,7 +617,8 @@ public enum CustomRoles
     Contagious,
     Unreportable,
     Rogue,
-    Lucky
+    Lucky,
+    Confused
 }
 //WinData
 public enum CustomWinner
