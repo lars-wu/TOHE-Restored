@@ -711,6 +711,7 @@ class MurderPlayerPatch
         target.SetRealKiller(killer, true); //既に追加されてたらスキップ
         Utils.CountAlivePlayers(true);
 
+        Confuser.isDead(target);
         Camouflager.isDead(target);
         Utils.TargetDies(__instance, target);
 
@@ -894,6 +895,9 @@ class ShapeshiftPatch
             case CustomRoles.Disperser:
                 if (shapeshifting)
                     Disperser.DispersePlayers(shapeshifter);
+                break;
+            case CustomRoles.Confuser:
+                Confuser.OnShapeshift(shapeshifter, shapeshifting);
                 break;
         }
 
@@ -1104,6 +1108,7 @@ class ReportDeadBodyPatch
         Divinator.didVote.Clear();
         Bloodhound.Clear();
 
+        Confuser.OnReportDeadBody();
         Camouflager.OnReportDeadBody();
         Psychic.OnReportDeadBody();
         BountyHunter.OnReportDeadBody();
@@ -2261,14 +2266,14 @@ public static class PlayerPhysicsFixedUpdate
 {
     public static void Postfix(PlayerPhysics __instance)
     {
-        //bool shouldInvert = (Invert.invert.FindAll(x => x.PlayerId == CachedPlayer.LocalPlayer.PlayerId).Count > 0 && Invert.meetings > 0) ^ EventUtility.eventInvert;  // xor. if already invert, eventInvert will turn it off for 10s
         if (__instance.AmOwner &&
-            AmongUsClient.Instance &&
-            //AmongUsClient.Instance.GameState == InnerNet.InnerNetClient.GameStates.Started &&
-            //!CachedPlayer.LocalPlayer.Data.IsDead &&
-            //shouldInvert &&
             GameData.Instance &&
-            __instance.myPlayer.CanMove)
+            AmongUsClient.Instance &&
+            AmongUsClient.Instance.GameState == InnerNet.InnerNetClient.GameStates.Started &&
+            !__instance.myPlayer.Data.IsDead &&
+            __instance.myPlayer.CanMove &&
+            Confuser.ConfuseActive &&
+            !Confuser.playerIdList.Contains(__instance.myPlayer.PlayerId))
             __instance.body.velocity *= -1;
     }
 }

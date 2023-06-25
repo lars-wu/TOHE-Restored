@@ -109,7 +109,8 @@ internal static class CustomRolesHelper
                 CustomRoles.Virus => CustomRoles.Virus,
                 CustomRoles.Disperser => CustomRoles.Shapeshifter,
                 CustomRoles.Camouflager => CustomRoles.Shapeshifter,
-             //   CustomRoles.Monarch => CustomRoles.Impostor,
+                CustomRoles.Confuser => CustomRoles.Shapeshifter,
+                //   CustomRoles.Monarch => CustomRoles.Impostor,
                 CustomRoles.Bloodhound => CustomRoles.Crewmate,
                 CustomRoles.Tracker => CustomRoles.Crewmate,
                 CustomRoles.Merchant => CustomRoles.Crewmate,
@@ -417,7 +418,8 @@ internal static class CustomRolesHelper
             CustomRoles.Bard or
             CustomRoles.Swooper or
             CustomRoles.Disperser or
-            CustomRoles.Camouflager;
+            CustomRoles.Camouflager or
+            CustomRoles.Confuser;
     }
     public static bool IsNeutral(this CustomRoles role) // �Ƿ�����
     {

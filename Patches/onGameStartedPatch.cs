@@ -224,6 +224,7 @@ internal class ChangeRoleSettings
             Tracker.Init();
             Merchant.Init();
             NSerialKiller.Init();
+            Confuser.Init();
 
             SoloKombatManager.Init();
             CustomWinnerHolder.Reset();

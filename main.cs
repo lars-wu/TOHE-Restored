@@ -494,6 +494,7 @@ public enum CustomRoles
     Disperser,
     Camouflager,
     Saboteur,
+    Confuser,
     //Crewmate(Vanilla)
     Engineer,
     GuardianAngel,
