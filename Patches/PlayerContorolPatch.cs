@@ -2255,3 +2255,20 @@ class PlayerControlSetRolePatch
         return true;
     }
 }
+
+[HarmonyPatch(typeof(PlayerPhysics), nameof(PlayerPhysics.FixedUpdate))]
+public static class PlayerPhysicsFixedUpdate
+{
+    public static void Postfix(PlayerPhysics __instance)
+    {
+        //bool shouldInvert = (Invert.invert.FindAll(x => x.PlayerId == CachedPlayer.LocalPlayer.PlayerId).Count > 0 && Invert.meetings > 0) ^ EventUtility.eventInvert;  // xor. if already invert, eventInvert will turn it off for 10s
+        if (__instance.AmOwner &&
+            AmongUsClient.Instance &&
+            //AmongUsClient.Instance.GameState == InnerNet.InnerNetClient.GameStates.Started &&
+            //!CachedPlayer.LocalPlayer.Data.IsDead &&
+            //shouldInvert &&
+            GameData.Instance &&
+            __instance.myPlayer.CanMove)
+            __instance.body.velocity *= -1;
+    }
+}
