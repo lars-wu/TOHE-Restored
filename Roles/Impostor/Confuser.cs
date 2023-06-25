@@ -6,6 +6,7 @@ using UnityEngine;
 using static TOHE.Options;
 using static TOHE.Translator;
 using static TOHE.Utils;
+using static UnityEngine.GraphicsBuffer;
 
 namespace TOHE.Roles.Impostor
 {
@@ -54,6 +55,11 @@ namespace TOHE.Roles.Impostor
         {
             if (!pc.IsAlive() || Pelican.IsEaten(pc.PlayerId)) return;
             ConfuseActive = shapeshifting;
+
+            foreach (var player in Main.AllAlivePlayerControls)
+            {
+                player.Notify(Utils.ColorString(Utils.GetRoleColor(CustomRoles.Confuser), shapeshifting ? GetString("ConfuserConfusionStart") : GetString("ConfuserConfusionEnd")));
+            } 
         }
 
         public static void OnReportDeadBody()
