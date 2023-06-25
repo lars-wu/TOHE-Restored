@@ -1853,7 +1853,11 @@ class FixedUpdatePatch
                 /*if(main.AmDebugger.Value && main.BlockKilling.TryGetValue(target.PlayerId, out var isBlocked)) {
                     Mark = isBlocked ? "(true)" : "(false)";
                 }*/
-                if ((Utils.IsActive(SystemTypes.Comms) && Options.CommsCamouflage.GetBool()) || Camouflager.IsActive)
+                bool hideShapeshifterName = 
+                    Options.HideShapeshifterName.GetBool() && 
+                    target.PlayerId != seer.PlayerId &&
+                    Main.CheckShapeshift.TryGetValue(target.PlayerId, out bool shapeshifting) && shapeshifting;
+                if ((Utils.IsActive(SystemTypes.Comms) && Options.CommsCamouflage.GetBool()) || Camouflager.IsActive || hideShapeshifterName)
                     RealName = $"<size=0>{RealName}</size> ";
 
                 string DeathReason = seer.Data.IsDead && seer.KnowDeathReason(target) ? $"({Utils.ColorString(Utils.GetRoleColor(CustomRoles.Doctor), Utils.GetVitalText(target.PlayerId))})" : "";
