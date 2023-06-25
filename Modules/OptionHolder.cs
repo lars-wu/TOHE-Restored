@@ -1213,12 +1213,12 @@ public static class Options
         ObliviousBaitImmune = BooleanOptionItem.Create(6050376, "ObliviousBaitImmune", false, TabGroup.Addons, false)
         .SetParent(CustomRoleSpawnChances[CustomRoles.Oblivious]);
         Workhorse.SetupCustomOption();
-        SetupAdtRoleOptions(6050380, CustomRoles.Confused, canSetNum: true);
-        ImpCanBeConfused = BooleanOptionItem.Create(6050381, "ImpCanBeConfused", true, TabGroup.Addons, false)
+        SetupAdtRoleOptions(6051480, CustomRoles.Confused, canSetNum: true);
+        ImpCanBeConfused = BooleanOptionItem.Create(6051481, "ImpCanBeConfused", true, TabGroup.Addons, false)
             .SetParent(CustomRoleSpawnChances[CustomRoles.Confused]);
-        CrewCanBeConfused = BooleanOptionItem.Create(6050382, "CrewCanBeConfused", true, TabGroup.Addons, false)
+        CrewCanBeConfused = BooleanOptionItem.Create(6051482, "CrewCanBeConfused", true, TabGroup.Addons, false)
             .SetParent(CustomRoleSpawnChances[CustomRoles.Confused]);
-        NeutralCanBeConfused = BooleanOptionItem.Create(6050383, "NeutralCanBeConfused", true, TabGroup.Addons, false)
+        NeutralCanBeConfused = BooleanOptionItem.Create(6051483, "NeutralCanBeConfused", true, TabGroup.Addons, false)
             .SetParent(CustomRoleSpawnChances[CustomRoles.Confused]);
         TextOptionItem.Create(909096_3, "RoleType.Impostor", TabGroup.Addons) // IMPOSTOR
             .SetGameMode(CustomGameMode.Standard)
