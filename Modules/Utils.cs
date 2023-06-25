@@ -1442,10 +1442,7 @@ public static class Utils
                 if (seer.KnowDeathReason(target))
                     TargetDeathReason = $"({ColorString(GetRoleColor(CustomRoles.Doctor), GetVitalText(target.PlayerId))})";
 
-                bool hideShapeshifterName =
-                    Options.HideShapeshifterName.GetBool() &&
-                    Main.CheckShapeshift.TryGetValue(target.PlayerId, out bool shapeshifting) && shapeshifting;
-                if (((IsActive(SystemTypes.Comms) && Options.CommsCamouflage.GetBool()) || Camouflager.IsActive || hideShapeshifterName) && !CamouflageIsForMeeting)
+                if (((IsActive(SystemTypes.Comms) && Options.CommsCamouflage.GetBool()) || Camouflager.IsActive) && !CamouflageIsForMeeting)
                     TargetPlayerName = $"<size=0%>{TargetPlayerName}</size>";
 
                 //全てのテキストを合成します。

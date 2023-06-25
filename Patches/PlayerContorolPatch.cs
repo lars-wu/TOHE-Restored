@@ -731,6 +731,8 @@ class MurderPlayerPatch
 [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Shapeshift))]
 class ShapeshiftPatch
 {
+    public static Dictionary<PlayerControl, string> PlayerOriginalName = new Dictionary<PlayerControl, string>();
+
     public static void Prefix(PlayerControl __instance, [HarmonyArgument(0)] PlayerControl target)
     {
         Logger.Info($"{__instance?.GetNameWithRole()} => {target?.GetNameWithRole()}", "Shapeshift");
@@ -746,6 +748,44 @@ class ShapeshiftPatch
 
         Main.CheckShapeshift[shapeshifter.PlayerId] = shapeshifting;
         Main.ShapeshiftTarget[shapeshifter.PlayerId] = target.PlayerId;
+
+        if (Options.HideShapeshifterName.GetBool())
+        {
+            foreach (var player in Main.AllAlivePlayerControls)
+            {
+                if (shapeshifting)
+                {
+                    if (player.PlayerId == target.PlayerId)
+                    {
+                        continue;
+                    }
+
+                    if (!PlayerOriginalName.Any(a => a.Key.PlayerId == target.PlayerId))
+                    {
+                        PlayerOriginalName.Add(target, target.name);
+                    }
+
+                    string hideName = $"<size=0>{target.name}</size>";
+                    //target.cosmetics.nameText.text = hideName;
+                    target.RpcSetNamePrivate(hideName, true, player, force: true);
+                }
+                else
+                {
+                    foreach (var item in PlayerOriginalName)
+                    {
+                        if (player.PlayerId == item.Key.PlayerId)
+                        {
+                            continue;
+                        }
+
+                        //item.Key.cosmetics.nameText.text = item.Value;
+                        item.Key.RpcSetNamePrivate(item.Value, true, player, force: true);
+                    }
+
+                    PlayerOriginalName.Clear();
+                }
+            }
+        }
 
         Sniper.OnShapeshift(shapeshifter, shapeshifting);
 
@@ -1853,11 +1893,12 @@ class FixedUpdatePatch
                 /*if(main.AmDebugger.Value && main.BlockKilling.TryGetValue(target.PlayerId, out var isBlocked)) {
                     Mark = isBlocked ? "(true)" : "(false)";
                 }*/
-                bool hideShapeshifterName = 
-                    Options.HideShapeshifterName.GetBool() && 
+                bool hideName =
+                    Options.HideShapeshifterName.GetBool() &&
                     target.PlayerId != seer.PlayerId &&
-                    Main.CheckShapeshift.TryGetValue(target.PlayerId, out bool shapeshifting) && shapeshifting;
-                if ((Utils.IsActive(SystemTypes.Comms) && Options.CommsCamouflage.GetBool()) || Camouflager.IsActive || hideShapeshifterName)
+                    ((Main.CheckShapeshift.TryGetValue(target.PlayerId, out bool shapeshifting) && shapeshifting) ||
+                    ShapeshiftPatch.PlayerOriginalName.Any(a => a.Key.PlayerId == target.PlayerId));
+                if ((Utils.IsActive(SystemTypes.Comms) && Options.CommsCamouflage.GetBool()) || Camouflager.IsActive || hideName) 
                     RealName = $"<size=0>{RealName}</size> ";
 
                 string DeathReason = seer.Data.IsDead && seer.KnowDeathReason(target) ? $"({Utils.ColorString(Utils.GetRoleColor(CustomRoles.Doctor), Utils.GetVitalText(target.PlayerId))})" : "";
