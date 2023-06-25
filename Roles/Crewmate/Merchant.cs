@@ -24,7 +24,6 @@ namespace TOHE.Roles.Crewmate
             CustomRoles.Bait,
             CustomRoles.Trapper,
             CustomRoles.Brakar,
-       //     CustomRoles.Guesser,
             CustomRoles.Knighted,
             CustomRoles.Necroview,
             CustomRoles.Onbound,
@@ -35,10 +34,8 @@ namespace TOHE.Roles.Crewmate
         {
             CustomRoles.Oblivious,
             CustomRoles.Bewilder,
-        //    CustomRoles.Workhorse,
-     //       CustomRoles.Fool,
-        //    CustomRoles.Avanger,
-            CustomRoles.Unreportable
+            CustomRoles.Unreportable,
+            CustomRoles.Confused
         };
 
         private static readonly List<CustomRoles> neutralAddons = new List<CustomRoles>
