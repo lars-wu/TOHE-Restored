@@ -36,7 +36,7 @@ namespace TOHE.Roles.Crewmate
             CustomRoles.Oblivious,
             CustomRoles.Bewilder,
             CustomRoles.Unreportable,
-            CustomRoles.Confused
+            //CustomRoles.Confused
         };
 
         private static readonly List<CustomRoles> neutralAddons = new List<CustomRoles>
