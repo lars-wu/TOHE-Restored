@@ -481,7 +481,7 @@ internal static class CustomRolesHelper
             CustomRoles.Totocalcio or
             CustomRoles.Virus or
             CustomRoles.Succubus or
-            CustomRoles.Amoror or
+            CustomRoles.Amor or
             CustomRoles.Spiritcaller;
     }
     public static bool IsMadmate(this CustomRoles role)
