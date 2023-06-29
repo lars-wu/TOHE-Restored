@@ -842,6 +842,7 @@ class MeetingHudStartPatch
                 case CustomRoles.Infectious:
                 case CustomRoles.Virus:
                 case CustomRoles.Succubus:
+                case CustomRoles.Spiritcaller:
                     sb.Append(Snitch.GetWarningMark(seer, target));
                     break;
                 case CustomRoles.Jackal:

@@ -1092,7 +1092,7 @@ public static class Options
         DarkHide.SetupCustomOption(); //TOH_Y
         Virus.SetupCustomOption();
         Wraith.SetupCustomOption();
-        
+        Spiritcaller.SetupCustomOption();
 
 
         // Add-Ons

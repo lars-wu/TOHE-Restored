@@ -93,6 +93,7 @@ enum CustomRPC
     SetJackalRecruitLimit,
     SetBloodhoundArrow,
     SetAmorMatchmakeLimit,
+    SetSpiritcallerSpiritLimit,
 
     //SoloKombat
     SyncKBPlayer,
@@ -849,6 +850,9 @@ internal static class RPC
                 break;
             case CustomRoles.Addict:
                 Addict.Add(targetId);
+                break;
+            case CustomRoles.Spiritcaller:
+                Spiritcaller.Add(targetId);
                 break;
         }
         HudManager.Instance.SetHudActive(true);

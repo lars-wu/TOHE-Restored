@@ -433,6 +433,8 @@ public static class Utils
             case CustomRoles.Counterfeiter:
             case CustomRoles.Pursuer:
             case CustomRoles.Amor:
+            case CustomRoles.Spiritcaller:
+            case CustomRoles.EvilSpirit:
                 hasTasks = false;
                 break;
             case CustomRoles.Workaholic:
@@ -597,6 +599,9 @@ public static class Utils
                 break;
             case CustomRoles.Amor:
                 ProgressText.Append(Amor.GetMatchmakeLimit());
+                break;
+            case CustomRoles.Spiritcaller:
+                ProgressText.Append(Spiritcaller.GetSpiritLimit());
                 break;
             default:
                 //タスクテキスト

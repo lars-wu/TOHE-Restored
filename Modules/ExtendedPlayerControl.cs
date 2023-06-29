@@ -452,6 +452,7 @@ static class ExtendedPlayerControl
             CustomRoles.Virus => pc.IsAlive(),
             CustomRoles.Farseer => pc.IsAlive(),
             CustomRoles.Amor => pc.IsAlive(),
+            CustomRoles.Spiritcaller => pc.IsAlive(),
             _ => pc.Is(CustomRoleTypes.Impostor),
         };
     }
@@ -489,6 +490,7 @@ static class ExtendedPlayerControl
             CustomRoles.HexMaster => true,
             CustomRoles.Wraith => true,
             CustomRoles.Parasite => true,
+            CustomRoles.Spiritcaller => Spiritcaller.CanVent.GetBool(),
 
             CustomRoles.Arsonist => pc.IsDouseDone(),
             CustomRoles.Revolutionist => pc.IsDrawDone(),
@@ -696,6 +698,9 @@ static class ExtendedPlayerControl
                 break;
             case CustomRoles.Deathpact:
                 Deathpact.SetKillCooldown(player.PlayerId);
+                break;
+            case CustomRoles.Spiritcaller:
+                Spiritcaller.SetKillCooldown(player.PlayerId);
                 break;
         }
         if (player.PlayerId == LastImpostor.currentId)

@@ -230,6 +230,7 @@ internal class ChangeRoleSettings
             Deathpact.Init();
             Addict.Init();
             Confuser.Init();
+            Spiritcaller.Init();
 
             SoloKombatManager.Init();
             CustomWinnerHolder.Reset();
@@ -621,6 +622,9 @@ internal class SelectRolesPatch
                         break;
                     case CustomRoles.Addict:
                         Addict.Add(pc.PlayerId);
+                        break;
+                    case CustomRoles.Spiritcaller:
+                        Spiritcaller.Add(pc.PlayerId);
                         break;
                 }
                 foreach (var subRole in pc.GetCustomSubRoles())

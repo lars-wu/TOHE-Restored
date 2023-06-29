@@ -220,6 +220,8 @@
 "Pursuer","","Pursuer","Преследователь","",""
 "Phantom","","Phantom","","",""
 "Amor","","Amor","","",""
+"Spiritcaller","","Spiritcaller","","",""
+"EvilSpirit","","Evil Spirit","","",""
 
 "# 附加职业 / Add-ons"
 "LastImpostor","绝境者","Last Impostor","Последний Предатель","絕境者","绝境者"
@@ -458,6 +460,7 @@
 "PursuerInfo","","Protect yourself and live to the end!","Берегите себя и доживите до конца!","",""
 "PhantomInfo","","Get killed and finish your tasks to win!","","",""
 "AmorInfo","","Spread Love","","",""
+"Spiritcaller","","Turn Players into Evil Spirits","","",""
 
 "# 附加职业 / Add-ons descriptions"
 "LoversInfo","最重要的是，记得照顾好你的另一半","Stay Alive and win together","Выживите со своим Любовником","你墜入了愛河","最重要的是，记得照顾好你的另一半"
@@ -635,6 +638,8 @@
 "PursuerInfoLong","","(Neutrals):\nAs the Pursuer, you can use your ability on someone to make them misfire when they try to kill.\n\nTo win, just survive to the end of the game.","(Добрый - Нейтрал):\nПреследователь может использовать свою способность на ком-то, чтобы заставить его убиться, когда он попытается кого-то убить.\n\nЧтобы победить, просто доживите до конца игры","",""
 "PhantomInfoLong","","(Neutrals):\nAs the Phantom, your job is to get killed and finish your tasks.\nYou can do your tasks while alive.\nYou cannot win if you're alive.\nIf you get killed, you win with the winning team if your tasks are completed.","","",""
 "AmorInfoLong","","(Neutrals):\nAs Amor, you win when a lover pair wins. You can match your own lover pair by marking 2 players with your kill button. After the 2nd player is marked the lover pair is complete and acts like a normal lover pair. It doesn't matter which lover pair wins, you can win with all lover pairs. If the lover pair you matched dies, you can match a new pair.","","",""
+"SpiritcallerInfoLong","","(Neutrals):\nAs the Spiritcaller, your victims become Evil Spirits after they die. These spirits can help you win by freezing other players for a short time and/or blocking their vision. Alternatively, the spirits can give you a shield that protects you briefly from an attempted kill.","","",""
+"EvilSpiritInfoLong","","(Neutrals):\nAs Evil Spirit, it's your job to help the Spiritcaller to victory. You can use your Haunt button to freeze players and reduce their vision. Alternatively, you can use your Haunt button to temporarily give the Spiritcaller a shield against a kill attempt.","","",""
 
 "# 附加职业 / Add-ons descriptions"
 "LastImpostorInfoLong","(附加职业):\n这个效果在内鬼仅剩一人时赋予该内鬼。使其击杀冷却缩短。","(Add-ons):\nThis effect is given to the last surviving Impostor. Reduces their kill cooldown.","(Атрибут):\nАтрибут, присваивается последнему Предателю. \nВремя отката убийства становится меньше, чем обычно. \nНе назначается Охотнику за головами, Серийному убийце или Вампиру.","(附加職業):\n這個效果只在偽裝者陣營只剩下一人時賦予該玩家，被賦予效果的玩家殺人冷卻將會縮短。","(附加职业):\n这个效果在内鬼仅剩一人时赋予该内鬼。使其击杀冷却缩短。"
@@ -1529,6 +1534,7 @@
 "DazzlerDazzled","","You got dazzled","","",""
 "ConfuserConfusionStart","","Control reversed!","","",""
 "ConfuserConfusionEnd","","Control reset","","",""
+"HauntedByEvilSpirit","","Haunted by an Evil Spirit","","",""
 
 "MonarchKnightCooldown","","Knight Cooldown","Откат посвящения","",""
 "MonarchKnightMax","","Maximum Knights","Максимум просвящений","",""
@@ -1538,6 +1544,8 @@
 "VirusNoticeTitle","","【 Infected Corpse! 】","【 Зараженный труп! 】","",""
 "VirusNoticeMessage","","The body your reported was infected by the Virus! You are now part of Team Virus. Help the Virus win the game.","Труп который вы зарепортили, был заражён вирусом! Теперь вы являетесь частью команды Вируса. Помогите Вирусу выиграть игру","",""
 "VirusNoticeMessage2","","The body your reported was infected by the Virus! Vote the Virus out this meeting or you will die.","Труп который вы зарепортили, был заражён вирусом! Голосуйте против Вируса на этой встрече, иначе вы умрёте.","",""
+"SpiritcallerNoticeTitle","","【 You turned into an Evil Spirit! 】","","",""
+"SpiritcallerNoticeMessage","","The Spiritcaller has killed you and turned you into an Evil Spirit. Your task now is to help the Spiritcaller to victory by using your spook button to hinder other players or to protect the Spiritcaller. Use /m for more information.","","",""
 "FarseerRevealCooldown","","<color=#BA55D3>Reveal</color> Cooldown","Откат раскрытия","",""
 "FarseerRevealTime","","<color=#BA55D3>Reveal</color> Time","Время раскрытия","",""
 "FarseerVision","","<color=#BA55D3>Overseer</color> Vision","Обзор <color=#BA55D3>Смотрителя</color>","",""
@@ -1563,6 +1571,12 @@
 "AddictSpeedWhileInvulnerble","","Movementspeed while <color=#008000>Invulnerble</color>","","",""
 "AddictFreezeTimeAfterInvulnerbility","","Time the <color=#008000>Addict</color> gets frozen in place after <color=#008000>Invulnerbility</color>","","",""
 "SkinEaterHideNameCosumed","","Hide Name of devoured Players.","","",""
+"SpiritcallerSpiritMax","","Maximum number of <color=#669999>Evil Spirits</color>","","",""
+"SpiritcallerSpiritAbilityCooldown","","<color=#669999>Evil Spirit</color> ability cooldown","","",""
+"SpiritcallerFreezeTime","","<color=#669999>Evil Spirit</color> ability freeze time","","",""
+"SpiritcallerProtectTime","","<color=#669999>Evil Spirit</color> ability protect time","","",""
+"SpiritcallerCauseVision","","<color=#669999>Evil Spirit</color> ability caused vision","","",""
+"SpiritcallerCauseVisionTime","","<color=#669999>Evil Spirit</color> ability caused vision time","","",""
 
 "## 信息 / Message"
 "Message.SetToSeconds","信息发送冷却时间为【{0}】秒","Set to 【{0}】 seconds.","Установлен на 【{0}】 секунды","訊息傳送冷卻時間設為【{0}】秒","信息发送冷却时间为【{0}】秒"

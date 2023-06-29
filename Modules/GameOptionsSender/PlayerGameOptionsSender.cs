@@ -286,6 +286,12 @@ public class PlayerGameOptionsSender : GameOptionsSender
             case CustomRoles.Confuser:
                 Confuser.ApplyGameOptions();
                 break;
+            case CustomRoles.EvilSpirit:
+                AURoleOptions.GuardianAngelCooldown = Spiritcaller.SpiritAbilityCooldown.GetFloat();
+                break;
+            case CustomRoles.Spiritcaller:
+                opt.SetVision(Spiritcaller.ImpostorVision.GetBool());
+                break;
         }
 
         // Ϊ�Ի��ߵ�����
@@ -314,6 +320,7 @@ public class PlayerGameOptionsSender : GameOptionsSender
 
         Dazzler.SetDazzled(player, opt);
         Deathpact.SetDeathpactVision(player, opt);
+        Spiritcaller.ReduceVision(opt, player);
 
         foreach (var subRole in Main.PlayerStates[player.PlayerId].SubRoles)
         {
