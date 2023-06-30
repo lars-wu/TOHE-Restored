@@ -2280,17 +2280,19 @@ public static class PlayerPhysicsFixedUpdate
             }
             else
             {
-                Logger.Info("__instance.AmOwner: false", "PlayerPhysicsFixedUpdate");
+                //var originPs = __instance.myPlayer.GetTruePosition();
 
-                Vector2 targetPos = (Vector2)__instance.transform.position + new Vector2(0.1f, 0f);
-                ushort num = (ushort)(NetHelpers.XRange.ReverseLerp(targetPos.x) * 65535f);
-                ushort num2 = (ushort)(NetHelpers.YRange.ReverseLerp(targetPos.y) * 65535f);
-                CustomRpcSender sender = CustomRpcSender.Create("Confused", sendOption: SendOption.Reliable);
-                sender.AutoStartRpc(__instance.NetId, (byte)RpcCalls.SnapTo)
-                    .Write(num)
-                    .Write(num2)
-                .EndRpc();
-                __instance.myPlayer.NetTransform.SnapTo(targetPos);
+                //Utils.TP(__instance.myPlayer.NetTransform, originPs * -1);
+
+                //Vector2 targetPos = (Vector2)__instance.transform.position + new Vector2(0.1f, 0f);
+                //ushort num = (ushort)(NetHelpers.XRange.ReverseLerp(targetPos.x) * 65535f);
+                //ushort num2 = (ushort)(NetHelpers.YRange.ReverseLerp(targetPos.y) * 65535f);
+                //CustomRpcSender sender = CustomRpcSender.Create("Confused", sendOption: SendOption.Reliable);
+                //sender.AutoStartRpc(__instance.NetId, (byte)RpcCalls.SnapTo)
+                //    .Write(num)
+                //    .Write(num2)
+                //.EndRpc();
+                //__instance.myPlayer.NetTransform.SnapTo(targetPos);
             }
         }
     }
