@@ -1120,6 +1120,7 @@ class ReportDeadBodyPatch
         Judge.OnReportDeadBody();
         Greedier.OnReportDeadBody();
         Tracker.OnReportDeadBody();
+        Spiritualist.OnReportDeadBody(target); 
 
         Mortician.OnReportDeadBody(player, target);
         Mediumshiper.OnReportDeadBody(target);
@@ -1834,6 +1835,8 @@ class FixedUpdatePatch
                 Suffix.Append(Bloodhound.GetTargetArrow(seer, target));
 
                 Suffix.Append(Tracker.GetTrackerArrow(seer, target));
+
+                Suffix.Append(Spiritualist.GetSpiritualistArrow(seer));
 
                 if (GameStates.IsInTask && seer.Is(CustomRoles.AntiAdminer))
                 {

@@ -58,6 +58,7 @@ namespace TOHE.Roles.Crewmate
             CustomRoles.DovesOfNeace,
             CustomRoles.Bloodhound,
             CustomRoles.Tracker,
+            CustomRoles.Spiritualist
         };
 
         public static System.Collections.Generic.Dictionary<int, string> RandomRole = new System.Collections.Generic.Dictionary<int, string>();

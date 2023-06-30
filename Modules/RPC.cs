@@ -831,6 +831,9 @@ internal static class RPC
             case CustomRoles.NSerialKiller:
                 NSerialKiller.Add(targetId);
                 break;
+            case CustomRoles.Spiritualist:
+                Spiritualist.Add(targetId);
+                break;
         }
         HudManager.Instance.SetHudActive(true);
         if (PlayerControl.LocalPlayer.PlayerId == targetId) RemoveDisableDevicesPatch.UpdateDisableDevices();

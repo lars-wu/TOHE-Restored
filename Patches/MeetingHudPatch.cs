@@ -162,7 +162,6 @@ class CheckForEndVotingPatch
                 if (CheckRole(ps.TargetPlayerId, CustomRoles.Divinator) && Divinator.HideVote.GetBool()) continue;
                 //隐藏抹除者的票
                 if (CheckRole(ps.TargetPlayerId, CustomRoles.Eraser) && Eraser.HideVote.GetBool()) continue;
-
                 if (CheckRole(ps.TargetPlayerId, CustomRoles.Tracker) && Tracker.HideVote.GetBool()) continue;
 
                 //主动叛变模式下自票无效

@@ -114,6 +114,7 @@ internal static class CustomRolesHelper
                 CustomRoles.Tracker => CustomRoles.Crewmate,
                 CustomRoles.Merchant => CustomRoles.Crewmate,
                 CustomRoles.Retributionist => CustomRoles.Crewmate,
+                CustomRoles.Spiritualist => CustomRoles.Crewmate,
                 _ => role.IsImpostor() ? CustomRoles.Impostor : CustomRoles.Crewmate,
             };
     }
@@ -154,6 +155,7 @@ internal static class CustomRolesHelper
                 CustomRoles.Marshall => CustomRoles.Crewmate,
                 CustomRoles.SabotageMaster => CustomRoles.EngineerTOHE,
                 CustomRoles.Retributionist => CustomRoles.Crewmate,
+                CustomRoles.Spiritualist => CustomRoles.Crewmate,
                 _ => role.IsImpostor() ? CustomRoles.Impostor : CustomRoles.Crewmate,
             };
     }

@@ -1144,6 +1144,10 @@ public static class Utils
             {
                 SelfSuffix.Append(Tracker.GetTrackerArrow(seer));
             }
+            if (seer.Is(CustomRoles.Spiritualist))
+            {
+                SelfSuffix.Append(Spiritualist.GetSpiritualistArrow(seer));
+            }
 
             //タスクを終えたSnitchがインポスター/キル可能なニュートラルの方角を確認できる
             SelfSuffix.Append(Snitch.GetSnitchArrow(seer));
