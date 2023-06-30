@@ -47,6 +47,8 @@ namespace TOHE.Roles.Crewmate
         {
             long timestamp = Utils.GetTimeStamp();
 
+            // TODO
+
             Logger.Info($"{timestamp}", "Spiritualist");
             Logger.Info($"{ShowGhostArrowEverySecondsTime[playerId]}", "Spiritualist");
             Logger.Info($"{ShowGhostArrowForTime[playerId]}", "Spiritualist");
