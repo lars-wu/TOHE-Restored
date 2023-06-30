@@ -122,6 +122,7 @@ internal static class CustomRolesHelper
                 CustomRoles.Addict => CustomRoles.Engineer,
                 CustomRoles.Spiritcaller => CustomRoles.Impostor,
                 CustomRoles.EvilSpirit => CustomRoles.GuardianAngel,
+                CustomRoles.Twister => CustomRoles.Shapeshifter,
                 _ => role.IsImpostor() ? CustomRoles.Impostor : CustomRoles.Crewmate,
             };
     }
@@ -437,7 +438,8 @@ internal static class CustomRolesHelper
             CustomRoles.SkinEater or
             CustomRoles.Dazzler or
             CustomRoles.Deathpact or
-            CustomRoles.Confuser;
+            CustomRoles.Confuser or
+            CustomRoles.Twister;
     }
     public static bool IsNeutral(this CustomRoles role) // �Ƿ�����
     {

@@ -110,7 +110,8 @@ public static class Divinator
                 CustomRoles.FFF or
                 CustomRoles.Greedier or
                 CustomRoles.Tracker or
-                CustomRoles.Dazzler
+                CustomRoles.Dazzler or
+                CustomRoles.Twister
                 => "Impulse",
 
                 CustomRoles.Vampire or

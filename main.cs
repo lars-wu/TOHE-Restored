@@ -503,6 +503,7 @@ public enum CustomRoles
     Dazzler,
     Deathpact,
     Confuser,
+    Twister,
     //Crewmate(Vanilla)
     Engineer,
     GuardianAngel,

@@ -979,6 +979,9 @@ class ShapeshiftPatch
             case CustomRoles.Confuser:
                 Confuser.OnShapeshift(shapeshifter, shapeshifting);
                 break;
+            case CustomRoles.Twister:
+                Twister.TwistPlayers(shapeshifter);
+                break;
         }
 
     End:

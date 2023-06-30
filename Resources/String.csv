@@ -144,6 +144,7 @@
 "Dazzler","","Dazzler","","",""
 "Deathpact","","Deathpact","","",""
 "Confuser","","Confuser","","",""
+"Twister","","Twister","","",""
 
 "# 船员阵营 / Crewmates"
 "Luckey","幸运儿","Luckey","Удачник","幸運兒","Suertudo"
@@ -383,6 +384,7 @@
 "DazzlerInfo","","Take away their vision","","",""
 "DeathpactInfo","","Assign players to a death pact","","",""
 "ConfuserInfo","","Reverse player movement control","","",""
+"TwisterInfo","","Swap all player positions","","",""
 
 "# 船员阵营 / Crewmate descriptions"
 "LuckeyInfo","你擅长治疗内鬼的低血压","Your Killer may Miss the Kill","Убийца может промазать по вам","是生是死，看你是歐還是非","你擅长治疗内鬼的低血压"
@@ -561,6 +563,7 @@
 "DazzlerInfoLong","","(Impostors):\nAs the Dazzler, you can reduce the vision of the target of your Shapeshift permanently. When you die, their vision will turn back to normal.","","",""
 "DeathpactInfoLong","","(Impostors):\nAs the Deathpact, the targets of your shapeshifting are marked for a deathpact. If enough players are marked for a death pact, the marked players must meet within a defined period of time; if they fail to do so, they die. If a marked player dies before the death pact is completed, the pact is withdrawn.","","",""
 "ConfuserInfoLong","","(Impostors):\nAs the confuser, you can shapeshift to reverse the movement control of all other players. The reversal lasts as long as you are in the shapeshift.","","",""
+"TwisterInfoLong","","(Impostors):\nAs the Twister, you can use shape-shifting to randomly swap the position of all players. The swap happens twice, once when you start your shape shift and once when you return to your original appearance.\nThe Twister itself will not swap places with anyone and players who are in ventilation shafts cannot be teleported.","","",""
 
 
 "# 船员阵营 / Crewmates descriptions"

@@ -292,6 +292,9 @@ public class PlayerGameOptionsSender : GameOptionsSender
             case CustomRoles.Spiritcaller:
                 opt.SetVision(Spiritcaller.ImpostorVision.GetBool());
                 break;
+            case CustomRoles.Twister:
+                Twister.ApplyGameOptions();
+                break;
         }
 
         // Ϊ�Ի��ߵ�����
