@@ -71,6 +71,7 @@ namespace TOHE.Roles.Impostor
             {
                 target.Notify(Utils.ColorString(Utils.GetRoleColor(CustomRoles.Dazzler), GetString("DazzlerDazzled")));
                 PlayersDazzled[pc.PlayerId].Add(target.PlayerId);
+
                 MarkEveryoneDirtySettings();
             }
         }
@@ -80,9 +81,15 @@ namespace TOHE.Roles.Impostor
             if (PlayersDazzled.Any(a => a.Value.Contains(player.PlayerId) && 
                (!ResetDazzledVisionOnDeath.GetBool() || Main.AllAlivePlayerControls.Any(b => b.PlayerId == a.Key))))
             {
+                float vision = CauseVision.GetFloat();
+                if (IsActive(SystemTypes.Electrical) && CustomRolesHelper.IsCrewmate(player.GetCustomRole()))
+                {
+                    vision /= 5;
+                }
+
                 opt.SetVision(false);
-                opt.SetFloat(FloatOptionNames.CrewLightMod, CauseVision.GetFloat());
-                opt.SetFloat(FloatOptionNames.ImpostorLightMod, CauseVision.GetFloat());
+                opt.SetFloat(FloatOptionNames.CrewLightMod, vision);
+                opt.SetFloat(FloatOptionNames.ImpostorLightMod, vision);
             }
         }
     }
