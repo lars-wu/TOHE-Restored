@@ -87,7 +87,7 @@ namespace TOHE.Roles.Crewmate
                     continue;
                 }
 
-                var writer = CustomRpcSender.Create("MessagesToSend", SendOption.None);
+                var writer = CustomRpcSender.Create("SpiritualistSendMessage", SendOption.None);
                 writer.StartMessage(target.GetClientId());
                 writer.StartRpc(target.NetId, (byte)RpcCalls.SetName)
                     .Write(GetString("SpiritualistNoticeTitle"))
