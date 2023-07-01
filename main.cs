@@ -308,7 +308,7 @@ public class Main : BasePlugin
                 {CustomRoles.Tracker, "#3CB371"},
                 {CustomRoles.Merchant, "#D27D2D"},
                 {CustomRoles.Retributionist, "#228B22"},
-                {CustomRoles.Spiritualist, "#3366cc"},
+                {CustomRoles.Spiritualist, "#669999"},
                 //第三陣営役職
                 {CustomRoles.Arsonist, "#ff6633"},
                 {CustomRoles.Jester, "#ec62a5"},

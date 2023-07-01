@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using MS.Internal.Xml.XPath;
-using UnityEngine;
+using Hazel;
 using static TOHE.Options;
-using static UnityEngine.GraphicsBuffer;
+using static TOHE.Translator;
 
 namespace TOHE.Roles.Crewmate
 {
@@ -49,24 +48,25 @@ namespace TOHE.Roles.Crewmate
 
             if (LastGhostArrowShowTime[playerId] == 0 || LastGhostArrowShowTime[playerId] + (long)ShowGhostArrowEverySeconds.GetFloat() <= timestamp)
             {
-                Logger.Info($"1", "Spiritualist");
-
                 LastGhostArrowShowTime[playerId] = timestamp;
                 ShowGhostArrowUntil[playerId] = timestamp + (long)ShowGhostArrowForSeconds.GetFloat();
                 return true;
             }
             else if (ShowGhostArrowUntil[playerId] >= timestamp)
             {
-                Logger.Info($"2", "Spiritualist");
                 return true;
             }
 
-            Logger.Info($"3", "Spiritualist");
             return false;
         }
 
         public static void OnReportDeadBody(GameData.PlayerInfo target)
         {
+            if (target == null)
+            {
+                return;
+            }
+
             foreach (var spiritualist in SpiritualistTarget)
             {
                 SpiritualistTarget[spiritualist.Key] = target.PlayerId;
@@ -81,7 +81,25 @@ namespace TOHE.Roles.Crewmate
                 LastGhostArrowShowTime[spiritualist.Key] = 0;
                 ShowGhostArrowUntil[spiritualist.Key] = 0;
 
-                //SpiritualistTarget[spiritualist.Key]
+                PlayerControl target = Main.AllPlayerControls.FirstOrDefault(a => a.PlayerId == SpiritualistTarget[spiritualist.Key]);
+                if (target == null)
+                {
+                    continue;
+                }
+
+                var writer = CustomRpcSender.Create("MessagesToSend", SendOption.None);
+                writer.StartMessage(target.GetClientId());
+                writer.StartRpc(target.NetId, (byte)RpcCalls.SetName)
+                    .Write(GetString("SpiritualistNoticeTitle"))
+                    .EndRpc();
+                writer.StartRpc(target.NetId, (byte)RpcCalls.SendChat)
+                    .Write(GetString("SpiritualistNoticeMessage"))
+                    .EndRpc();
+                writer.StartRpc(target.NetId, (byte)RpcCalls.SetName)
+                    .Write(target.Data.PlayerName)
+                    .EndRpc();
+                writer.EndMessage();
+                writer.SendMessage();
             }
         }
 
