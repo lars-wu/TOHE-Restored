@@ -1210,6 +1210,7 @@ class ReportDeadBodyPatch
         Tracker.OnReportDeadBody();
         Deathpact.OnReportDeadBody();
         Addict.OnReportDeadBody();
+        Spiritualist.OnReportDeadBody(target); 
 
         Mortician.OnReportDeadBody(player, target);
         Mediumshiper.OnReportDeadBody(target);
@@ -1985,6 +1986,7 @@ class FixedUpdatePatch
 
                 Suffix.Append(Deathpact.GetDeathpactPlayerArrow(seer));
                 Suffix.Append(Deathpact.GetDeathpactMark(seer, target));
+                Suffix.Append(Spiritualist.GetSpiritualistArrow(seer));
 
                 if (GameStates.IsInTask && seer.Is(CustomRoles.AntiAdminer))
                 {

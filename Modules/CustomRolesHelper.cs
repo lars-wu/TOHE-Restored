@@ -123,6 +123,7 @@ internal static class CustomRolesHelper
                 CustomRoles.Spiritcaller => CustomRoles.Impostor,
                 CustomRoles.EvilSpirit => CustomRoles.GuardianAngel,
                 CustomRoles.Twister => CustomRoles.Shapeshifter,
+                CustomRoles.Spiritualist => CustomRoles.Crewmate,
                 _ => role.IsImpostor() ? CustomRoles.Impostor : CustomRoles.Crewmate,
             };
     }
@@ -164,6 +165,7 @@ internal static class CustomRolesHelper
                 CustomRoles.SabotageMaster => CustomRoles.EngineerTOHE,
                 CustomRoles.Retributionist => CustomRoles.Crewmate,
                 CustomRoles.Addict => CustomRoles.Engineer,
+                CustomRoles.Spiritualist => CustomRoles.Crewmate,
                 _ => role.IsImpostor() ? CustomRoles.Impostor : CustomRoles.Crewmate,
             };
     }

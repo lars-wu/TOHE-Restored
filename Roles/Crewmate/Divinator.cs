@@ -198,7 +198,8 @@ public static class Divinator
                 CustomRoles.Hangman or
                 CustomRoles.Mortician or
                 CustomRoles.Deathpact or
-                CustomRoles.Spiritcaller
+                CustomRoles.Spiritcaller or
+                CustomRoles.Spiritualist
                 => "Disturbed",
 
                 CustomRoles.Glitch or

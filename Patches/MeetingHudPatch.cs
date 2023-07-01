@@ -163,7 +163,6 @@ class CheckForEndVotingPatch
                 if (CheckRole(ps.TargetPlayerId, CustomRoles.Divinator) && Divinator.HideVote.GetBool()) continue;
                 //隐藏抹除者的票
                 if (CheckRole(ps.TargetPlayerId, CustomRoles.Eraser) && Eraser.HideVote.GetBool()) continue;
-
                 if (CheckRole(ps.TargetPlayerId, CustomRoles.Tracker) && Tracker.HideVote.GetBool()) continue;
 
                 //主动叛变模式下自票无效
@@ -251,6 +250,7 @@ class CheckForEndVotingPatch
             }
 
             Collector.CollectAmount(VotingData, __instance);
+            Spiritualist.OnEndVoting();
 
             if (Options.VoteMode.GetBool() && Options.WhenTie.GetBool() && tie)
             {

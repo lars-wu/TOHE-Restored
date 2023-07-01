@@ -1154,6 +1154,10 @@ public static class Utils
             {
                 SelfSuffix.Append(Tracker.GetTrackerArrow(seer));
             }
+            if (seer.Is(CustomRoles.Spiritualist))
+            {
+                SelfSuffix.Append(Spiritualist.GetSpiritualistArrow(seer));
+            }
 
             SelfSuffix.Append(Deathpact.GetDeathpactPlayerArrow(seer));
 

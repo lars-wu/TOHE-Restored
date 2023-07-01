@@ -231,6 +231,7 @@ internal class ChangeRoleSettings
             Addict.Init();
             Confuser.Init();
             Spiritcaller.Init();
+            Spiritualist.Init();
 
             SoloKombatManager.Init();
             CustomWinnerHolder.Reset();
@@ -625,6 +626,9 @@ internal class SelectRolesPatch
                         break;
                     case CustomRoles.Spiritcaller:
                         Spiritcaller.Add(pc.PlayerId);
+                        break;
+                    case CustomRoles.Spiritualist:
+                        Spiritualist.Add(pc.PlayerId);
                         break;
                 }
                 foreach (var subRole in pc.GetCustomSubRoles())

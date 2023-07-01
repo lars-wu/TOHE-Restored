@@ -946,6 +946,7 @@ public static class Options
         .SetParent(CustomRoleSpawnChances[CustomRoles.SuperStar]);
         TimeManager.SetupCustomOption();
         Tracker.SetupCustomOption();
+        Spiritualist.SetupCustomOption();
         SetupRoleOptions(8021115, TabGroup.CrewmateRoles, CustomRoles.Transporter);
         TransporterTeleportMax = IntegerOptionItem.Create(8021117, "TransporterTeleportMax", new(1, 99, 1), 5, TabGroup.CrewmateRoles, false)
         .SetParent(CustomRoleSpawnChances[CustomRoles.Transporter])

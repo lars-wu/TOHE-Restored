@@ -309,6 +309,7 @@ public class Main : BasePlugin
                 {CustomRoles.Merchant, "#D27D2D"},
                 {CustomRoles.Retributionist, "#228B22"},
                 {CustomRoles.Addict, "#008000"},
+                {CustomRoles.Spiritualist, "#669999"},
                 //第三陣営役職
                 {CustomRoles.Arsonist, "#ff6633"},
                 {CustomRoles.Jester, "#ec62a5"},
@@ -551,6 +552,7 @@ public enum CustomRoles
     Merchant,
     Retributionist,
     Addict,
+    Spiritualist,
     //Neutral
     Arsonist,
     HexMaster,
