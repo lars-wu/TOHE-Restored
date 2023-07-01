@@ -16,8 +16,8 @@ namespace TOHE.Roles.Crewmate
         public static OptionItem ShowGhostArrowEverySeconds;
         public static OptionItem ShowGhostArrowForSeconds;
 
-        private static Dictionary<byte, long> ShowGhostArrowEverySecondsTime = new();
-        private static Dictionary<byte, long> ShowGhostArrowForTime = new();
+        private static Dictionary<byte, long> ShowGhostArrowUntil = new();
+        private static Dictionary<byte, long> LastGhostArrowShowTime = new();
 
         public static Dictionary<byte, byte> SpiritualistTarget = new();
 
@@ -38,8 +38,8 @@ namespace TOHE.Roles.Crewmate
         {
             playerIdList.Add(playerId);
             SpiritualistTarget.Add(playerId, 0);
-            ShowGhostArrowEverySecondsTime.Add(playerId, 0);
-            ShowGhostArrowForTime.Add(playerId, 0);
+            LastGhostArrowShowTime.Add(playerId, 0);
+            ShowGhostArrowUntil.Add(playerId, 0);
         }
         public static bool IsEnable => playerIdList.Count > 0;
 
@@ -47,21 +47,15 @@ namespace TOHE.Roles.Crewmate
         {
             long timestamp = Utils.GetTimeStamp();
 
-            // TODO
-
-            Logger.Info($"{timestamp}", "Spiritualist");
-            Logger.Info($"{ShowGhostArrowEverySecondsTime[playerId]}", "Spiritualist");
-            Logger.Info($"{ShowGhostArrowForTime[playerId]}", "Spiritualist");
-
-            if (ShowGhostArrowEverySecondsTime[playerId] == 0 || ShowGhostArrowEverySecondsTime[playerId] >= timestamp)
+            if (LastGhostArrowShowTime[playerId] == 0 || LastGhostArrowShowTime[playerId] + (long)ShowGhostArrowEverySeconds.GetFloat() <= timestamp)
             {
                 Logger.Info($"1", "Spiritualist");
 
-                ShowGhostArrowEverySecondsTime[playerId] = timestamp + (long)ShowGhostArrowEverySeconds.GetFloat();
-                ShowGhostArrowForTime[playerId] = timestamp + (long)ShowGhostArrowForSeconds.GetFloat();
+                LastGhostArrowShowTime[playerId] = timestamp;
+                ShowGhostArrowUntil[playerId] = timestamp + (long)ShowGhostArrowForSeconds.GetFloat();
                 return true;
             }
-            else if (ShowGhostArrowForTime[playerId] > timestamp)
+            else if (ShowGhostArrowUntil[playerId] >= timestamp)
             {
                 Logger.Info($"2", "Spiritualist");
                 return true;
@@ -75,11 +69,19 @@ namespace TOHE.Roles.Crewmate
         {
             foreach (var spiritualist in SpiritualistTarget)
             {
-                ShowGhostArrowEverySecondsTime[spiritualist.Key] = 0;
-                ShowGhostArrowForTime[spiritualist.Key] = 0;
-
                 SpiritualistTarget[spiritualist.Key] = target.PlayerId;
                 TargetArrow.Add(spiritualist.Key, target.PlayerId);
+            }
+        }
+
+        public static void OnEndVoting()
+        {
+            foreach (var spiritualist in SpiritualistTarget)
+            {
+                LastGhostArrowShowTime[spiritualist.Key] = 0;
+                ShowGhostArrowUntil[spiritualist.Key] = 0;
+
+                //SpiritualistTarget[spiritualist.Key]
             }
         }
 
