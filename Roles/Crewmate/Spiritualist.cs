@@ -32,6 +32,8 @@ namespace TOHE.Roles.Crewmate
         {
             playerIdList = new();
             SpiritualistTarget = new();
+            LastGhostArrowShowTime = new();
+            ShowGhostArrowUntil = new();
         }
         public static void Add(byte playerId)
         {
