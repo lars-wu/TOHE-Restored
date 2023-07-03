@@ -54,7 +54,34 @@ namespace TOHE.Roles.Impostor
             foreach (var player in Main.AllAlivePlayerControls)
             {
                 player.Notify(Utils.ColorString(Utils.GetRoleColor(CustomRoles.Confuser), shapeshifting ? GetString("ConfuserConfusionStart") : GetString("ConfuserConfusionEnd")));
-            } 
+            }
+
+            //int clientId = pc.GetClientId();
+            //var systemtypes = SystemTypes.Reactor;
+            //if (Main.NormalOptions.MapId == 2) systemtypes = SystemTypes.Laboratory;
+
+            //pc.RpcDesyncRepairSystem(systemtypes, 128);
+            //pc.RpcDesyncRepairSystem(SystemTypes.Electrical, 128);
+            //pc.RpcDesyncRepairSystem(SystemTypes.Comms, 128);
+            //pc.RpcDesyncRepairSystem(SystemTypes.Admin, 128);
+
+            //new LateTask(() =>
+            //{
+            //    pc.RpcDesyncRepairSystem(systemtypes, 16);
+            //    pc.RpcDesyncRepairSystem(SystemTypes.Comms, 16);
+            //    pc.RpcDesyncRepairSystem(SystemTypes.Admin, 16);
+
+            //    if (Main.NormalOptions.MapId == 4) //Airship用
+            //        pc.RpcDesyncRepairSystem(systemtypes, 17);
+            //}, 1, "Fix Desync Reactor");
+
+            //pc.ReactorFlash(0f); //リアクターフラッシュ
+            //player.MarkDirtySettings();
+            //new LateTask(() =>
+            //{
+            //    Main.PlayerStates[player.PlayerId].IsBlackOut = false; //ブラックアウト解除
+            //    player.MarkDirtySettings();
+            //}, Options.KillFlashDuration.GetFloat(), "RemoveKillFlash");
         }
 
         public static void OnReportDeadBody()
