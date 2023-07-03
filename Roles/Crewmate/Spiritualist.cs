@@ -76,7 +76,7 @@ namespace TOHE.Roles.Crewmate
             }
         }
 
-        public static void OnEndVoting()
+        public static void AfterMeetingTasks()
         {
             foreach (var spiritualist in SpiritualistTarget)
             {
