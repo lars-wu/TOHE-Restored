@@ -18,7 +18,7 @@ namespace TOHE.Roles.Crewmate
         private static Dictionary<byte, long> ShowGhostArrowUntil = new();
         private static Dictionary<byte, long> LastGhostArrowShowTime = new();
 
-        public static Dictionary<byte, byte> SpiritualistTarget = new();
+        public static byte SpiritualistTarget = new();
 
         public static void SetupCustomOption()
         {
@@ -38,7 +38,7 @@ namespace TOHE.Roles.Crewmate
         public static void Add(byte playerId)
         {
             playerIdList.Add(playerId);
-            SpiritualistTarget.Add(playerId, 0);
+            SpiritualistTarget = 0;
             LastGhostArrowShowTime.Add(playerId, 0);
             ShowGhostArrowUntil.Add(playerId, 0);
         }
@@ -69,25 +69,23 @@ namespace TOHE.Roles.Crewmate
                 return;
             }
 
-            foreach (var spiritualist in SpiritualistTarget)
-            {
-                SpiritualistTarget[spiritualist.Key] = target.PlayerId;
-                TargetArrow.Add(spiritualist.Key, target.PlayerId);
-            }
+            SpiritualistTarget = target.PlayerId;
         }
 
         public static void AfterMeetingTasks()
         {
-            foreach (var spiritualist in SpiritualistTarget)
+            foreach (var spiritualist in playerIdList)
             {
-                LastGhostArrowShowTime[spiritualist.Key] = 0;
-                ShowGhostArrowUntil[spiritualist.Key] = 0;
+                LastGhostArrowShowTime[spiritualist] = 0;
+                ShowGhostArrowUntil[spiritualist] = 0;
 
-                PlayerControl target = Main.AllPlayerControls.FirstOrDefault(a => a.PlayerId == SpiritualistTarget[spiritualist.Key]);
+                PlayerControl target = Main.AllPlayerControls.FirstOrDefault(a => a.PlayerId == SpiritualistTarget);
                 if (target == null)
                 {
                     continue;
                 }
+
+                TargetArrow.Add(spiritualist, target.PlayerId);
 
                 var writer = CustomRpcSender.Create("SpiritualistSendMessage", SendOption.None);
                 writer.StartMessage(target.GetClientId());
@@ -107,11 +105,11 @@ namespace TOHE.Roles.Crewmate
 
         public static string GetSpiritualistArrow(PlayerControl seer)
         {
-            if (!seer.Is(CustomRoles.Spiritualist)) return "";
+            if (!seer.Is(CustomRoles.Spiritualist) || !seer.IsAlive()) return "";
             if (GameStates.IsMeeting) return "";
-            if (SpiritualistTarget.ContainsKey(seer.PlayerId) && SpiritualistTarget[seer.PlayerId] != 0 && ShowArrow(seer.PlayerId))
+            if (SpiritualistTarget != 0 && ShowArrow(seer.PlayerId))
             {
-                return Utils.ColorString(seer.GetRoleColor(), TargetArrow.GetArrows(seer, SpiritualistTarget[seer.PlayerId])); 
+                return Utils.ColorString(seer.GetRoleColor(), TargetArrow.GetArrows(seer, SpiritualistTarget)); 
             }
             return "";
         }
