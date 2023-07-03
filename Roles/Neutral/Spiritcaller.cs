@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using AmongUs.GameOptions;
 using Hazel;
+using TOHE.Roles.Impostor;
 using UnityEngine;
 using static TOHE.Options;
 using static TOHE.Translator;
@@ -92,6 +93,8 @@ namespace TOHE.Roles.Neutral
 
             if (target.Is(CustomRoles.Pelican))
                 Pelican.OnPelicanDied(target.PlayerId);
+            else if (target.Is(CustomRoles.SkinEater))
+                SkinEater.OnSkinEaterDied(target.PlayerId);
 
             SpiritLimit--;
             SendRPC();
