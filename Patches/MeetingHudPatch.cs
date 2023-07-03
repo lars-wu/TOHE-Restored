@@ -250,7 +250,6 @@ class CheckForEndVotingPatch
             }
 
             Collector.CollectAmount(VotingData, __instance);
-            Spiritualist.OnEndVoting();
 
             if (Options.VoteMode.GetBool() && Options.WhenTie.GetBool() && tie)
             {
