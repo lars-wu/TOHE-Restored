@@ -1938,7 +1938,7 @@ class FixedUpdatePatch
 
                 Suffix.Append(Deathpact.GetDeathpactPlayerArrow(seer));
                 Suffix.Append(Deathpact.GetDeathpactMark(seer, target));
-                Suffix.Append(Spiritualist.GetSpiritualistArrow(seer));
+                Suffix.Append(Spiritualist.GetSpiritualistArrow(seer, target));
 
                 if (GameStates.IsInTask && seer.Is(CustomRoles.AntiAdminer))
                 {
