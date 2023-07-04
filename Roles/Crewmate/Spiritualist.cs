@@ -103,9 +103,10 @@ namespace TOHE.Roles.Crewmate
             }
         }
 
-        public static string GetSpiritualistArrow(PlayerControl seer)
+        public static string GetSpiritualistArrow(PlayerControl seer, PlayerControl target = null)
         {
             if (!seer.Is(CustomRoles.Spiritualist) || !seer.IsAlive()) return "";
+            if (target != null && seer.PlayerId != target.PlayerId) return "";
             if (GameStates.IsMeeting) return "";
             if (SpiritualistTarget != 0 && ShowArrow(seer.PlayerId))
             {

@@ -1836,7 +1836,7 @@ class FixedUpdatePatch
 
                 Suffix.Append(Tracker.GetTrackerArrow(seer, target));
 
-                Suffix.Append(Spiritualist.GetSpiritualistArrow(seer));
+                Suffix.Append(Spiritualist.GetSpiritualistArrow(seer, target));
 
                 if (GameStates.IsInTask && seer.Is(CustomRoles.AntiAdminer))
                 {
