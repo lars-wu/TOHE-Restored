@@ -1585,6 +1585,8 @@
 "SpiritcallerProtectTime","","<color=#293d3d>Evil Spirit</color> ability protect time","","",""
 "SpiritcallerCauseVision","","<color=#293d3d>Evil Spirit</color> ability caused vision","","",""
 "SpiritcallerCauseVisionTime","","<color=#293d3d>Evil Spirit</color> ability caused vision time","","",""
+"SpiritualistShowGhostArrowEverySeconds","","Interval in which the arrow is shown","","",""
+"SpiritualistShowGhostArrowForSeconds","","Time the arrow is shown","","",""
 
 "## 信息 / Message"
 "Message.SetToSeconds","信息发送冷却时间为【{0}】秒","Set to 【{0}】 seconds.","Установлен на 【{0}】 секунды","訊息傳送冷卻時間設為【{0}】秒","信息发送冷却时间为【{0}】秒"
