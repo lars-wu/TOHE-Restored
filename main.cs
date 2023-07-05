@@ -349,8 +349,8 @@ public class Main : BasePlugin
                 {CustomRoles.Pursuer, "#617218"},
                 {CustomRoles.Phantom, "#662962"},
                 {CustomRoles.Amor, "#ee3377"},
-                {CustomRoles.Spiritcaller, "#293d3d"},
-                {CustomRoles.EvilSpirit, "#293d3d"},
+                {CustomRoles.Spiritcaller, "#003366"},
+                {CustomRoles.EvilSpirit, "#003366"},
                 // GM
                 {CustomRoles.GM, "#ff5b70"},
                 //サブ役職
