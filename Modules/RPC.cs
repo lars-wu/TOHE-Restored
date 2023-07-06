@@ -891,7 +891,7 @@ internal static class RPC
                 Virus.Add(targetId);
                 break;
             case CustomRoles.Devourer:
-                SkinEater.Add(targetId);
+                Devourer.Add(targetId);
                 break;
             case CustomRoles.Bloodhound:
                 Bloodhound.Add(targetId); 

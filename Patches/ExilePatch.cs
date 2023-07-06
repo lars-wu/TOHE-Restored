@@ -93,7 +93,7 @@ class ExileControllerWrapUpPatch
             //判断恐怖分子胜利
             if (role == CustomRoles.Terrorist) Utils.CheckTerroristWin(exiled);
 
-            if (role == CustomRoles.Devourer) SkinEater.OnSkinEaterDied(exiled.PlayerId);
+            if (role == CustomRoles.Devourer) Devourer.OnDevourerDied(exiled.PlayerId);
 
             if (CustomWinnerHolder.WinnerTeam != CustomWinner.Terrorist) Main.PlayerStates[exiled.PlayerId].SetDead();
         }

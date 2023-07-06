@@ -1013,8 +1013,8 @@ class ShapeshiftPatch
                     Disperser.DispersePlayers(shapeshifter);
                 break;
             case CustomRoles.Devourer:
-                if (shapeshifting) 
-                    SkinEater.OnShapeshift(shapeshifter, target);
+                if (shapeshifting)
+                    Devourer.OnShapeshift(shapeshifter, target);
                 break;
             case CustomRoles.Dazzler:
                 if (shapeshifting)
@@ -2043,7 +2043,7 @@ class FixedUpdatePatch
                 /*if(main.AmDebugger.Value && main.BlockKilling.TryGetValue(target.PlayerId, out var isBlocked)) {
                     Mark = isBlocked ? "(true)" : "(false)";
                 }*/
-                bool targetDevoured = SkinEater.HideNameOfConsumedPlayer.GetBool() && SkinEater.PlayerSkinsCosumed.Any(a => a.Value.Contains(target.PlayerId));
+                bool targetDevoured = Devourer.HideNameOfConsumedPlayer.GetBool() && Devourer.PlayerSkinsCosumed.Any(a => a.Value.Contains(target.PlayerId));
                 bool hideName =
                     Options.HideShapeshifterName.GetBool() &&
                     target.PlayerId != seer.PlayerId &&

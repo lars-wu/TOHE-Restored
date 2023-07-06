@@ -830,7 +830,6 @@ public static class Options
         QuickShooter.SetupCustomOption();
         Sniper.SetupCustomOption();
         Witch.SetupCustomOption(); //spellcaster
-        Deathpact.SetupCustomOption();
         TextOptionItem.Create(909090_3, "RoleType.ImpSupport", TabGroup.ImpostorRoles)// SUPPORT
             .SetGameMode(CustomGameMode.Standard)
             .SetColor(new Color32(255, 25, 25, byte.MaxValue));// SUPPORT
@@ -907,8 +906,6 @@ public static class Options
             .SetParent(CustomRoleSpawnChances[CustomRoles.Warlock])
             .SetValueFormat(OptionFormat.Seconds);
         Wildling.SetupCustomOption();
-        SkinEater.SetupCustomOption();
-        Dazzler.SetupCustomOption();
         TextOptionItem.Create(909090_5, "RoleType.Madmate", TabGroup.ImpostorRoles)
             .SetGameMode(CustomGameMode.Standard)
             .SetColor(new Color32(255, 25, 25, byte.MaxValue));

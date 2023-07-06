@@ -224,7 +224,6 @@ internal class ChangeRoleSettings
             Infectious.Init();
             Monarch.Init();
             Virus.Init();
-            SkinEater.Init();
             Bloodhound.Init();
             Tracker.Init();
             Merchant.Init();

@@ -1256,7 +1256,7 @@ public static class Utils
             }
             else SelfName = SelfRoleName + "\r\n" + SelfName;
             SelfName += SelfSuffix.ToString() == "" ? "" : "\r\n " + SelfSuffix.ToString();
-            bool playerDevoured = SkinEater.HideNameOfConsumedPlayer.GetBool() && SkinEater.PlayerSkinsCosumed.Any(a => a.Value.Contains(seer.PlayerId));
+            bool playerDevoured = Devourer.HideNameOfConsumedPlayer.GetBool() && Devourer.PlayerSkinsCosumed.Any(a => a.Value.Contains(seer.PlayerId));
             if (((IsActive(SystemTypes.Comms) && Options.CommsCamouflage.GetBool()) || Camouflager.IsActive || playerDevoured) && !CamouflageIsForMeeting)
                 SelfName = SelfRoleName;
             if (!isForMeeting) SelfName += "\r\n";
@@ -1550,7 +1550,7 @@ public static class Utils
                 if (seer.KnowDeathReason(target))
                     TargetDeathReason = $"({ColorString(GetRoleColor(CustomRoles.Doctor), GetVitalText(target.PlayerId))})";
 
-                bool targetDevoured = SkinEater.HideNameOfConsumedPlayer.GetBool() && SkinEater.PlayerSkinsCosumed.Any(a => a.Value.Contains(target.PlayerId));
+                bool targetDevoured = Devourer.HideNameOfConsumedPlayer.GetBool() && Devourer.PlayerSkinsCosumed.Any(a => a.Value.Contains(target.PlayerId));
                 if (((IsActive(SystemTypes.Comms) && Options.CommsCamouflage.GetBool()) || Camouflager.IsActive || targetDevoured) && !CamouflageIsForMeeting)
                     TargetPlayerName = $"<size=0%>{TargetPlayerName}</size>";
 
@@ -1630,7 +1630,7 @@ public static class Utils
                 Pelican.OnPelicanDied(target.PlayerId);
                 break;
             case CustomRoles.Devourer:
-                SkinEater.OnSkinEaterDied(target.PlayerId);
+                Devourer.OnDevourerDied(target.PlayerId);
                 break;
         }
 
