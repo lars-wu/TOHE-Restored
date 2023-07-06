@@ -169,8 +169,9 @@ class GameEndChecker
                 //恋人抢夺胜利
                 else if (CustomRolesHelper.RoleExist(CustomRoles.Lovers) && !reason.Equals(GameOverReason.HumansByTask))
                 {
-                    if (!(!Main.LoversPlayers.ToArray().All(p => p.IsAlive()) && Options.LoverSuicide.GetBool()))
-                    {
+                    if (!(!Main.LoversPlayers.ToArray().All(p => p.IsAlive()) && Options.LoverSuicide.GetBool()) ||
+                        !(!Amor.Lovers.ToArray().All(p => p.IsAlive()) && Amor.LoversSuicide.GetBool()))
+                    { 
                         if (CustomWinnerHolder.WinnerTeam is CustomWinner.Crewmate or CustomWinner.Impostor or CustomWinner.Jackal or CustomWinner.Pelican)
                         {
                             CustomWinnerHolder.ResetAndSetWinner(CustomWinner.Lovers);
