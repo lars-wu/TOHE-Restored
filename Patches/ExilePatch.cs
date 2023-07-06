@@ -120,8 +120,13 @@ class ExileControllerWrapUpPatch
                 CustomRoles.Greedier or
                 CustomRoles.DovesOfNeace or
                 CustomRoles.QuickShooter or
-                CustomRoles.Bomber or
-                CustomRoles.Addict
+                CustomRoles.Addict or
+                CustomRoles.ShapeshifterTOHE or
+                CustomRoles.Wildling or
+                CustomRoles.Deathpact or
+                CustomRoles.Dazzler or
+                CustomRoles.Devourer or
+                CustomRoles.Bomber
                 ) pc.RpcResetAbilityCooldown();
         }
         if (Options.RandomSpawn.GetBool() || Options.CurrentGameMode == CustomGameMode.SoloKombat)
