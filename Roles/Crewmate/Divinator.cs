@@ -125,7 +125,7 @@ public static class Divinator
                 CustomRoles.Opportunist or
                 CustomRoles.Pelican or
                 CustomRoles.ImperiusCurse or 
-                CustomRoles.SkinEater
+                CustomRoles.Devourer
                 => "Weirdo",
 
                 CustomRoles.EvilGuesser or

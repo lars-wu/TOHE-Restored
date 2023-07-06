@@ -753,7 +753,7 @@ static class ExtendedPlayerControl
             case CustomRoles.Farseer:
                 Farseer.SetCooldown(player.PlayerId);
                 break;
-            case CustomRoles.SkinEater:
+            case CustomRoles.Devourer:
                 SkinEater.SetKillCooldown(player.PlayerId);
                 break;
             case CustomRoles.Amor:

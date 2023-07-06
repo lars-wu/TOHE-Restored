@@ -291,7 +291,7 @@ public class PlayerGameOptionsSender : GameOptionsSender
                 opt.SetFloat(FloatOptionNames.CrewLightMod, Farseer.Vision.GetFloat());
                 opt.SetFloat(FloatOptionNames.ImpostorLightMod, Farseer.Vision.GetFloat());
                 break;
-            case CustomRoles.SkinEater:
+            case CustomRoles.Devourer:
                 SkinEater.ApplyGameOptions();
                 break;
             case CustomRoles.Dazzler:

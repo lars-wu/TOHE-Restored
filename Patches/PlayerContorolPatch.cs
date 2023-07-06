@@ -1012,7 +1012,7 @@ class ShapeshiftPatch
                 if (shapeshifting)
                     Disperser.DispersePlayers(shapeshifter);
                 break;
-            case CustomRoles.SkinEater:
+            case CustomRoles.Devourer:
                 if (shapeshifting) 
                     SkinEater.OnShapeshift(shapeshifter, target);
                 break;

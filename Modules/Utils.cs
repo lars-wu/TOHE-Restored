@@ -1629,7 +1629,7 @@ public static class Utils
             case CustomRoles.Pelican:
                 Pelican.OnPelicanDied(target.PlayerId);
                 break;
-            case CustomRoles.SkinEater:
+            case CustomRoles.Devourer:
                 SkinEater.OnSkinEaterDied(target.PlayerId);
                 break;
         }

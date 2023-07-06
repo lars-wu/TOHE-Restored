@@ -122,7 +122,7 @@ internal static class CustomRolesHelper
                 CustomRoles.Disperser => CustomRoles.Shapeshifter,
                 CustomRoles.Camouflager => CustomRoles.Shapeshifter,
                 CustomRoles.Monarch => CustomRoles.Impostor,
-                CustomRoles.SkinEater => CustomRoles.Shapeshifter,
+                CustomRoles.Devourer => CustomRoles.Shapeshifter,
                 CustomRoles.Confuser => CustomRoles.Shapeshifter,
                 CustomRoles.Bloodhound => CustomRoles.Crewmate,
                 CustomRoles.Tracker => CustomRoles.Crewmate,
@@ -487,7 +487,7 @@ internal static class CustomRolesHelper
             CustomRoles.Swooper or
             CustomRoles.Disperser or
             CustomRoles.Camouflager or
-            CustomRoles.SkinEater or
+            CustomRoles.Devourer or
             CustomRoles.Dazzler or
             CustomRoles.Deathpact or
             CustomRoles.Confuser or

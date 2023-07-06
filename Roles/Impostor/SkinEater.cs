@@ -33,18 +33,18 @@ namespace TOHE.Roles.Impostor
 
         public static void SetupCustomOption()
         {
-            SetupRoleOptions(Id, TabGroup.ImpostorRoles, CustomRoles.SkinEater);
-            DefaultKillCooldown = FloatOptionItem.Create(Id + 10, "SansDefaultKillCooldown", new(0f, 180f, 2.5f), 30f, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.SkinEater])
+            SetupRoleOptions(Id, TabGroup.ImpostorRoles, CustomRoles.Devourer);
+            DefaultKillCooldown = FloatOptionItem.Create(Id + 10, "SansDefaultKillCooldown", new(0f, 180f, 2.5f), 30f, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Devourer])
                 .SetValueFormat(OptionFormat.Seconds);
-            ReduceKillCooldown = FloatOptionItem.Create(Id + 11, "SansReduceKillCooldown", new(0f, 180f, 2.5f), 5f, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.SkinEater])
+            ReduceKillCooldown = FloatOptionItem.Create(Id + 11, "SansReduceKillCooldown", new(0f, 180f, 2.5f), 5f, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Devourer])
                 .SetValueFormat(OptionFormat.Seconds);
-            MinKillCooldown = FloatOptionItem.Create(Id + 12, "SansMinKillCooldown", new(0f, 180f, 2.5f), 10f, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.SkinEater])
+            MinKillCooldown = FloatOptionItem.Create(Id + 12, "SansMinKillCooldown", new(0f, 180f, 2.5f), 10f, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Devourer])
                 .SetValueFormat(OptionFormat.Seconds);
-            ShapeshiftCooldown = FloatOptionItem.Create(Id + 14, "ShapeshiftCooldown", new(0f, 180f, 2.5f), 30f, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.SkinEater])
+            ShapeshiftCooldown = FloatOptionItem.Create(Id + 14, "ShapeshiftCooldown", new(0f, 180f, 2.5f), 30f, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Devourer])
                 .SetValueFormat(OptionFormat.Seconds);
-            ShapeshiftDuration = FloatOptionItem.Create(Id + 15, "ShapeshiftDuration", new(0f, 180f, 2.5f), 20f, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.SkinEater])
+            ShapeshiftDuration = FloatOptionItem.Create(Id + 15, "ShapeshiftDuration", new(0f, 180f, 2.5f), 20f, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Devourer])
                 .SetValueFormat(OptionFormat.Seconds);
-            HideNameOfConsumedPlayer = BooleanOptionItem.Create(Id + 16, "SkinEaterHideNameCosumed", false, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.SkinEater]);
+            HideNameOfConsumedPlayer = BooleanOptionItem.Create(Id + 16, "SkinEaterHideNameCosumed", false, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Devourer]);
         }
         public static void Init()
         {

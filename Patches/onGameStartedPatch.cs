@@ -636,9 +636,6 @@ internal class SelectRolesPatch
                     case CustomRoles.Wildling:
                         Wildling.Add(pc.PlayerId);
                         break;
-                    case CustomRoles.SkinEater:
-                        SkinEater.Add(pc.PlayerId);
-                        break;
                     case CustomRoles.Bloodhound:
                         Bloodhound.Add(pc.PlayerId);
                         break;

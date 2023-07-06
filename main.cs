@@ -517,7 +517,7 @@ public enum CustomRoles
     Disperser,
     Camouflager,
     Saboteur,
-    SkinEater,
+    Devourer,
     Dazzler,
     Deathpact,
     Confuser,
