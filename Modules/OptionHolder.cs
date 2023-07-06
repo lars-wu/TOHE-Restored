@@ -1073,7 +1073,6 @@ public static class Options
         .SetParent(CustomRoleSpawnChances[CustomRoles.Mayor]);
         Monarch.SetupCustomOption();
         Farseer.SetupCustomOption();
-        Addict.SetupCustomOption();
 
         // Neutral
         TextOptionItem.Create(909094_0, "RoleType.NeutralBenign", TabGroup.NeutralRoles)
