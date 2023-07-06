@@ -15,7 +15,6 @@ namespace TOHE.Roles.Neutral
         private static List<byte> playerIdList = new();
         private static int SpiritLimit = new();
 
-        private static List<byte> GhostPlayer = new();
         private static Dictionary<byte, long> PlayersHaunted = new();
 
         private static OptionItem KillCooldown;
@@ -57,7 +56,6 @@ namespace TOHE.Roles.Neutral
             SpiritLimit = new();
             ProtectTimeStamp = new();
             PlayersHaunted = new();
-            GhostPlayer = new();
         }
 
         public static void Add(byte playerId)
@@ -72,8 +70,6 @@ namespace TOHE.Roles.Neutral
         }
         public static bool IsEnable => playerIdList.Count > 0;
         public static void SetKillCooldown(byte id) => Main.AllPlayerKillCooldown[id] = KillCooldown.GetFloat();
-
-        public static bool IsGhostPlayer(byte playerId) => GhostPlayer.Contains(playerId);
         public static bool InProtect(PlayerControl player) => player.Is(CustomRoles.Spiritcaller) && ProtectTimeStamp > Utils.GetTimeStamp();
 
         private static void SendRPC()
@@ -92,18 +88,10 @@ namespace TOHE.Roles.Neutral
         {
             if (SpiritLimit < 1) return;
 
-            if (target.Is(CustomRoles.Pelican))
-                Pelican.OnPelicanDied(target.PlayerId);
-            else if (target.Is(CustomRoles.SkinEater))
-                SkinEater.OnSkinEaterDied(target.PlayerId);
-
             SpiritLimit--;
             SendRPC();
-            GhostPlayer.Add(target.PlayerId);
-            target.RpcSetCustomRole(CustomRoles.EvilSpirit);
 
-            if (AmongUsClient.Instance.AmHost && !Main.ResetCamPlayerList.Contains(target.PlayerId))
-                Main.ResetCamPlayerList.Add(target.PlayerId);
+            target.RpcSetCustomRole(CustomRoles.EvilSpirit);
 
             var writer = CustomRpcSender.Create("SpiritCallerSendMessage", SendOption.None);
             writer.StartMessage(target.GetClientId());

@@ -619,7 +619,6 @@ public enum CustomRoles
     Vulture,
     Amor,
     Spiritcaller,
-    EvilSpirit,
 
     //SoloKombat
     KB_Normal,
@@ -666,7 +665,8 @@ public enum CustomRoles
    // Reflective,
     Rascal,
     Soulless,
-    Confused
+    Confused,
+    EvilSpirit
 }
 //WinData
 public enum CustomWinner
