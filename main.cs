@@ -524,6 +524,7 @@ public enum CustomRoles
     Twister,
     Councillor,
     EvilDiviner,
+    Lurker,
     //Crewmate(Vanilla)
     Engineer,
     GuardianAngel,

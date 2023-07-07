@@ -244,6 +244,7 @@ internal class ChangeRoleSettings
             Confuser.Init();
             Spiritcaller.Init();
             Amor.Init();
+            Lurker.Init();
 
             SoloKombatManager.Init();
             CustomWinnerHolder.Reset();
@@ -679,6 +680,9 @@ internal class SelectRolesPatch
                         break;
                     case CustomRoles.Spiritcaller:
                         Spiritcaller.Add(pc.PlayerId);
+                        break;
+                    case CustomRoles.Lurker:
+                        Lurker.Add(pc.PlayerId);
                         break;
                 }
                 foreach (var subRole in pc.GetCustomSubRoles())

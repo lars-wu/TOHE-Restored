@@ -248,6 +248,9 @@ class CheckMurderPatch
                 case CustomRoles.Wraith:
                     if (!Wraith.OnCheckMurder(killer, target)) return false;
                     break;
+                case CustomRoles.Lurker:
+                    Lurker.OnCheckMurder(killer);
+                    break;
 
                 //==========中立阵营==========//
                 case CustomRoles.Arsonist:
@@ -2195,6 +2198,7 @@ class EnterVentPatch
         Swooper.OnEnterVent(pc, __instance);
         Wraith.OnEnterVent(pc, __instance);
         Addict.OnEnterVent(pc, __instance);
+        Lurker.OnEnterVent(pc);
 
         if (pc.Is(CustomRoles.Veteran))
         {

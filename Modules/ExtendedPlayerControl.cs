@@ -768,6 +768,9 @@ static class ExtendedPlayerControl
             case CustomRoles.Spiritcaller:
                 Spiritcaller.SetKillCooldown(player.PlayerId);
                 break;
+            case CustomRoles.Lurker:
+                Lurker.SetKillCooldown(player.PlayerId);
+                break;
         }
         if (player.PlayerId == LastImpostor.currentId)
             LastImpostor.SetKillCooldown();
