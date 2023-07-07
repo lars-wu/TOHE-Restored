@@ -1215,12 +1215,10 @@ public static class Utils
             {
             SelfSuffix.Append(EvilTracker.GetTargetArrow(seer, seer));
             }
-            if (seer.Is(CustomRoles.Deathpact) && !isForMeeting)
-            {
-            SelfSuffix.Append(Deathpact.GetDeathpactPlayerArrow(seer));
-            }
 
-            
+            SelfSuffix.Append(Deathpact.GetDeathpactPlayerArrow(seer));
+
+
 
             //KB自身名字后缀
 
