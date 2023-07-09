@@ -1216,10 +1216,6 @@ public static class Utils
             SelfSuffix.Append(EvilTracker.GetTargetArrow(seer, seer));
             }
 
-            SelfSuffix.Append(Deathpact.GetDeathpactPlayerArrow(seer));
-
-
-
             //KB自身名字后缀
 
             if (Options.CurrentGameMode == CustomGameMode.SoloKombat)
