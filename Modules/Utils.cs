@@ -1204,8 +1204,6 @@ public static class Utils
                 SelfSuffix.Append(Spiritualist.GetSpiritualistArrow(seer));
             }
 
-            SelfSuffix.Append(Deathpact.GetDeathpactPlayerArrow(seer));
-
             //タスクを終えたSnitchがインポスター/キル可能なニュートラルの方角を確認できる
             if (seer.Is(CustomRoles.Snitch) && !isForMeeting)
             {
@@ -1215,6 +1213,8 @@ public static class Utils
             {
             SelfSuffix.Append(EvilTracker.GetTargetArrow(seer, seer));
             }
+
+            SelfSuffix.Append(Deathpact.GetDeathpactPlayerArrow(seer));
 
             //KB自身名字后缀
 
