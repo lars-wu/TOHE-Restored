@@ -930,7 +930,7 @@ class MeetingHudStartPatch
                 switch (subRole)
                 {
                     case CustomRoles.Lovers:
-                        if (seer.Is(CustomRoles.Lovers) || seer.Data.IsDead)
+                        if ((seer.Is(CustomRoles.Lovers) && Amor.IsLoverPair(seer, target)) || seer.Data.IsDead)
                         {
                             sb.Append(Utils.ColorString(Utils.GetRoleColor(CustomRoles.Lovers), "♡"));
                             isLover = true;
