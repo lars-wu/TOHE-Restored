@@ -33,7 +33,7 @@ public class Main : BasePlugin
     public static ConfigEntry<string> DebugKeyInput { get; private set; }
     public static readonly string MainMenuText = " ";
     public const string PluginGuid = "com.karped1em.townofhostedited";
-    public const string PluginVersion = "2.4.2";
+    public const string PluginVersion = "2.4.3.4";
     public const int PluginCreate = 3;
     public const bool Canary = false;
 
@@ -117,6 +117,7 @@ public class Main : BasePlugin
     public static Dictionary<byte, float> AllPlayerSpeed = new();
     public const float MinSpeed = 0.0001f;
     public static List<byte> CleanerBodies = new();
+    public static List<byte> MedusaBodies = new();
     public static List<byte> InfectedBodies = new();
     public static List<byte> BrakarVoteFor = new();
     public static Dictionary<byte, (byte, float)> BitPlayers = new();
@@ -315,6 +316,8 @@ public class Main : BasePlugin
                 {CustomRoles.Tracefinder, "#0066CC"},
                 {CustomRoles.Oracle, "#6666FF"},
                 {CustomRoles.Spiritualist, "#669999"},
+                {CustomRoles.Chameleon, "#01C895"},
+                {CustomRoles.ParityCop, "#0D57AF"},
                 //第三陣営役職
                 {CustomRoles.Arsonist, "#ff6633"},
                 {CustomRoles.Jester, "#ec62a5"},
@@ -363,6 +366,9 @@ public class Main : BasePlugin
                 {CustomRoles.Amor, "#ee3377"},
                 {CustomRoles.Spiritcaller, "#003366"},
                 {CustomRoles.EvilSpirit, "#003366"},
+                {CustomRoles.Medusa, "#9900CC"},
+                {CustomRoles.Baker, "#b58428"},
+                {CustomRoles.Famine, "#cb4d4d"},
                 // GM
                 {CustomRoles.GM, "#ff5b70"},
                 //サブ役職
@@ -404,6 +410,12 @@ public class Main : BasePlugin
                 {CustomRoles.Rascal, "#990000"},
                 {CustomRoles.Soulless, "#531269"},
                 {CustomRoles.Confused, "#9933ff"},
+                {CustomRoles.Gravestone, "#2EA8E7"},
+                {CustomRoles.Lazy, "#a4dffe"},
+                {CustomRoles.Autopsy, "#80ffdd"},
+                {CustomRoles.Pessimist, "#B71556"},
+
+
                 //SoloKombat
                 {CustomRoles.KB_Normal, "#f55252"}
             };
@@ -521,9 +533,10 @@ public enum CustomRoles
     Dazzler,
     Deathpact,
     Confuser,
-    Twister,
     Councillor,
     EvilDiviner,
+    Morphling,
+    Twister,
     Lurker,
     //Crewmate(Vanilla)
     Engineer,
@@ -577,6 +590,8 @@ public enum CustomRoles
     Tracefinder,
     Oracle,
     Spiritualist,
+    Chameleon,
+    ParityCop,
     //Neutral
     Arsonist,
     HexMaster,
@@ -620,6 +635,10 @@ public enum CustomRoles
     Vulture,
     Amor,
     Spiritcaller,
+    Medusa,
+    Sidekick,
+    Baker,
+    Famine,
 
     //SoloKombat
     KB_Normal,
@@ -643,7 +662,6 @@ public enum CustomRoles
     Workhorse,
     Fool,
     Avanger,
-    Sidekick,
     Youtuber,
     Egoist,
     TicketsStealer,
@@ -667,7 +685,11 @@ public enum CustomRoles
     Rascal,
     Soulless,
     Confused,
-    EvilSpirit
+    EvilSpirit,
+    Gravestone,
+    Lazy,
+    Autopsy,
+    Pessimist,
 }
 //WinData
 public enum CustomWinner
@@ -715,7 +737,9 @@ public enum CustomWinner
     Pickpocket = CustomRoles.Pickpocket,
     Traitor = CustomRoles.Traitor,
     Vulture = CustomRoles.Vulture,
-    Spiritcaller = CustomRoles.Spiritcaller
+    Spiritcaller = CustomRoles.Spiritcaller,
+    Medusa = CustomRoles.Medusa,
+    Famine = CustomRoles.Famine,
 }
 public enum AdditionalWinners
 {
@@ -735,6 +759,7 @@ public enum AdditionalWinners
     Phantom = CustomRoles.Phantom,
     Maverick = CustomRoles.Maverick,
     Amor = CustomRoles.Amor
+ //   Baker = CustomRoles.Baker,
 }
 public enum SuffixModes
 {

@@ -283,17 +283,6 @@ class CreatePlayerPatch
                     }
                 }, 3.3f, "DisplayUpWarnning");
             }
-            if (PlayerControl.LocalPlayer.FriendCode.GetEditedDevUser().IsUp)
-            {
-                new LateTask(() =>
-                {
-                    if (!AmongUsClient.Instance.IsGameStarted && client.Character != null)
-                    {
-                        Main.isChatCommand = true;
-                     //   Utils.SendMessage($"{GetString("Message.YTPlanNotice")} {PlayerControl.LocalPlayer.FriendCode.GetEditedDevUser().UpName}", client.Character.PlayerId);
-                    }
-                }, 3.3f, "DisplayUpWarnning");
-            }
         }
     }
 }
