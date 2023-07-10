@@ -459,7 +459,7 @@ public static class Utils
             case CustomRoles.Sunnyboy:
             case CustomRoles.Opportunist:
             case CustomRoles.Phantom:
-            case CustomRoles.Baker:
+            //case CustomRoles.Baker:
          //   case CustomRoles.Famine:
                 if (ForRecompute)
                     hasTasks = false;

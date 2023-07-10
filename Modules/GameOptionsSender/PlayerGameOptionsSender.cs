@@ -328,9 +328,6 @@ public class PlayerGameOptionsSender : GameOptionsSender
             case CustomRoles.Twister:
                 Twister.ApplyGameOptions();
                 break;
-            case CustomRoles.Twister:
-                Twister.ApplyGameOptions();
-                break;
         }
 
         // Ϊ�Ի��ߵ�����
