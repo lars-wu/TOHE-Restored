@@ -253,7 +253,6 @@ internal class ChangeRoleSettings
             Morphling.Init();
             ParityCop.Init(); // *giggle* party cop
             Baker.Init();
-            Spiritcaller.Init();
 
 
             SoloKombatManager.Init();
