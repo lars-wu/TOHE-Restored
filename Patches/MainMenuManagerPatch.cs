@@ -186,6 +186,15 @@ public static class DleksPatch
     }
 }
 
+[HarmonyPatch(typeof(Constants), nameof(Constants.GetBroadcastVersion))]
+public static class BroadcastVersionPatch
+{
+    public static void Postfix(ref int __result)
+    {
+        __result = Constants.GetVersion(2222, 0, 0, 0);
+    }
+}
+
 // 参考：https://github.com/Yumenopai/TownOfHost_Y
 public class ModNews
 {
