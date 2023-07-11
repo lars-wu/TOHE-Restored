@@ -510,10 +510,10 @@ internal static class CustomRolesHelper
             CustomRoles.Dazzler or
             CustomRoles.Deathpact or
             CustomRoles.Confuser or
-            CustomRoles.Lurker or
             CustomRoles.Devourer or
             CustomRoles.Camouflager or
-            CustomRoles.Twister;
+            CustomRoles.Twister or
+            CustomRoles.Lurker;
     }
     public static bool IsNeutral(this CustomRoles role) // �Ƿ�����
     {

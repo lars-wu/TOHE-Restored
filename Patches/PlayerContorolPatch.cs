@@ -2248,8 +2248,8 @@ class EnterVentPatch
         Swooper.OnEnterVent(pc, __instance);
         Wraith.OnEnterVent(pc, __instance);
         Addict.OnEnterVent(pc, __instance);
-        Lurker.OnEnterVent(pc);
         Chameleon.OnEnterVent(pc, __instance);
+        Lurker.OnEnterVent(pc);
 
         if (pc.Is(CustomRoles.Veteran))
         {
