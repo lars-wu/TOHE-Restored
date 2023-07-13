@@ -636,7 +636,7 @@ public enum CustomRoles
     Amor,
     Spiritcaller,
     Medusa,
-    Sidekick,
+    //Sidekick,
     Baker,
     Famine,
 
@@ -690,6 +690,7 @@ public enum CustomRoles
     Lazy,
     Autopsy,
     Pessimist,
+    Sidekick,
 }
 //WinData
 public enum CustomWinner
