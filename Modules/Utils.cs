@@ -451,12 +451,12 @@ public static class Utils
             case CustomRoles.Pursuer:
             case CustomRoles.Amor:
             case CustomRoles.Spiritcaller:
-            case CustomRoles.EvilSpirit:
                 hasTasks = false;
                 break;
             case CustomRoles.Workaholic:
             case CustomRoles.Terrorist:
             case CustomRoles.Sunnyboy:
+            case CustomRoles.Convict:
             case CustomRoles.Opportunist:
             case CustomRoles.Phantom:
             //case CustomRoles.Baker:
@@ -471,12 +471,12 @@ public static class Utils
                     hasTasks = false;
                 break;
             case CustomRoles.Executioner:
-                if (Executioner.ChangeRolesAfterTargetKilled.GetValue() == 0)
+                if (Executioner.ChangeRolesAfterTargetKilled.GetValue() != 1)
                     hasTasks = !ForRecompute;
                 else hasTasks = false;
                 break;
             case CustomRoles.Lawyer:
-                if (Lawyer.ChangeRolesAfterTargetKilled.GetValue() == 0)
+                if (Lawyer.ChangeRolesAfterTargetKilled.GetValue() != 1)
                     hasTasks = !ForRecompute;
                 else hasTasks = false;
                 break;
@@ -494,6 +494,7 @@ public static class Utils
             //    case CustomRoles.Sidekick:
                 case CustomRoles.Egoist:
                 case CustomRoles.Infected:
+                case CustomRoles.EvilSpirit:
                 case CustomRoles.Contagious:
                 case CustomRoles.Soulless:
                 case CustomRoles.Rascal:
@@ -519,6 +520,8 @@ public static class Utils
             (pc.Is(CustomRoles.Retributionist) && !Options.RetributionistCanBeMadmate.GetBool()) ||
             pc.Is(CustomRoles.Needy) ||
             pc.Is(CustomRoles.Lazy) ||
+            pc.Is(CustomRoles.Loyal) ||
+            pc.Is(CustomRoles.SuperStar) ||
             pc.Is(CustomRoles.CyberStar) ||
             pc.Is(CustomRoles.Egoist) ||
             pc.Is(CustomRoles.DualPersonality)
@@ -1465,15 +1468,29 @@ public static class Utils
                     TargetMark.Append(ColorString(GetRoleColor(CustomRoles.SuperStar), "★"));
 
                 // Necroview
-                if (seer.Is(CustomRoles.Necroview))
-                    {
-                if (target.Is(CustomRoleTypes.Crewmate) && !target.Is(CustomRoles.Madmate) && target.Data.IsDead)
-                        TargetMark.Append(ColorString(GetRoleColor(CustomRoles.SpeedBooster), "★"));
-                if (target.Is(CustomRoleTypes.Impostor) && target.Data.IsDead || target.Is(CustomRoles.Madmate) && target.Data.IsDead || target.Is(CustomRoles.Parasite) && target.Data.IsDead || target.Is(CustomRoles.Crewpostor) && target.Data.IsDead || target.Is(CustomRoles.Rascal) && target.Data.IsDead)
+                if (seer.Is(CustomRoles.Necroview) && isForMeeting)
+                {
+                    if (target.Is(CustomRoleTypes.Crewmate) && !target.GetCustomRole().IsEvilAddons() && target.Data.IsDead)
+                        TargetMark.Append(ColorString(GetRoleColor(CustomRoles.Bait), "★"));
+
+                    if ((target.Is(CustomRoleTypes.Impostor) || target.Is(CustomRoles.Madmate) || target.Is(CustomRoles.Rascal) || target.Is(CustomRoles.Parasite) || target.Is(CustomRoles.Crewpostor) || target.Is(CustomRoles.Convict)) && target.Data.IsDead)
                         TargetMark.Append(ColorString(GetRoleColor(CustomRoles.Impostor), "★"));
-                if (target.Is(CustomRoleTypes.Neutral) && target.Data.IsDead)
+
+                    if ((target.Is(CustomRoleTypes.Neutral) || target.Is(CustomRoles.Rogue) || target.Is(CustomRoles.Contagious) || target.Is(CustomRoles.Charmed) || target.Is(CustomRoles.Infected) || target.Is(CustomRoles.Egoist) || target.Is(CustomRoles.Soulless)) && target.Data.IsDead)
                         TargetMark.Append(ColorString(GetRoleColor(CustomRoles.Executioner), "★"));
-                    }
+                }
+                // Parasight
+                if (seer.Is(CustomRoles.Parasight) && isForMeeting)
+                {
+                    if (target.Is(CustomRoleTypes.Crewmate) && !target.GetCustomRole().IsEvilAddons() && !target.Data.IsDead)
+                        TargetMark.Append(ColorString(GetRoleColor(CustomRoles.Bait), "★"));
+
+                    if ((target.Is(CustomRoleTypes.Impostor) || target.Is(CustomRoles.Madmate) || target.Is(CustomRoles.Rascal) || target.Is(CustomRoles.Parasite) || target.Is(CustomRoles.Crewpostor) || target.Is(CustomRoles.Convict)) && !target.Data.IsDead)
+                        TargetMark.Append(ColorString(GetRoleColor(CustomRoles.Impostor), "★"));
+
+                    if ((target.Is(CustomRoleTypes.Neutral) || target.Is(CustomRoles.Rogue) || target.Is(CustomRoles.Contagious) || target.Is(CustomRoles.Charmed) || target.Is(CustomRoles.Infected) || target.Is(CustomRoles.Egoist) || target.Is(CustomRoles.Soulless)) && !target.Data.IsDead)
+                        TargetMark.Append(ColorString(GetRoleColor(CustomRoles.Executioner), "★"));
+                }
 
 
                 //球状闪电提示
@@ -1741,9 +1758,12 @@ public static class Utils
                 if (seer.KnowDeathReason(target))
                     TargetDeathReason = $"({ColorString(GetRoleColor(CustomRoles.Doctor), GetVitalText(target.PlayerId))})";
 
-                bool targetDevoured = Devourer.HideNameOfConsumedPlayer.GetBool() && Devourer.PlayerSkinsCosumed.Any(a => a.Value.Contains(target.PlayerId));
-                if (((IsActive(SystemTypes.Comms) && Options.CommsCamouflage.GetBool()) || Camouflager.IsActive || targetDevoured) && !CamouflageIsForMeeting)
+                if (((IsActive(SystemTypes.Comms) && Options.CommsCamouflage.GetBool()) || Camouflager.IsActive) && !CamouflageIsForMeeting)
                     TargetPlayerName = $"<size=0%>{TargetPlayerName}</size>";
+
+                bool targetDevoured = Devourer.HideNameOfConsumedPlayer.GetBool() && Devourer.PlayerSkinsCosumed.Any(a => a.Value.Contains(target.PlayerId));
+                if (targetDevoured && !CamouflageIsForMeeting)
+                    TargetPlayerName = GetString("DevouredName");
 
                 //全てのテキストを合成します。
                 string TargetName = $"{TargetRoleText}{TargetPlayerName}{TargetDeathReason}{TargetMark}";
@@ -1933,12 +1953,12 @@ public static class Utils
     }
     public static string SummaryTexts(byte id, bool disableColor = true, bool check = false)
     {
-        var RolePos = TranslationController.Instance.currentLanguage.languageID is SupportedLangs.English or SupportedLangs.Russian ? 47 : 37;
-        var KillsPos = TranslationController.Instance.currentLanguage.languageID is SupportedLangs.English or SupportedLangs.Russian ? 13 : 9;
+        var RolePos = TranslationController.Instance.currentLanguage.languageID is SupportedLangs.English or SupportedLangs.Russian ? 37 : 34;
+        var KillsPos = TranslationController.Instance.currentLanguage.languageID is SupportedLangs.English or SupportedLangs.Russian ? 14 : 12;
         var name = Main.AllPlayerNames[id].RemoveHtmlTags().Replace("\r\n", string.Empty);
         if (id == PlayerControl.LocalPlayer.PlayerId) name = DataManager.player.Customization.Name;
         else name = GetPlayerById(id)?.Data.PlayerName ?? name;
-        string summary = $"{ColorString(Main.PlayerColors[id], name)}<pos=24%>{GetProgressText(id)}</pos><pos=32%> {GetKillCountText(id)}</pos><pos={32 + KillsPos}%> {GetVitalText(id, true)}</pos><pos={RolePos + KillsPos}%> {GetDisplayRoleName(id, true)}{GetSubRolesText(id, summary: true)}</pos>";
+        string summary = $"{ColorString(Main.PlayerColors[id], name)}<pos=14%>{GetProgressText(id)}</pos><pos=24%> {GetKillCountText(id)}</pos><pos={22 + KillsPos}%> {GetVitalText(id, true)}</pos><pos={RolePos + KillsPos}%> {GetDisplayRoleName(id, true)}{GetSubRolesText(id, summary: true)}</pos>";
         if (Options.CurrentGameMode == CustomGameMode.SoloKombat)
         {
             if (TranslationController.Instance.currentLanguage.languageID is SupportedLangs.SChinese or SupportedLangs.TChinese)

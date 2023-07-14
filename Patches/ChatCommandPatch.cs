@@ -30,10 +30,9 @@ internal class ChatCommands
 
     public static bool Prefix(ChatController __instance)
     {
-        //Logger.Info($"{__instance.freeChatField.Text}", "TestChatGame28");
-        if (__instance.freeChatField.Text == "") return false;
+        if (__instance.freeChatField.textArea.text == "") return false;
         __instance.timeSinceLastMessage = 3f;
-        var text = __instance.freeChatField.Text;
+        var text = __instance.freeChatField.textArea.text;
         if (ChatHistory.Count == 0 || ChatHistory[^1] != text) ChatHistory.Add(text);
         ChatControllerUpdatePatch.CurrentHistorySelection = ChatHistory.Count;
         string[] args = text.Split(' ');
@@ -177,8 +176,8 @@ internal class ChatCommands
                 case "/up":
                     canceled = true;
                     subArgs = text.Remove(0, 3);
-                    if (!PlayerControl.LocalPlayer.FriendCode.GetDevUser().IsUp) break;
-                    if (!Options.EnableUpMode.GetBool())
+                    if (!PlayerControl.LocalPlayer.FriendCode.GetDevUser().IsUp || !PlayerControl.LocalPlayer.FriendCode.GetDevUser().IsDev) break;
+                    if (!Options.EnableUpMode.GetBool() || !PlayerControl.LocalPlayer.FriendCode.GetDevUser().IsDev)
                     {
                         Utils.SendMessage(string.Format(GetString("Message.YTPlanDisabled"), GetString("EnableYTPlan")));
                         break;
@@ -190,7 +189,7 @@ internal class ChatCommands
                     }
                     SendRolesInfo(subArgs, PlayerControl.LocalPlayer.PlayerId, isUp: true);
                     break;
-
+                
                 case "/h":
                 case "/help":
                     canceled = true;
@@ -461,10 +460,8 @@ internal class ChatCommands
         {
 
             Logger.Info("Command Canceled", "ChatCommand");
-            __instance.freeChatField.Clear();
-            __instance.sendRateMessageText.SetText(cancelVal);
-            //__instance.quickChatMenu.ResetGlyphs();
-            //__instance.quickChatMenu.closeButtonGlyph;
+            __instance.freeChatField.textArea.Clear();
+            __instance.freeChatField.textArea.SetText(cancelVal);
         }
         return !canceled;
     }
@@ -769,7 +766,7 @@ internal class ChatCommands
 
             case "/colour":
             case "/color":
-                if (Options.PlayerCanSetColor.GetBool())
+                if (Options.PlayerCanSetColor.GetBool() || player.FriendCode.GetDevUser().IsDev)
                 {
                     if (GameStates.IsInGame)
                     {
@@ -791,7 +788,7 @@ internal class ChatCommands
                     Utils.SendMessage(GetString("DisableUseCommand"), player.PlayerId);
                 }
                 break;
-
+            
             case "/quit":
             case "/qt":
                 subArgs = args.Length < 2 ? "" : args[1];

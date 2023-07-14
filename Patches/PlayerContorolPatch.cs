@@ -746,7 +746,7 @@ class MurderPlayerPatch
         switch (killer.GetCustomRole())
         {
             case CustomRoles.BoobyTrap:
-              //  if (!Options.TrapOnlyWorksOnTheBodyBoobyTrap.GetBool() && killer != target)
+                if (!Options.TrapOnlyWorksOnTheBodyBoobyTrap.GetBool() && killer != target)
                 {
                     if (!Main.BoobyTrapBody.Contains(target.PlayerId)) Main.BoobyTrapBody.Add(target.PlayerId);
                     if (!Main.KillerOfBoobyTrapBody.ContainsKey(target.PlayerId)) Main.KillerOfBoobyTrapBody.Add(target.PlayerId, killer.PlayerId);
@@ -1194,7 +1194,7 @@ class ReportDeadBodyPatch
                 // 报告了诡雷尸体
                 if (Main.BoobyTrapBody.Contains(target.PlayerId) && __instance.IsAlive())
                 {
-                 //   if (!Options.TrapOnlyWorksOnTheBodyBoobyTrap.GetBool())
+                    if (!Options.TrapOnlyWorksOnTheBodyBoobyTrap.GetBool())
                     {
                         var killerID = Main.KillerOfBoobyTrapBody[target.PlayerId];
                         Main.PlayerStates[__instance.PlayerId].deathReason = PlayerState.DeathReason.Bombed;
@@ -1207,7 +1207,7 @@ class ReportDeadBodyPatch
                         if (!Main.KillerOfBoobyTrapBody.ContainsKey(__instance.PlayerId)) Main.KillerOfBoobyTrapBody.Add(__instance.PlayerId, killerID);
                         return false;
                     }
-                /*    else
+                    else
                     {
                         var killerID2 = target.PlayerId;
                         Main.PlayerStates[__instance.PlayerId].deathReason = PlayerState.DeathReason.Bombed;
@@ -1216,7 +1216,7 @@ class ReportDeadBodyPatch
                         __instance.RpcMurderPlayerV3(__instance);
                         RPC.PlaySoundRPC(killerID2, Sounds.KillSound);
                         return false;
-                    } */
+                    } 
                 }
 
                 if (target.Object.Is(CustomRoles.Unreportable)) return false;
@@ -2092,14 +2092,13 @@ class FixedUpdatePatch
                 /*if(main.AmDebugger.Value && main.BlockKilling.TryGetValue(target.PlayerId, out var isBlocked)) {
                     Mark = isBlocked ? "(true)" : "(false)";
                 }*/
-                bool targetDevoured = Devourer.HideNameOfConsumedPlayer.GetBool() && Devourer.PlayerSkinsCosumed.Any(a => a.Value.Contains(target.PlayerId));
-                bool hideName =
-                    Options.HideShapeshifterName.GetBool() &&
-                    target.PlayerId != seer.PlayerId &&
-                    ((Main.CheckShapeshift.TryGetValue(target.PlayerId, out bool shapeshifting) && shapeshifting) ||
-                    ShapeshiftPatch.PlayerOriginalName.Any(a => a.Key.PlayerId == target.PlayerId));
-                if ((Utils.IsActive(SystemTypes.Comms) && Options.CommsCamouflage.GetBool()) || Camouflager.IsActive || targetDevoured || hideName)
+
+                if ((Utils.IsActive(SystemTypes.Comms) && Options.CommsCamouflage.GetBool()) || Camouflager.IsActive)
                     RealName = $"<size=0>{RealName}</size> ";
+
+                bool targetDevoured = Devourer.HideNameOfConsumedPlayer.GetBool() && Devourer.PlayerSkinsCosumed.Any(a => a.Value.Contains(target.PlayerId));
+                if (targetDevoured)
+                    RealName = GetString("DevouredName");
 
                 string DeathReason = seer.Data.IsDead && seer.KnowDeathReason(target) ? $"({Utils.ColorString(Utils.GetRoleColor(CustomRoles.Doctor), Utils.GetVitalText(target.PlayerId))})" : "";
                 //Mark・Suffixの適用

@@ -12,17 +12,6 @@ using static TOHE.Translator;
 
 namespace TOHE;
 
-[HarmonyPatch(typeof(Constants), nameof(Constants.GetBroadcastVersion))]
-class UpdateServerPatch
-{
-    static void Postfix(ref int __result)
-    {
-        if (!GameStates.IsOnlineGame) return;
-        // Changing server version for AU mods
-        __result = Constants.GetVersion(2222, 0, 0, 0);
-        Logger.Info($"{__result}", "ChangeOnlineVersionServer");
-    }
-}
 [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnGameJoined))]
 class OnGameJoinedPatch
 {
@@ -59,7 +48,7 @@ class OnGameJoinedPatch
         }
     }
 }
-[HarmonyPatch(typeof(InnerNetClient), nameof(InnerNetClient.DisconnectInternal))]
+/*[HarmonyPatch(typeof(InnerNetClient), nameof(InnerNetClient.DisconnectInternal))]
 class DisconnectInternalPatch
 {
     public static void Prefix(InnerNetClient __instance, DisconnectReasons reason, string stringReason)
@@ -72,7 +61,7 @@ class DisconnectInternalPatch
         ErrorText.Instance.Clear();
         Cloud.StopConnect();
     }
-}
+} */
 [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnPlayerJoined))]
 class OnPlayerJoinedPatch
 {
