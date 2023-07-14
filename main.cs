@@ -642,7 +642,7 @@ public enum CustomRoles
     Amor,
     Spiritcaller,
     Medusa,
-    //Sidekick,
+    Sidekick,
     Baker,
     Famine,
 
