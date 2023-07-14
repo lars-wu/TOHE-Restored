@@ -71,7 +71,7 @@ namespace TOHE.Roles.Crewmate
 
         public static void FixedUpdate(PlayerControl player)
         {
-            if (!GameStates.IsInTask || !IsEnable || !SuicideTimer.ContainsKey(player.PlayerId) || !player.IsAlive()) return;
+            if (!IsEnable || !SuicideTimer.ContainsKey(player.PlayerId) || !player.IsAlive()) return;
 
             if (SuicideTimer[player.PlayerId] >= TimeLimit.GetFloat())
             {

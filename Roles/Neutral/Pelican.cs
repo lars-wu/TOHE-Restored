@@ -168,6 +168,8 @@ public static class Pelican
     private static int Count = 0;
     public static void OnFixedUpdate()
     {
+        if (!IsEnable) return;
+
         if (!GameStates.IsInTask)
         {
             if (eatenList.Count > 0)
@@ -178,7 +180,9 @@ public static class Pelican
             return;
         }
 
-        if (!IsEnable) return; Count--; if (Count > 0) return; Count = 30;
+        Count--; 
+        if (Count > 0) return; 
+        Count = 30;
 
         foreach (var pc in eatenList)
         {

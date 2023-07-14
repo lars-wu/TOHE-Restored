@@ -80,18 +80,16 @@ namespace TOHE.Roles.Crewmate
         }
         public static void Add(byte playerId)
         {
-
-        if (!AmongUsClient.Instance.AmHost) return;
-        if (!Main.ResetCamPlayerList.Contains(playerId))
-            Main.ResetCamPlayerList.Add(playerId);
+            if (!AmongUsClient.Instance.AmHost) return;
+            if (!Main.ResetCamPlayerList.Contains(playerId))
+                Main.ResetCamPlayerList.Add(playerId);
         }
-
 
         public static void SetCooldown(byte id) => Main.AllPlayerKillCooldown[id] = FarseerCooldown.GetFloat();
 
         public static void OnPostFix(PlayerControl player)
         {
-            if (GameStates.IsInTask && Main.FarseerTimer.ContainsKey(player.PlayerId))//アーソニストが誰かを塗っているとき
+            if (Main.FarseerTimer.ContainsKey(player.PlayerId))//アーソニストが誰かを塗っているとき
             {
                 if (!player.IsAlive() || Pelican.IsEaten(player.PlayerId))
                 {
