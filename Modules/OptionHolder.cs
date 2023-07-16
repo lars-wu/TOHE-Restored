@@ -1264,6 +1264,7 @@ public static class Options
         NSerialKiller.SetupCustomOption();
         DarkHide.SetupCustomOption(); //TOH_Y
         Ritualist.SetupCustomOption();
+        Spiritcaller.SetupCustomOption();
         Traitor.SetupCustomOption();
         Virus.SetupCustomOption();
         Wraith.SetupCustomOption();
