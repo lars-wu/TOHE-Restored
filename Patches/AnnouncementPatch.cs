@@ -45,21 +45,22 @@ public class ModNewsHistory
     // 
     public static void Init()
     {
+        // When creating new news, you can not delete old news
         {
             // TOHE v2.4.3
             var news = new ModNews
             {
-                Number = 100001, // 100001
+                Number = 100001,
                 Title = "TownOfHostEdited v2.5.0",
                 SubTitle = "★★★★Another big update, maybe bigger?★★★★",
                 ShortTitle = "★TOHE v2.5.0",
-                Text = "<size=150%>Welcome to TOHE v2.5.0.</size>\n\n<size=125%>Support for Among Us v2023.7.11.</size>\n"
+                Text = "<size=150%>Welcome to TOHE v2.5.0.</size>\n\n<size=125%>Support for Among Us v2023.7.11 and v2023.7.12</size>\n"
 
                     + "\n【Base】\n - Base on TOH v4.1.2\r\n"
                     + "\n【Fixes】\n - Various bug fixes\n\r"
                     + "\n【Changes】\n - Hex Master hex icon changed to separate it from Spellcaster\n - Fortune Teller moved to Experimentals due to a planned and unfinished rework\n\r"
 
-                    + "\n【New Features】\n - New role: Twister (role by papercut on Discord)\n\r - New role: Chameleon (from Project: Lotus)\n\r - New role: Morphling\n\r - New role: Inspector (role by ryuk on Discord)\n\r - New role: Medusa\n\r - New add-on: Lazy\n\r - New add-on: Gravestone\n\r - New add-on: Autopsy (from TOHY)\n\r - New add-on: Loyal\n\r - New add-on: Parasight\n\r- New experimental role: Spiritcaller (role by papercut on Discord)\n\r"
+                    + "\n【New Features】\n - New role: Twister (role by papercut on Discord)\n\r - New role: Chameleon (from Project: Lotus)\n\r - New role: Morphling\n\r - New role: Inspector (role by ryuk on Discord)\n\r - New role: Medusa\n\r - New add-on: Lazy\n\r - New add-on: Gravestone\n\r - New add-on: Autopsy (from TOHY)\n\r - New add-on: Loyal\n\r - New add-on: Visionary\n\r- New experimental role: Spiritcaller (role by papercut on Discord)\n\r"
 
                     + "\n【Role Changes】\n - Various changes were made, such as an update to Opportunist\n\r",
 
@@ -70,7 +71,6 @@ public class ModNewsHistory
         }   
 
         {
-            // When creating new news, you can not delete old news
             // TOHE v2.4.2
             var news = new ModNews
             {

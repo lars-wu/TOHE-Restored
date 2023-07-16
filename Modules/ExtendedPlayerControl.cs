@@ -465,14 +465,13 @@ static class ExtendedPlayerControl
             CustomRoles.Parasite => pc.IsAlive(),
             CustomRoles.NWitch => pc.IsAlive(),
             CustomRoles.Wraith => pc.IsAlive(),
-            CustomRoles.Bomber => false,
-      //      CustomRoles.Chameleon => false,
+            CustomRoles.Bomber => (Options.BomberCanKill.GetBool() && pc.IsAlive()),
             CustomRoles.Innocent => pc.IsAlive(),
             CustomRoles.Counterfeiter => Counterfeiter.CanUseKillButton(pc.PlayerId),
             CustomRoles.Pursuer => Pursuer.CanUseKillButton(pc.PlayerId),
             CustomRoles.Morphling => Morphling.CanUseKillButton(pc.PlayerId),
             CustomRoles.FFF => pc.IsAlive(),
-            CustomRoles.Medicaler => Medicaler.CanUseKillButton(pc.PlayerId),
+            CustomRoles.Medic => Medic.CanUseKillButton(pc.PlayerId),
             CustomRoles.Gamer => pc.IsAlive(),
             CustomRoles.DarkHide => DarkHide.CanUseKillButton(pc),
             CustomRoles.Provocateur => pc.IsAlive(),
@@ -505,7 +504,7 @@ static class ExtendedPlayerControl
             CustomRoles.Innocent or
         //    CustomRoles.SwordsMan or
             CustomRoles.FFF or
-            CustomRoles.Medicaler or
+            CustomRoles.Medic or
       //      CustomRoles.NWitch or
             CustomRoles.DarkHide or
             CustomRoles.Monarch or
@@ -517,7 +516,7 @@ static class ExtendedPlayerControl
             => false,
 
             CustomRoles.Jackal => Jackal.CanVent.GetBool(),
-            CustomRoles.Sidekick => Jackal.CanVent.GetBool(),
+            CustomRoles.Sidekick => Jackal.CanVentSK.GetBool(),
             CustomRoles.Poisoner => Poisoner.CanVent.GetBool(),
             CustomRoles.NSerialKiller => NSerialKiller.CanVent.GetBool(),
             CustomRoles.Medusa => Medusa.CanVent.GetBool(),
@@ -681,6 +680,9 @@ static class ExtendedPlayerControl
                 Main.AllPlayerKillCooldown[player.PlayerId] = Options.ScavengerKillCooldown.GetFloat();
                 break;
             case CustomRoles.Bomber:
+                if (Options.BomberCanKill.GetBool())
+                Main.AllPlayerKillCooldown[player.PlayerId] = Options.BomberKillCD.GetFloat();
+                else
                 Main.AllPlayerKillCooldown[player.PlayerId] = 300f;
                 break;
             case CustomRoles.Capitalism:
@@ -705,8 +707,8 @@ static class ExtendedPlayerControl
             case CustomRoles.Cleaner:
                 Main.AllPlayerKillCooldown[player.PlayerId] = Options.CleanerKillCooldown.GetFloat();
                 break;
-            case CustomRoles.Medicaler:
-                Medicaler.SetKillCooldown(player.PlayerId);
+            case CustomRoles.Medic:
+                Medic.SetKillCooldown(player.PlayerId);
                 break;
             case CustomRoles.Gamer:
                 Gamer.SetKillCooldown(player.PlayerId);
@@ -901,7 +903,7 @@ static class ExtendedPlayerControl
         && target.Data.IsDead;
 
     public static bool KnowLivingTeam(this PlayerControl seer, PlayerControl target)
-        => (seer.Is(CustomRoles.Parasight))
+        => (seer.Is(CustomRoles.Visionary))
         && !target.Data.IsDead;
     public static string GetRoleInfo(this PlayerControl player, bool InfoLong = false)
     {

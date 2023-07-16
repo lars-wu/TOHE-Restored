@@ -436,7 +436,7 @@ public static class Utils
             case CustomRoles.Collector:
             case CustomRoles.ImperiusCurse:
             case CustomRoles.Provocateur:
-            case CustomRoles.Medicaler:
+            case CustomRoles.Medic:
             case CustomRoles.BloodKnight:
             case CustomRoles.Camouflager:
             case CustomRoles.Totocalcio:
@@ -591,8 +591,8 @@ public static class Utils
             case CustomRoles.Gangster:
                 ProgressText.Append(Gangster.GetRecruitLimit(playerId));
                 break;
-            case CustomRoles.Medicaler:
-                ProgressText.Append(Medicaler.GetSkillLimit(playerId));
+            case CustomRoles.Medic:
+                ProgressText.Append(Medic.GetSkillLimit(playerId));
                 break;
             case CustomRoles.CursedWolf:
                 int SpellCount = Main.CursedWolfSpellCount[playerId];
@@ -1331,7 +1331,8 @@ public static class Utils
                 SelfMark.Append(ColorString(GetRoleColor(CustomRoles.BallLightning), "■"));
 
             //医生护盾提示
-            SelfMark.Append(Medicaler.GetSheildMark(seer));
+            if ((Medic.InProtect(seer.PlayerId) || Medic.TempMarkProtected == seer.PlayerId) && !seer.Is(CustomRoles.Medic) && (Medic.WhoCanSeeProtect.GetInt() == 0 || Medic.WhoCanSeeProtect.GetInt() == 2))
+                SelfMark.Append(ColorString(GetRoleColor(CustomRoles.Medic), " ●"));
 
             //玩家自身血量提示
             SelfMark.Append(Gamer.TargetMark(seer, seer));
@@ -1470,7 +1471,7 @@ public static class Utils
                 // Necroview
                 if (seer.Is(CustomRoles.Necroview) && isForMeeting)
                 {
-                    if (target.Is(CustomRoleTypes.Crewmate) && !target.GetCustomRole().IsEvilAddons() && target.Data.IsDead)
+                    if (target.Is(CustomRoleTypes.Crewmate) && !(target.Is(CustomRoles.Madmate) || target.Is(CustomRoles.Egoist) || target.Is(CustomRoles.Charmed) || target.Is(CustomRoles.Infected) || target.Is(CustomRoles.Contagious) || target.Is(CustomRoles.Rogue) || target.Is(CustomRoles.Rascal) || target.Is(CustomRoles.Soulless)) && target.Data.IsDead)
                         TargetMark.Append(ColorString(GetRoleColor(CustomRoles.Bait), "★"));
 
                     if ((target.Is(CustomRoleTypes.Impostor) || target.Is(CustomRoles.Madmate) || target.Is(CustomRoles.Rascal) || target.Is(CustomRoles.Parasite) || target.Is(CustomRoles.Crewpostor) || target.Is(CustomRoles.Convict)) && target.Data.IsDead)
@@ -1479,10 +1480,10 @@ public static class Utils
                     if ((target.Is(CustomRoleTypes.Neutral) || target.Is(CustomRoles.Rogue) || target.Is(CustomRoles.Contagious) || target.Is(CustomRoles.Charmed) || target.Is(CustomRoles.Infected) || target.Is(CustomRoles.Egoist) || target.Is(CustomRoles.Soulless)) && target.Data.IsDead)
                         TargetMark.Append(ColorString(GetRoleColor(CustomRoles.Executioner), "★"));
                 }
-                // Parasight
-                if (seer.Is(CustomRoles.Parasight) && isForMeeting)
+                // Visionary
+                if (seer.Is(CustomRoles.Visionary) && isForMeeting)
                 {
-                    if (target.Is(CustomRoleTypes.Crewmate) && !target.GetCustomRole().IsEvilAddons() && !target.Data.IsDead)
+                    if (target.Is(CustomRoleTypes.Crewmate) && !(target.Is(CustomRoles.Madmate) || target.Is(CustomRoles.Egoist) || target.Is(CustomRoles.Charmed) || target.Is(CustomRoles.Infected) || target.Is(CustomRoles.Contagious) || target.Is(CustomRoles.Rogue) || target.Is(CustomRoles.Rascal) || target.Is(CustomRoles.Soulless)) && !target.Data.IsDead)
                         TargetMark.Append(ColorString(GetRoleColor(CustomRoles.Bait), "★"));
 
                     if ((target.Is(CustomRoleTypes.Impostor) || target.Is(CustomRoles.Madmate) || target.Is(CustomRoles.Rascal) || target.Is(CustomRoles.Parasite) || target.Is(CustomRoles.Crewpostor) || target.Is(CustomRoles.Convict)) && !target.Data.IsDead)
@@ -1742,7 +1743,14 @@ public static class Utils
 
                 TargetMark.Append(Gamer.TargetMark(seer, target));
 
-                TargetMark.Append(Medicaler.TargetMark(seer, target));
+                if (seer.Is(CustomRoles.Medic) && (Medic.InProtect(target.PlayerId) || Medic.TempMarkProtected == target.PlayerId) && (Medic.WhoCanSeeProtect.GetInt() == 0 || Medic.WhoCanSeeProtect.GetInt() == 1))
+                {
+                    TargetMark.Append(ColorString(GetRoleColor(CustomRoles.Medic), " ●"));
+                }
+                else if (seer.Data.IsDead && Medic.InProtect(target.PlayerId))
+                {
+                    TargetMark.Append(ColorString(GetRoleColor(CustomRoles.Medic), " ●"));
+                }
 
                 TargetMark.Append(Totocalcio.TargetMark(seer, target));
                 TargetMark.Append(Lawyer.LawyerMark(seer, target));
@@ -1970,7 +1978,8 @@ public static class Utils
             ? "INVALID"
             : disableColor ? summary.RemoveHtmlTags() : summary;
     }
-    public static string RemoveHtmlTags(this string str) => Regex.Replace(str, "<[^>]*?>", "");
+    public static string RemoveHtmlTags(this string str) => Regex.Replace(str, "", "");
+   // public static string RemoveHtmlTags(this string str) => Regex.Replace(str, "<[^>]*?>", "");
     public static bool CanMafiaKill()
     {
         if (Main.PlayerStates == null) return false;

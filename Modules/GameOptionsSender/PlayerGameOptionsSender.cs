@@ -133,7 +133,7 @@ public class PlayerGameOptionsSender : GameOptionsSender
             case CustomRoles.Innocent:
             case CustomRoles.Pelican:
             case CustomRoles.Revolutionist:
-            case CustomRoles.Medicaler:
+            case CustomRoles.Medic:
             case CustomRoles.Provocateur:
             case CustomRoles.Monarch:
             case CustomRoles.Deputy:
@@ -175,6 +175,10 @@ public class PlayerGameOptionsSender : GameOptionsSender
             case CustomRoles.ShapeshifterTOHE:
                 AURoleOptions.ShapeshifterCooldown = Options.ShapeshiftCD.GetFloat();
                 AURoleOptions.ShapeshifterDuration = Options.ShapeshiftDur.GetFloat();
+                break;
+            case CustomRoles.Bomber:
+                AURoleOptions.ShapeshifterCooldown = Options.BombCooldown.GetFloat();
+                AURoleOptions.ShapeshifterDuration = 3f;
                 break;
             case CustomRoles.Mafia:
                 AURoleOptions.ShapeshifterCooldown = Options.MafiaShapeshiftCD.GetFloat();
@@ -252,7 +256,6 @@ public class PlayerGameOptionsSender : GameOptionsSender
             case CustomRoles.HexMaster:
             case CustomRoles.Parasite:
                 opt.SetVision(true);
-                //Main.NormalOptions.KillCooldown = Options.DefaultKillCooldown;
                 break;
         /*    case CustomRoles.Chameleon:
                 opt.SetVision(false);

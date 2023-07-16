@@ -414,6 +414,8 @@ class CheckForEndVotingPatch
 
     EndOfSession:
 
+        Medic.OnCheckMark();
+
         name += "<size=0>";
         new LateTask(() =>
         {
@@ -823,7 +825,7 @@ class MeetingHudStartPatch
                 sb.Append($"({Utils.ColorString(Utils.GetRoleColor(CustomRoles.Doctor), Utils.GetVitalText(target.PlayerId))})");
             if (seer.KnowDeadTeam(target))
             {
-                if (target.Is(CustomRoleTypes.Crewmate) && !target.GetCustomRole().IsEvilAddons())
+                if (target.Is(CustomRoleTypes.Crewmate) && !(target.Is(CustomRoles.Madmate) || target.Is(CustomRoles.Egoist) || target.Is(CustomRoles.Charmed) || target.Is(CustomRoles.Infected) || target.Is(CustomRoles.Contagious) || target.Is(CustomRoles.Rogue) || target.Is(CustomRoles.Rascal) || target.Is(CustomRoles.Soulless)))
                     sb.Append(Utils.ColorString(Utils.GetRoleColor(CustomRoles.Bait), "★"));
 
                 if (target.Is(CustomRoleTypes.Impostor) || target.Is(CustomRoles.Madmate) || target.Is(CustomRoles.Rascal) || target.Is(CustomRoles.Parasite) || target.Is(CustomRoles.Crewpostor) || target.Is(CustomRoles.Convict))
@@ -837,7 +839,7 @@ class MeetingHudStartPatch
             }
             if (seer.KnowLivingTeam(target))
             {
-                if (target.Is(CustomRoleTypes.Crewmate) && !target.GetCustomRole().IsEvilAddons())
+                if (target.Is(CustomRoleTypes.Crewmate) && !(target.Is(CustomRoles.Madmate) || target.Is(CustomRoles.Egoist) || target.Is(CustomRoles.Charmed) || target.Is(CustomRoles.Infected) || target.Is(CustomRoles.Contagious) || target.Is(CustomRoles.Rogue) || target.Is(CustomRoles.Rascal) || target.Is(CustomRoles.Soulless)))
                     sb.Append(Utils.ColorString(Utils.GetRoleColor(CustomRoles.Bait), "★"));
 
                 if (target.Is(CustomRoleTypes.Impostor) || target.Is(CustomRoles.Madmate) || target.Is(CustomRoles.Rascal) || target.Is(CustomRoles.Parasite) || target.Is(CustomRoles.Crewpostor) || target.Is(CustomRoles.Convict))
@@ -945,9 +947,7 @@ class MeetingHudStartPatch
                         pva.NameText.text = Utils.ColorString(Utils.GetRoleColor(CustomRoles.Councillor), target.PlayerId.ToString()) + " " + pva.NameText.text;
 
                     break;
-                case CustomRoles.Medicaler:
-                    sb.Append(Medicaler.TargetMark(seer, target));
-                    break;
+
                 case CustomRoles.Gamer:
                     sb.Append(Gamer.TargetMark(seer, target));
                     sb.Append(Snitch.GetWarningMark(seer, target));
@@ -1009,8 +1009,14 @@ class MeetingHudStartPatch
                 sb.Append(Utils.ColorString(Utils.GetRoleColor(CustomRoles.BallLightning), "■"));
 
             //医生护盾提示
-            if (seer.PlayerId == target.PlayerId)
-                sb.Append(Medicaler.GetSheildMark(seer));
+            if (seer.PlayerId == target.PlayerId && (Medic.InProtect(seer.PlayerId) || Medic.TempMarkProtected == seer.PlayerId) && (Medic.WhoCanSeeProtect.GetInt() == 0 || Medic.WhoCanSeeProtect.GetInt() == 2))
+                sb.Append(Utils.ColorString(Utils.GetRoleColor(CustomRoles.Medic), " ●"));
+
+            if (seer.Is(CustomRoles.Medic) && (Medic.InProtect(target.PlayerId) || Medic.TempMarkProtected == target.PlayerId) && (Medic.WhoCanSeeProtect.GetInt() == 0 || Medic.WhoCanSeeProtect.GetInt() == 1))
+                sb.Append(Utils.ColorString(Utils.GetRoleColor(CustomRoles.Medic), " ●"));
+
+            if (seer.Data.IsDead && Medic.InProtect(target.PlayerId))
+                sb.Append(Utils.ColorString(Utils.GetRoleColor(CustomRoles.Medic), " ●"));
 
             //赌徒提示
             sb.Append(Totocalcio.TargetMark(seer, target));
