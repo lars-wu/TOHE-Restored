@@ -74,7 +74,7 @@ public static class Chameleon
     }
     public static void OnFixedUpdate(PlayerControl player)
     {
-        if (!GameStates.IsInTask || !IsEnable) return;
+        if (!IsEnable) return;
 
         var now = Utils.GetTimeStamp();
 

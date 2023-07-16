@@ -135,7 +135,7 @@ namespace TOHE.Roles.Impostor
 
         public static void OnFixedUpdate(PlayerControl player)
         {
-            if (!IsEnable || !GameStates.IsInTask || !player.Is(CustomRoles.Deathpact)) return;
+            if (!IsEnable || !player.Is(CustomRoles.Deathpact)) return;
             if (!ActiveDeathpacts.Contains(player.PlayerId)) return;
             if (CheckCancelDeathpact(player)) return;
             if (DeathpactTime[player.PlayerId] < Utils.GetTimeStamp() && DeathpactTime[player.PlayerId] != 0)

@@ -113,8 +113,6 @@ namespace TOHE.Roles.Neutral
 
         public static void OnFixedUpdate(PlayerControl pc)
         {
-            if (!GameStates.IsInTask) return;
-
             if (pc.Is(CustomRoles.Spiritcaller))
             {
                 if (ProtectTimeStamp < Utils.GetTimeStamp() && ProtectTimeStamp != 0)

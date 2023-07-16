@@ -104,7 +104,7 @@ public static class BountyHunter
     {
         if (!player.Is(CustomRoles.BountyHunter)) return; //以下、バウンティハンターのみ実行
 
-        if (GameStates.IsInTask && ChangeTimer.ContainsKey(player.PlayerId))
+        if (ChangeTimer.ContainsKey(player.PlayerId))
         {
             if (!player.IsAlive())
                 ChangeTimer.Remove(player.PlayerId);
