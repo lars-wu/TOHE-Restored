@@ -2085,7 +2085,7 @@ class FixedUpdatePatch
 
                 Suffix.Append(Tracker.GetTrackerArrow(seer, target));
 
-                Suffix.Append(Deathpact.GetDeathpactPlayerArrow(seer));
+                Suffix.Append(Deathpact.GetDeathpactPlayerArrow(seer, target));
                 Suffix.Append(Deathpact.GetDeathpactMark(seer, target));
                 Suffix.Append(Spiritualist.GetSpiritualistArrow(seer, target));
 
