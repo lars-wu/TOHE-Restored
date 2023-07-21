@@ -33,7 +33,7 @@ public class Main : BasePlugin
     public static ConfigEntry<string> DebugKeyInput { get; private set; }
     public static readonly string MainMenuText = " ";
     public const string PluginGuid = "com.karped1em.townofhostedited";
-    public const string PluginVersion = "2.5.1.2";
+    public const string PluginVersion = "2.5.1.9";
     public const int PluginCreate = 3;
     public const bool Canary = false;
 
@@ -284,6 +284,7 @@ public class Main : BasePlugin
                 {CustomRoles.Paranoia, "#c993f5"},
                 {CustomRoles.Psychic, "#6F698C"},
                 {CustomRoles.Sheriff, "#ffb347"},
+                {CustomRoles.CopyCat, "#ffb2ab"},
                 {CustomRoles.SuperStar, "#f6f657"},
                 {CustomRoles.CyberStar, "#ee4a55" },
                 {CustomRoles.SpeedBooster, "#00ffff"},
@@ -291,7 +292,7 @@ public class Main : BasePlugin
                 {CustomRoles.Dictator, "#df9b00"},
                 {CustomRoles.Detective, "#7160e8" },
                 {CustomRoles.NiceGuesser, "#f0e68c"},
-                {CustomRoles.SwordsMan, "#AAAAAA"},
+                {CustomRoles.SwordsMan, "#7a7a7a"},
                 {CustomRoles.Transporter, "#42D1FF"},
                 {CustomRoles.TimeManager, "#6495ed"},
                 {CustomRoles.Veteran, "#a77738"},
@@ -300,7 +301,7 @@ public class Main : BasePlugin
                 {CustomRoles.Grenadier, "#3c4a16"},
                 {CustomRoles.Medic, "#00ff97"},
                 {CustomRoles.Divinator, "#882c83"},
-                {CustomRoles.Glitch, "#dcdcdc"},
+                {CustomRoles.Glitch, "#39FF14"},
                 {CustomRoles.Judge, "#f8d85a"},
                 {CustomRoles.Mortician, "#333c49"},
                 {CustomRoles.Mediumshiper, "#a200ff"},
@@ -319,8 +320,11 @@ public class Main : BasePlugin
                 {CustomRoles.Spiritualist, "#669999"},
                 {CustomRoles.Chameleon, "#01C895"},
                 {CustomRoles.ParityCop, "#0D57AF"},
+                {CustomRoles.Admirer, "#ee43c3"},
                 //第三陣営役職
                 {CustomRoles.Arsonist, "#ff6633"},
+                {CustomRoles.PlagueBearer,"#e5f6b4"},
+                {CustomRoles.Pestilence,"#343136"},
                 {CustomRoles.Jester, "#ec62a5"},
                 {CustomRoles.Terrorist, "#00e600"},
                 {CustomRoles.Executioner, "#c0c0c0"},
@@ -352,6 +356,7 @@ public class Main : BasePlugin
                 {CustomRoles.Juggernaut, "#A41342"},
                 {CustomRoles.Parasite, "#ff1919"},
                 {CustomRoles.Crewpostor, "#ff1919"},
+                {CustomRoles.Refugee, "#ff1919"},
                 {CustomRoles.Infectious, "#7B8968"},
                 {CustomRoles.Virus, "#2E8B57"},
                 {CustomRoles.Farseer, "#BA55D3"},
@@ -371,6 +376,7 @@ public class Main : BasePlugin
                 {CustomRoles.Spiritcaller, "#003366"},
                 {CustomRoles.EvilSpirit, "#003366"},
                 {CustomRoles.Convict, "#ff1919"},
+                {CustomRoles.Amnesiac, "#7FBFFF"},
                 // GM
                 {CustomRoles.GM, "#ff5b70"},
                 //サブ役職
@@ -417,6 +423,9 @@ public class Main : BasePlugin
                 {CustomRoles.Autopsy, "#80ffdd"},
                 {CustomRoles.Loyal, "#B71556"},
                 {CustomRoles.Visionary, "#ff1919"},
+                {CustomRoles.Recruit, "#00b4eb"},
+                {CustomRoles.Admired, "#ee43c3"},
+                {CustomRoles.Glow, "#d9f67d"},
              //   {CustomRoles.QuickFix, "#3333ff"},
 
 
@@ -512,6 +521,7 @@ public enum CustomRoles
     AntiAdminer,
     Sans,
     Bomber,
+    Nuker,
     BoobyTrap,
     Scavenger,
     Capitalism,
@@ -544,6 +554,7 @@ public enum CustomRoles
     Lurker,
     Convict,
     Visionary,
+    Refugee,
     //Crewmate(Vanilla)
     Engineer,
     GuardianAngel,
@@ -586,6 +597,7 @@ public enum CustomRoles
     Observer,
     DovesOfNeace,
     Monarch,
+    CopyCat,
     Farseer,
     Bloodhound,
     Tracker,
@@ -599,6 +611,7 @@ public enum CustomRoles
     Spiritualist,
     Chameleon,
     ParityCop,
+    Admirer,
     //Neutral
     Arsonist,
     HexMaster,
@@ -642,11 +655,15 @@ public enum CustomRoles
     Vulture,
     Amor,
     Spiritcaller,
+    PlagueBearer,
+    Pestilence,
     Medusa,
     Sidekick,
     Baker,
-    Famine,
-
+    Spiritcaller,
+    Amnesiac,
+    
+    
     //SoloKombat
     KB_Normal,
 
@@ -697,7 +714,10 @@ public enum CustomRoles
     Autopsy,
     Loyal,
     EvilSpirit,
-   // QuickFix
+    Recruit,
+    Admired,
+    Glow,
+    // QuickFix
 }
 //WinData
 public enum CustomWinner
@@ -744,10 +764,12 @@ public enum CustomWinner
     Ritualist = CustomRoles.Ritualist,
     Pickpocket = CustomRoles.Pickpocket,
     Traitor = CustomRoles.Traitor,
+    Pestilence = CustomRoles.Pestilence,
     Vulture = CustomRoles.Vulture,
-    Spiritcaller = CustomRoles.Spiritcaller,
     Medusa = CustomRoles.Medusa,
-    Famine = CustomRoles.Famine,
+    Spiritcaller = CustomRoles.Spiritcaller,
+    Glitch = CustomRoles.Glitch,
+    Spiritcaller = CustomRoles.Spiritcaller
 }
 public enum AdditionalWinners
 {

@@ -181,6 +181,7 @@ internal class ChangeRoleSettings
             Jackal.Init();
             Sidekick.Init();
             Sheriff.Init();
+            CopyCat.Init();
             SwordsMan.Init();
             EvilTracker.Init();
             Snitch.Init();
@@ -224,6 +225,8 @@ internal class ChangeRoleSettings
             Totocalcio.Init();
             Succubus.Init();
             CursedSoul.Init();
+            Admirer.Init();
+            Amnesiac.Init();
             Infectious.Init();
             Monarch.Init();
             Virus.Init();
@@ -499,6 +502,9 @@ internal class SelectRolesPatch
                     case CustomRoles.Sheriff:
                         Sheriff.Add(pc.PlayerId);
                         break;
+                    case CustomRoles.CopyCat:
+                        CopyCat.Add(pc.PlayerId);
+                        break;
                     case CustomRoles.QuickShooter:
                         QuickShooter.Add(pc.PlayerId);
                         break;
@@ -635,6 +641,12 @@ internal class SelectRolesPatch
                     case CustomRoles.CursedSoul:
                         CursedSoul.Add(pc.PlayerId);
                         break;
+                    case CustomRoles.Admirer:
+                        Admirer.Add(pc.PlayerId);
+                        break;
+                    case CustomRoles.Amnesiac:
+                        Amnesiac.Add(pc.PlayerId);
+                        break;
                     case CustomRoles.DovesOfNeace:
                         Main.DovesOfNeaceNumOfUsed.Add(pc.PlayerId, Options.DovesOfNeaceMaxOfUseage.GetInt());
                         break;
@@ -697,6 +709,11 @@ internal class SelectRolesPatch
                         break;
                     case CustomRoles.Amor:
                         Amor.Add(pc.PlayerId);
+                    case CustomRoles.PlagueBearer:
+                        PlagueBearer.Add(pc.PlayerId);
+                        break;
+                    case CustomRoles.ParityCop:
+                        ParityCop.Add(pc.PlayerId);
                         break;
                     case CustomRoles.Spiritcaller:
                         Spiritcaller.Add(pc.PlayerId);
@@ -886,7 +903,8 @@ internal class SelectRolesPatch
                 || pc.Is(CustomRoles.Dictator) 
                 || pc.Is(CustomRoles.God) 
                 || pc.Is(CustomRoles.FFF) 
-                || pc.Is(CustomRoles.Bomber) 
+                || pc.Is(CustomRoles.Bomber)
+                || pc.Is(CustomRoles.Nuker) 
                 || pc.Is(CustomRoles.Provocateur)
                 || (pc.GetCustomRole().IsCrewmate() && !Options.CrewCanBeInLove.GetBool())
                 || (pc.GetCustomRole().IsNeutral() && !Options.NeutralCanBeInLove.GetBool())

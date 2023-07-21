@@ -9,12 +9,12 @@ public static class Oracle
     private static readonly int Id = 7600;
     private static List<byte> playerIdList = new();
 
-    private static OptionItem CheckLimitOpt;
+    public static OptionItem CheckLimitOpt;
   //  private static OptionItem OracleCheckMode;
     public static OptionItem HideVote;
 
     public static List<byte> didVote = new();
-    private static Dictionary<byte, int> CheckLimit = new();
+    public static Dictionary<byte, int> CheckLimit = new();
 
     public static void SetupCustomOption()
     {
@@ -97,6 +97,7 @@ public static class Oracle
             CustomRoles.AntiAdminer or
             CustomRoles.Sans or
             CustomRoles.Bomber or
+            CustomRoles.Nuker or
             CustomRoles.Scavenger or
             CustomRoles.BoobyTrap or
             CustomRoles.Capitalism or
@@ -129,6 +130,7 @@ public static class Oracle
             CustomRoles.NWitch or
             CustomRoles.Wraith or
             CustomRoles.Parasite or
+            CustomRoles.Refugee or
             CustomRoles.Terrorist or
             CustomRoles.Executioner or
             CustomRoles.Juggernaut or
