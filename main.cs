@@ -654,12 +654,12 @@ public enum CustomRoles
     Traitor,
     Vulture,
     Amor,
-    Spiritcaller,
     PlagueBearer,
     Pestilence,
     Medusa,
     Sidekick,
     Baker,
+    Famine,
     Spiritcaller,
     Amnesiac,
     
@@ -769,7 +769,7 @@ public enum CustomWinner
     Medusa = CustomRoles.Medusa,
     Spiritcaller = CustomRoles.Spiritcaller,
     Glitch = CustomRoles.Glitch,
-    Spiritcaller = CustomRoles.Spiritcaller
+    Famine = CustomRoles.Famine
 }
 public enum AdditionalWinners
 {

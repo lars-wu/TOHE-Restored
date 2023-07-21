@@ -709,6 +709,7 @@ internal class SelectRolesPatch
                         break;
                     case CustomRoles.Amor:
                         Amor.Add(pc.PlayerId);
+                        break;
                     case CustomRoles.PlagueBearer:
                         PlagueBearer.Add(pc.PlayerId);
                         break;
@@ -721,10 +722,6 @@ internal class SelectRolesPatch
                     case CustomRoles.Lurker:
                         Lurker.Add(pc.PlayerId);
                         break;
-                    case CustomRoles.ParityCop:
-                        ParityCop.Add(pc.PlayerId);
-                        break;
-                    
                 }
                 foreach (var subRole in pc.GetCustomSubRoles())
                 {
