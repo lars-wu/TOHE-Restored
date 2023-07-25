@@ -33,7 +33,8 @@ public class Main : BasePlugin
     public static ConfigEntry<string> DebugKeyInput { get; private set; }
     public static readonly string MainMenuText = " ";
     public const string PluginGuid = "com.karped1em.townofhostedited";
-    public const string PluginVersion = "2.5.1.9";
+    public const string PluginVersion = "2.5.1.14";
+    public const string PluginDisplayVersion = "2.5.1_5";
     public const int PluginCreate = 3;
     public const bool Canary = false;
 
@@ -91,6 +92,8 @@ public class Main : BasePlugin
     public static string LastVotedPlayer;
     public static List<byte> ResetCamPlayerList = new();
     public static List<byte> winnerList = new();
+    public static List<byte> ForCrusade = new();
+    public static List<byte> KillGhoul = new();
     public static List<string> winnerNameList = new();
     public static List<int> clientIdList = new();
     public static List<(string, byte, string)> MessagesToSend = new();
@@ -100,11 +103,20 @@ public class Main : BasePlugin
     public static Dictionary<byte, float> AllPlayerKillCooldown = new();
     public static Dictionary<byte, Vent> LastEnteredVent = new();
     public static Dictionary<byte, Vector2> LastEnteredVentLocation = new();
+    public static Dictionary<byte, Vector2> TimeMasterBackTrack = new();
+    public static Dictionary<byte, int> MasochistKillMax = new();
+    public static Dictionary<byte, int> TimeMasterNum = new();
+    public static Dictionary<byte, long> TimeMasterInProtect = new();
+    //public static Dictionary<byte, long> FlashbangInProtect = new();
     public static List<byte> CyberStarDead = new();
     public static List<byte> WorkaholicAlive = new();
     public static List<byte> BaitAlive = new();
     public static List<byte> BoobyTrapBody = new();
     public static List<byte> BoobyTrapKiller = new();
+    //public static List<byte> KilledDiseased = new();
+    public static Dictionary<byte, int> KilledDiseased = new();
+    public static Dictionary<byte, int> KilledAntidote = new();
+    //public static List<byte> ForFlashbang = new();
     public static Dictionary<byte, byte> KillerOfBoobyTrapBody = new();
     public static Dictionary<byte, string> DetectiveNotify = new();
     public static Dictionary<byte, string> VirusNotify = new();
@@ -157,6 +169,7 @@ public class Main : BasePlugin
     public static Dictionary<byte, byte> ShapeshiftTarget = new();
     public static Dictionary<(byte, byte), string> targetArrows = new();
     public static Dictionary<byte, Vector2> EscapeeLocation = new();
+    public static Dictionary<byte, Vector2> TimeMasterLocation = new();
     public static bool VisibleTasksCount = false;
     public static string nickName = "";
     public static bool introDestroyed = false;
@@ -318,9 +331,12 @@ public class Main : BasePlugin
                 {CustomRoles.Tracefinder, "#0066CC"},
                 {CustomRoles.Oracle, "#6666FF"},
                 {CustomRoles.Spiritualist, "#669999"},
-                {CustomRoles.Chameleon, "#01C895"},
+                {CustomRoles.Chameleon, "#01C834"},
                 {CustomRoles.ParityCop, "#0D57AF"},
                 {CustomRoles.Admirer, "#ee43c3"},
+                {CustomRoles.TimeMaster, "#44baff"},
+                {CustomRoles.Crusader, "#C65C39"},
+                {CustomRoles.Reverie, "#00BFFF"},
                 //第三陣営役職
                 {CustomRoles.Arsonist, "#ff6633"},
                 {CustomRoles.PlagueBearer,"#e5f6b4"},
@@ -377,6 +393,8 @@ public class Main : BasePlugin
                 {CustomRoles.EvilSpirit, "#003366"},
                 {CustomRoles.Convict, "#ff1919"},
                 {CustomRoles.Amnesiac, "#7FBFFF"},
+                {CustomRoles.Doomsayer, "#14f786"},
+                {CustomRoles.Masochist, "#684405"},
                 // GM
                 {CustomRoles.GM, "#ff5b70"},
                 //サブ役職
@@ -392,6 +410,7 @@ public class Main : BasePlugin
                 {CustomRoles.Brakar, "#1447af"},
                 {CustomRoles.Oblivious, "#424242"},
                 {CustomRoles.Bewilder, "#c894f5"},
+                {CustomRoles.Sunglasses, "#E7C12B"},
                 {CustomRoles.Workhorse, "#00ffff"},
                 {CustomRoles.Fool, "#e6e7ff"},
                 {CustomRoles.Avanger, "#ffab1c"},
@@ -413,6 +432,7 @@ public class Main : BasePlugin
                 {CustomRoles.Unreportable, "#FF6347"},
                 {CustomRoles.Rogue, "#696969"},
                 {CustomRoles.Lucky, "#b8d7a3"},
+                {CustomRoles.Unlucky, "#d7a3a3"},
                 {CustomRoles.DoubleShot, "#19fa8d"},
      //           {CustomRoles.Reflective, "#FFD700"},
                 {CustomRoles.Rascal, "#990000"},
@@ -425,7 +445,12 @@ public class Main : BasePlugin
                 {CustomRoles.Visionary, "#ff1919"},
                 {CustomRoles.Recruit, "#00b4eb"},
                 {CustomRoles.Admired, "#ee43c3"},
-                {CustomRoles.Glow, "#d9f67d"},
+                {CustomRoles.Glow, "#E2F147"},
+                {CustomRoles.Diseased, "#AAAAAA"},
+                {CustomRoles.Antidote,"#FF9876"},
+
+                {CustomRoles.Swift, "#ff1919"},
+                {CustomRoles.Ghoul, "#B22222"},
              //   {CustomRoles.QuickFix, "#3333ff"},
 
 
@@ -555,6 +580,8 @@ public enum CustomRoles
     Convict,
     Visionary,
     Refugee,
+    Underdog,   
+   // Flashbang,
     //Crewmate(Vanilla)
     Engineer,
     GuardianAngel,
@@ -612,6 +639,9 @@ public enum CustomRoles
     Chameleon,
     ParityCop,
     Admirer,
+    TimeMaster,
+    Crusader,
+    Reverie,
     //Neutral
     Arsonist,
     HexMaster,
@@ -662,6 +692,9 @@ public enum CustomRoles
     Famine,
     Spiritcaller,
     Amnesiac,
+    Doomsayer,
+    Masochist,
+   // Flux,
     
     
     //SoloKombat
@@ -683,6 +716,7 @@ public enum CustomRoles
     Brakar,
     Oblivious,
     Bewilder,
+    Sunglasses,
     Workhorse,
     Fool,
     Avanger,
@@ -704,6 +738,7 @@ public enum CustomRoles
     Unreportable,
     Rogue,
     Lucky,
+    Unlucky,
     DoubleShot,
    // Reflective,
     Rascal,
@@ -717,6 +752,10 @@ public enum CustomRoles
     Recruit,
     Admired,
     Glow,
+    Diseased,
+    Antidote,
+    Swift,
+    Ghoul,
     // QuickFix
 }
 //WinData
@@ -769,7 +808,9 @@ public enum CustomWinner
     Medusa = CustomRoles.Medusa,
     Spiritcaller = CustomRoles.Spiritcaller,
     Glitch = CustomRoles.Glitch,
-    Famine = CustomRoles.Famine
+    Plaguebearer = CustomRoles.PlagueBearer,
+    Masochist = CustomRoles.Masochist,
+    Doomsayer = CustomRoles.Doomsayer,
 }
 public enum AdditionalWinners
 {

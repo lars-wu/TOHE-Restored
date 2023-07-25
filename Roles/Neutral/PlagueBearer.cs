@@ -1,21 +1,13 @@
 ﻿using System.Collections.Generic;
 using Hazel;
-using Sentry.Protocol;
-using UnityEngine;
-using static TOHE.Options;
-using static UnityEngine.GraphicsBuffer;
-using static TOHE.Translator;
-using System.Diagnostics;
-using Hazel.Dtls;
-using System.Linq;
-using AmongUs.GameOptions;
-using MS.Internal.Xml.XPath;
 using TOHE.Roles.Impostor;
+using static TOHE.Options;
+using static TOHE.Translator;
 
 namespace TOHE.Roles.Neutral;
 public static class PlagueBearer
 {
-    private static readonly int Id = 555420;
+    private static readonly int Id = 26000;
     public static List<byte> playerIdList = new();
     public static Dictionary<byte, List<byte>> PlaguedList = new();
     public static Dictionary<byte, float> PlagueBearerCD = new();
@@ -24,15 +16,21 @@ public static class PlagueBearer
 
     public static OptionItem PlagueBearerCDOpt;
     public static OptionItem PestilenceCDOpt;
+    public static OptionItem PestilenceCanVent;
+    public static OptionItem PestilenceHasImpostorVision;
 
 
     public static void SetupCustomOption()
     {
         Options.SetupRoleOptions(Id, TabGroup.NeutralRoles, CustomRoles.PlagueBearer);
-        PlagueBearerCDOpt = FloatOptionItem.Create(Id + 10, "PlagueBearerCD", new(0f, 180f, 2.5f), 5f, TabGroup.NeutralRoles, false).SetParent(Options.CustomRoleSpawnChances[CustomRoles.PlagueBearer])
+        PlagueBearerCDOpt = FloatOptionItem.Create(Id + 10, "PlagueBearerCD", new(0f, 180f, 2.5f), 22.5f, TabGroup.NeutralRoles, false).SetParent(Options.CustomRoleSpawnChances[CustomRoles.PlagueBearer])
                 .SetValueFormat(OptionFormat.Seconds);
-        PestilenceCDOpt = FloatOptionItem.Create(Id + 11, "PestilenceCD", new(0f, 180f, 2.5f), 25f, TabGroup.NeutralRoles, false).SetParent(Options.CustomRoleSpawnChances[CustomRoles.PlagueBearer])
+        PestilenceCDOpt = FloatOptionItem.Create(Id + 11, "PestilenceCD", new(0f, 180f, 2.5f), 20f, TabGroup.NeutralRoles, false).SetParent(Options.CustomRoleSpawnChances[CustomRoles.PlagueBearer])
                 .SetValueFormat(OptionFormat.Seconds);
+        PestilenceCanVent = BooleanOptionItem.Create(Id + 12, "PestilenceCanVent", true, TabGroup.NeutralRoles, false)
+            .SetParent(CustomRoleSpawnChances[CustomRoles.PlagueBearer]);
+        PestilenceHasImpostorVision = BooleanOptionItem.Create(Id + 13, "PestilenceHasImpostorVision", true, TabGroup.NeutralRoles, false)
+            .SetParent(CustomRoleSpawnChances[CustomRoles.PlagueBearer]);
     }
 
     public static void Init()
@@ -71,7 +69,6 @@ public static class PlagueBearer
     }
     public static void receiveRPC(MessageReader reader)
     {
-
         byte PlagueBearerId = reader.ReadByte();
         byte PlaguedId = reader.ReadByte();
         PlaguedList[PlagueBearerId].Add(PlaguedId);
@@ -127,11 +124,13 @@ public static class PlagueBearer
     {
         if (killer == null || target == null) return false;
         if (!PestilenceList.Contains(target.PlayerId)) return false;
+        if (target.Is(CustomRoles.Guardian) && target.AllTasksCompleted()) return true;
+        if (target.Is(CustomRoles.Opportunist) && target.AllTasksCompleted()) return false;
+        if (target.Is(CustomRoles.Veteran) && Main.VeteranInProtect.ContainsKey(target.PlayerId)) return true;
+        if (target.Is(CustomRoles.TimeMaster) && Main.TimeMasterInProtect.ContainsKey(target.PlayerId)) return true;
         if (IsIndirectKill(killer)) return false;
         killer.SetRealKiller(target);
         target.RpcMurderPlayerV3(killer);
         return true;
     }
-
-
 }

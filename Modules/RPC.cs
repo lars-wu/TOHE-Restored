@@ -103,6 +103,7 @@ enum CustomRPC
     SetVultureArrow,
     SetAmorMatchmakeLimit,
     SetSpiritcallerSpiritLimit,
+    SetDoomsayerProgress,
 
     //SoloKombat
     SyncKBPlayer,
@@ -372,6 +373,9 @@ internal class RPCHandlerPatch
                 break;
             case CustomRPC.SetPelicanEtenNum:
                 Pelican.ReceiveRPC(reader);
+                break;
+            case CustomRPC.SetDoomsayerProgress:
+                Doomsayer.ReceiveRPC();
                 break;
             case CustomRPC.SwordsManKill:
                 SwordsMan.ReceiveRPC(reader);
@@ -736,6 +740,9 @@ internal static class RPC
             case CustomRoles.Sniper:
                 Sniper.Add(targetId);
                 break;
+            case CustomRoles.Crusader:
+                Crusader.Add(targetId);
+                break;
             case CustomRoles.Mare:
                 Mare.Add(targetId);
                 break;
@@ -859,6 +866,9 @@ internal static class RPC
                 break;
             case CustomRoles.Juggernaut:
                 Juggernaut.Add(targetId);
+                break;
+            case CustomRoles.Reverie:
+                Reverie.Add(targetId);
                 break;
             case CustomRoles.Hacker:
                 Hacker.Add(targetId);
@@ -991,6 +1001,9 @@ internal static class RPC
                 break;
             case CustomRoles.Lurker:
                 Lurker.Add(targetId);
+                break;
+            case CustomRoles.Doomsayer:
+                Doomsayer.Add(targetId);
                 break;
         }
         HudManager.Instance.SetHudActive(true);
