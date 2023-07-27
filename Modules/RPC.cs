@@ -743,9 +743,9 @@ internal static class RPC
             case CustomRoles.Crusader:
                 Crusader.Add(targetId);
                 break;
-            case CustomRoles.Mare:
+        /*    case CustomRoles.Mare:
                 Mare.Add(targetId);
-                break;
+                break; */
             case CustomRoles.EvilTracker:
                 EvilTracker.Add(targetId);
                 break;
