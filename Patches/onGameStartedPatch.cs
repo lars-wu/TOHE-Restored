@@ -53,12 +53,17 @@ internal class ChangeRoleSettings
             Main.FarseerTimer = new();
             Main.CursedPlayers = new();
             Main.MafiaRevenged = new();
+            Main.NecromancerRevenged = new();
             Main.RetributionistRevenged = new();
             Main.isCurseAndKill = new();
             Main.isCursed = false;
             Main.PuppeteerList = new();
+            Main.CovenLeaderList = new();
             Main.TaglockedList = new();
+            Main.ShroudList = new();
             Main.DetectiveNotify = new();
+            Main.SleuthNotify = new();
+            Main.ForCrusade = new();
             Main.KillGhoul = new();
             Main.CyberStarDead = new();
             Main.KilledDiseased = new();
@@ -101,6 +106,8 @@ internal class ChangeRoleSettings
             Main.MadmateNum = 0;
             Main.BardCreations = 0;
             Main.DovesOfNeaceNumOfUsed = new();
+            Main.GodfatherTarget = byte.MaxValue;
+            Main.ShamanTarget = byte.MaxValue;
 
             ReportDeadBodyPatch.CanReport = new();
 
@@ -193,6 +200,7 @@ internal class ChangeRoleSettings
             Vampire.Init();
             Poisoner.Init();
             AntiAdminer.Init();
+            Monitor.Init();
             TimeManager.Init();
             LastImpostor.Init();
             TargetArrow.Init();
@@ -227,6 +235,7 @@ internal class ChangeRoleSettings
             Swooper.Init();
             Wraith.Init();
             BloodKnight.Init();
+            Banshee.Init();
             Totocalcio.Init();
             Succubus.Init();
             CursedSoul.Init();
@@ -264,6 +273,11 @@ internal class ChangeRoleSettings
             PlagueBearer.Init();
             Reverie.Init();
             Doomsayer.Init();
+            Pirate.Init();
+            Shroud.Init();
+            Werewolf.Init();
+            Chronomancer.Init();
+
 
             SoloKombatManager.Init();
             CustomWinnerHolder.Reset();
@@ -300,7 +314,7 @@ internal class SelectRolesPatch
             }
             RpcSetRoleReplacer.StartReplace(senders);
 
-            if (Options.EnableGM.GetBool())
+            if (Main.EnableGM.Value)
             {
                 PlayerControl.LocalPlayer.RpcSetCustomRole(CustomRoles.GM);
                 PlayerControl.LocalPlayer.RpcSetRole(RoleTypes.Crewmate);
@@ -356,7 +370,7 @@ internal class SelectRolesPatch
                 else
                     Logger.Warn($"覆盖原版职业 => {sd.Item1.GetRealName()}: {sd.Item2} => {kp.Value.GetRoleTypes()}", "Override Role Select");
             }
-            if (Options.EnableGM.GetBool()) newList.Add((PlayerControl.LocalPlayer, RoleTypes.Crewmate));
+            if (Main.EnableGM.Value) newList.Add((PlayerControl.LocalPlayer, RoleTypes.Crewmate));
             RpcSetRoleReplacer.StoragedData = newList;
 
             RpcSetRoleReplacer.Release(); //保存していたSetRoleRpcを一気に書く
@@ -546,6 +560,9 @@ internal class SelectRolesPatch
                     case CustomRoles.AntiAdminer:
                         AntiAdminer.Add(pc.PlayerId);
                         break;
+                    case CustomRoles.Monitor:
+                        Monitor.Add(pc.PlayerId);
+                        break;
                     case CustomRoles.Mario:
                         Main.MarioVentCount[pc.PlayerId] = 0;
                         break;
@@ -652,6 +669,9 @@ internal class SelectRolesPatch
                     case CustomRoles.BloodKnight:
                         BloodKnight.Add(pc.PlayerId);
                         break;
+                    case CustomRoles.Banshee:
+                        Banshee.Add(pc.PlayerId);
+                        break;
                     case CustomRoles.Totocalcio:
                         Totocalcio.Add(pc.PlayerId);
                         break;
@@ -697,11 +717,20 @@ internal class SelectRolesPatch
                     case CustomRoles.NSerialKiller:
                         NSerialKiller.Add(pc.PlayerId);
                         break;
+                    case CustomRoles.Werewolf:
+                        Werewolf.Add(pc.PlayerId);
+                        break;
                     case CustomRoles.Traitor:
                         Traitor.Add(pc.PlayerId);
                         break;
                     case CustomRoles.NWitch:
                         NWitch.Add(pc.PlayerId);
+                        break;
+                    case CustomRoles.CovenLeader:
+                        CovenLeader.Add(pc.PlayerId);
+                        break;
+                    case CustomRoles.Shroud:
+                        Shroud.Add(pc.PlayerId);
                         break;
                     case CustomRoles.Maverick:
                         Maverick.Add(pc.PlayerId);
@@ -745,6 +774,12 @@ internal class SelectRolesPatch
                     case CustomRoles.Doomsayer:
                         Doomsayer.Add(pc.PlayerId);
                         break;
+                    case CustomRoles.Pirate:
+                        Pirate.Add(pc.PlayerId);
+                        break;
+                    case CustomRoles.Chronomancer:
+                        Chronomancer.Add(pc.PlayerId);
+                        break;
                 }
                 foreach (var subRole in pc.GetCustomSubRoles())
                 {
@@ -760,6 +795,7 @@ internal class SelectRolesPatch
         EndOfSelectRolePatch:
 
             HudManager.Instance.SetHudActive(true);
+      //      HudManager.Instance.Chat.SetVisible(true);
             List<PlayerControl> AllPlayers = new();
             CustomRpcSender sender = CustomRpcSender.Create("SelectRoles Sender", SendOption.Reliable);
             foreach (var pc in Main.AllPlayerControls)
@@ -796,7 +832,7 @@ internal class SelectRolesPatch
             }
 
             // ResetCamが必要なプレイヤーのリストにクラス化が済んでいない役職のプレイヤーを追加
-            Main.ResetCamPlayerList.AddRange(Main.AllPlayerControls.Where(p => p.GetCustomRole() is CustomRoles.Arsonist or CustomRoles.NWitch or CustomRoles.Revolutionist or CustomRoles.Farseer or CustomRoles.Sidekick or CustomRoles.KB_Normal).Select(p => p.PlayerId));
+            Main.ResetCamPlayerList.AddRange(Main.AllPlayerControls.Where(p => p.GetCustomRole() is CustomRoles.Arsonist or CustomRoles.NWitch or CustomRoles.Conjuror or CustomRoles.Necromancer or CustomRoles.Revolutionist or CustomRoles.Farseer or CustomRoles.Sidekick or CustomRoles.Shaman or CustomRoles.KB_Normal).Select(p => p.PlayerId));
             Utils.CountAlivePlayers(true);
             Utils.SyncAllSettings();
             SetColorPatch.IsAntiGlitchDisabled = false;
@@ -923,6 +959,7 @@ internal class SelectRolesPatch
                 || pc.Is(CustomRoles.Dictator) 
                 || pc.Is(CustomRoles.God) 
                 || pc.Is(CustomRoles.FFF) 
+                || pc.GetCustomRole().IsCoven()
                 || pc.Is(CustomRoles.Bomber)
                 || pc.Is(CustomRoles.Nuker) 
                 || pc.Is(CustomRoles.Provocateur)
