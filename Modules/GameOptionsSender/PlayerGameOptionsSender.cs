@@ -393,6 +393,9 @@ public class PlayerGameOptionsSender : GameOptionsSender
                 AURoleOptions.EngineerCooldown = Options.MarioVentCD.GetFloat();
                 AURoleOptions.EngineerInVentMaxTime = 1;
                 break;
+            case CustomRoles.Pitfall:
+                Pitfall.ApplyGameOptions();
+                break;
         }
 
         // Ϊ�Ի��ߵ�����
@@ -439,6 +442,7 @@ public class PlayerGameOptionsSender : GameOptionsSender
         Dazzler.SetDazzled(player, opt);
         Deathpact.SetDeathpactVision(player, opt);
         Spiritcaller.ReduceVision(opt, player);
+        Pitfall.ReduceVision(opt, player);
 
         foreach (var subRole in Main.PlayerStates[player.PlayerId].SubRoles)
         {

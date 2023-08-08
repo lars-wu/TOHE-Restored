@@ -1155,7 +1155,7 @@ public static class Options
         Dazzler.SetupCustomOption();
         Devourer.SetupCustomOption();
         Twister.SetupCustomOption();
-
+        Pitfall.SetupCustomOption();
 
         TextOptionItem.Create(100004, "RoleType.Madmate", TabGroup.ImpostorRoles)
             .SetGameMode(CustomGameMode.Standard)

@@ -619,7 +619,8 @@ public enum CustomRoles
     Underdog,
     Ludopath,
     Chronomancer,
-   // Flashbang,
+    Pitfall,
+    // Flashbang,
     //Crewmate(Vanilla)
     Engineer,
     GuardianAngel,
