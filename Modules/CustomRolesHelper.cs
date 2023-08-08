@@ -160,7 +160,6 @@ internal static class CustomRolesHelper
                 CustomRoles.PlagueBearer => CustomRoles.Impostor,
                 CustomRoles.Pestilence => CustomRoles.Impostor,
                 CustomRoles.Doomsayer => CustomRoles.Crewmate,
-                CustomRoles.Godfather => CustomRoles.Impostor,
                 CustomRoles.Pitfall => CustomRoles.Shapeshifter,
 
                 _ => role.IsImpostor() ? CustomRoles.Impostor : CustomRoles.Crewmate,

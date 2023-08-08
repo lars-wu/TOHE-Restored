@@ -41,14 +41,14 @@ namespace TOHE.Roles.Crewmate
             CustomRoles.Oblivious,
             CustomRoles.Bewilder,
             CustomRoles.Unreportable, // Disregarded
-            CustomRoles.Avanger, // Avenger
-            CustomRoles.Diseased,
-            CustomRoles.Unlucky
+            //CustomRoles.Avanger, // Avenger
+            //CustomRoles.Diseased,
+            //CustomRoles.Unlucky
         };
 
         private static readonly List<CustomRoles> neutralAddons = new List<CustomRoles>
         {
-           CustomRoles.Soulless
+           //CustomRoles.Soulless
         };
 
         private static readonly List<CustomRoles> experimentalAddons = new List<CustomRoles>
