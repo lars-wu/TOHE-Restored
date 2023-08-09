@@ -86,8 +86,9 @@ namespace TOHE.Roles.Neutral
 
         public static void OnCheckMurder(PlayerControl target)
         {
-            if (SpiritLimit < 1 || target.GetCustomRole().IsAbleToBeSidekicked() || target.GetCustomRole().IsImpostor()) return;
-            
+            if (SpiritLimit < 1) return; // || target.GetCustomRole().IsAbleToBeSidekicked() || target.GetCustomRole().IsImpostor()
+
+
             SpiritLimit--;
             SendRPC();
 
