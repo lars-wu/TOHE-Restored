@@ -107,6 +107,8 @@ enum CustomRPC
     SetSpiritcallerSpiritLimit,
     SetDoomsayerProgress,
     SetTrackerTarget,
+    SetSeekerTarget,
+    SetSeekerPoints,
 
     //SoloKombat
     SyncKBPlayer,
@@ -564,14 +566,18 @@ internal class RPCHandlerPatch
             case CustomRPC.SetVultureArrow:
                 Vulture.ReceiveRPC(reader);
                 break;
-            case CustomRPC.SetSpiritcallerSpiritLimit:
-                Spiritcaller.ReceiveRPC(reader);
-                break;
-                
             case CustomRPC.DoPoison:
                 Baker.ReceiveRPC(reader);
                 break;
-
+            case CustomRPC.SetSpiritcallerSpiritLimit:
+                Spiritcaller.ReceiveRPC(reader);
+                break;
+            case CustomRPC.SetSeekerTarget:
+                Seeker.ReceiveRPC(reader);
+                break;
+            case CustomRPC.SetSeekerPoints:
+                Seeker.ReceiveRPC(reader, setTarget: false);
+                break;
         }
     }
 }
@@ -1040,6 +1046,9 @@ internal static class RPC
                 break;
             case CustomRoles.Pirate:
                 Pirate.Add(targetId);
+                break;
+            case CustomRoles.Seeker:
+                Seeker.Add(targetId);
                 break;
             case CustomRoles.Pitfall:
                 Pitfall.Add(targetId);
