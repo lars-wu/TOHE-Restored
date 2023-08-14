@@ -43,6 +43,11 @@ namespace TOHE.Roles.Crewmate
         private static string KillerRoleClue4 = "The Killer's Role is {0}!";
         private static string KillerRoleClue5 = "The Killer's killing method resulted in {0}!"; // deathreason
         private static string KillerRoleClue6 = "The Killer can change his appearance!";
+        private static string KillerRoleTypeClue1 = "The Killer is a Concealing Impostor!";
+        private static string KillerRoleTypeClue2 = "The Killer is a Hindering Impostor!";
+        private static string KillerRoleTypeClue3 = "The Killer is a Killing Impostor!";
+        private static string KillerRoleTypeClue4 = "The Killer is a Support Impostor!";
+        
         //private static string KillerKillAmountClue = "The Killer has already killed {0} people!";
         //private static string RandomClue1 = "The Killer killed with a Knife!";
         //private static string RandomClue2 = "The Killer killed with a Pistol!";
@@ -143,5 +148,29 @@ namespace TOHE.Roles.Crewmate
                 writer.SendMessage();
             }
         }
+    }
+
+    public class EnigmaClue
+    {
+        public string Title { get; set; }
+        public string Message { get; set; }
+        public EnigmaClueTypes EnigmaClueType { get; set; }
+    }
+
+    public enum EnigmaClueTypes
+    {
+        HatClue = 0,
+        SkinClue,
+        PetClue,
+        NameClue,
+        NameLengthClue,
+        ColorClue,
+        LocationClue,
+        KillerStatusClue,
+        KillerColeClue,
+        KillerRoleTypeClue,
+        SecurityClue,
+        SabotageClue,
+        RandomClue
     }
 }
