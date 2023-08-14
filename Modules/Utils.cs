@@ -429,17 +429,20 @@ public static class Utils
             case CustomRoles.Poisoner:
             case CustomRoles.CovenLeader:
             case CustomRoles.Necromancer:
-            case CustomRoles.Conjuror:
+            case CustomRoles.Ritualist:
             case CustomRoles.NSerialKiller:
             case CustomRoles.Werewolf:
             case CustomRoles.Traitor:
             case CustomRoles.Glitch:
             case CustomRoles.Pickpocket:
             case CustomRoles.Maverick:
+            case CustomRoles.Agitater:
             case CustomRoles.Jinx:
+            case CustomRoles.SoulCollector:
             case CustomRoles.Parasite:
             case CustomRoles.Crusader:
             case CustomRoles.Refugee:
+    //        case CustomRoles.Minion:
             case CustomRoles.Jester:
             case CustomRoles.Pirate:
          //   case CustomRoles.Baker:
@@ -457,11 +460,13 @@ public static class Utils
             case CustomRoles.FFF:
             case CustomRoles.Gamer:
             case CustomRoles.HexMaster:
+            case CustomRoles.Occultist:
             case CustomRoles.Wraith:
+            case CustomRoles.Shade:
       //      case CustomRoles.Chameleon:
             case CustomRoles.Juggernaut:
             case CustomRoles.Reverie:
-            case CustomRoles.Ritualist:
+            case CustomRoles.PotionMaster:
             case CustomRoles.DarkHide:
             case CustomRoles.Collector:
             case CustomRoles.ImperiusCurse:
@@ -590,6 +595,9 @@ public static class Utils
                 var doused = GetDousedPlayerCount(playerId);
                 ProgressText.Append(ColorString(GetRoleColor(CustomRoles.Arsonist).ShadeColor(0.25f), $"({doused.Item1}/{doused.Item2})"));
                 break;
+            case CustomRoles.SoulCollector:
+                ProgressText.Append(SoulCollector.GetProgressText(playerId));
+                break;
             case CustomRoles.Sheriff:
                 ProgressText.Append(Sheriff.GetShotLimit(playerId));
                 break;
@@ -671,6 +679,9 @@ public static class Utils
             case CustomRoles.Eraser:
                 ProgressText.Append(Eraser.GetProgressText(playerId));
                 break;
+            case CustomRoles.Cleanser:
+                ProgressText.Append(Cleanser.GetProgressText(playerId));
+                break;
             case CustomRoles.Hacker:
                 ProgressText.Append(Hacker.GetHackLimit(playerId));
                 break;
@@ -704,8 +715,8 @@ public static class Utils
             case CustomRoles.EvilDiviner:
                 ProgressText.Append(EvilDiviner.GetDivinationCount(playerId));
                 break;
-            case CustomRoles.Ritualist:
-                ProgressText.Append(Ritualist.GetRitualCount(playerId));
+            case CustomRoles.PotionMaster:
+                ProgressText.Append(PotionMaster.GetRitualCount(playerId));
                 break;
             case CustomRoles.Jackal:
                 if (Jackal.CanRecruitSidekick.GetBool())
@@ -908,11 +919,11 @@ public static class Utils
         }
         //  SendMessage(sb.ToString(), PlayerId);
     //    SendMessage(sb.Append("\n.").ToString(), PlayerId, "<color=#ff5b70>【 ★ Roles ★ 】</color>");
-        SendMessage(impsb.Append("\n.").ToString(), PlayerId, ColorString(GetRoleColor(CustomRoles.Impostor), "【 ★ Impostor Roles ★ 】"));
-        SendMessage(crewsb.Append("\n.").ToString(), PlayerId, ColorString(Utils.GetRoleColor(CustomRoles.Crewmate), "【 ★ Crewmate Roles ★ 】"));
-        SendMessage(neutralsb.Append("\n.").ToString(), PlayerId, "<color=#7f8c8d>【 ★ Neutral Roles ★ 】</color>");
-        SendMessage(covensb.Append("\n.").ToString(), PlayerId, "<color=#663399>【 ★ Coven Roles ★ 】</color>");
-        SendMessage(addonsb.Append("\n.").ToString(), PlayerId, "<color=#ff9ace>【 ★ Add-ons ★ 】</color>");
+        SendMessage(impsb.Append("\n.").ToString(), PlayerId, ColorString(GetRoleColor(CustomRoles.Impostor), GetString("ImpostorRoles")));
+        SendMessage(crewsb.Append("\n.").ToString(), PlayerId, ColorString(Utils.GetRoleColor(CustomRoles.Crewmate), GetString("CrewmateRoles")));
+        SendMessage(neutralsb.Append("\n.").ToString(), PlayerId, GetString("NeutralRoles"));
+        SendMessage(covensb.Append("\n.").ToString(), PlayerId, GetString("CovenRoles"));
+        SendMessage(addonsb.Append("\n.").ToString(), PlayerId, GetString("AddonRoles"));
         //foreach (string roleList in sb.ToString().Split("\n\n●"))
         //    SendMessage("\n\n●" + roleList + "\n\n.", PlayerId);
     }
@@ -1238,6 +1249,7 @@ public static class Utils
             + $"\n  ○ /color {GetString("Command.color")}"
             + $"\n  ○ /qt {GetString("Command.quit")}"
             + $"\n ○ /death {GetString("Command.death")}"
+     //       + $"\n ○ /icons {GetString("Command.iconinfo")}"
             , ID);
     }
     public static void ShowHelp(byte ID)
@@ -1253,6 +1265,8 @@ public static class Utils
             + $"\n  ○ /color {GetString("Command.color")}"
             + $"\n  ○ /rn {GetString("Command.rename")}"
             + $"\n  ○ /qt {GetString("Command.quit")}"
+       //     + $"\n  ○ /icons {GetString("Command.iconinfo")}"
+            + $"\n  ○ /death {GetString("Command.death")}"
             + "\n\n" + GetString("CommandHostList")
             + $"\n  ○ /s {GetString("Command.say")}"
             + $"\n  ○ /rn {GetString("Command.rename")}"
@@ -1264,7 +1278,7 @@ public static class Utils
             + $"\n  ○ /id {GetString("Command.idlist")}"
             + $"\n  ○ /qq {GetString("Command.qq")}"
             + $"\n  ○ /dump {GetString("Command.dump")}"
-            + $"\n  ○ /death {GetString("Command.death")}"
+        //    + $"\n  ○ /iconhelp {GetString("Command.iconhelp")}"
             , ID);
     }
     public static void CheckTerroristWin(GameData.PlayerInfo Terrorist)
@@ -1440,6 +1454,7 @@ public static class Utils
             //呪われている場合
             SelfMark.Append(Witch.GetSpelledMark(seer.PlayerId, isForMeeting));
             SelfMark.Append(HexMaster.GetHexedMark(seer.PlayerId, isForMeeting));
+            SelfMark.Append(Occultist.GetCursedMark(seer.PlayerId, isForMeeting));
             if (Baker.IsPoisoned(seer) && isForMeeting && seer.IsAlive())
                 SelfMark.Append(ColorString(GetRoleColor(CustomRoles.Famine), "θ"));
 
@@ -1499,6 +1514,10 @@ public static class Utils
             if (seer.Is(CustomRoles.HexMaster))
             {
                 SelfSuffix.Append(HexMaster.GetHexModeText(seer, false, isForMeeting));
+            }
+            if (seer.Is(CustomRoles.Occultist))
+            {
+                SelfSuffix.Append(Occultist.GetHexModeText(seer, false, isForMeeting));
             }
             if (seer.Is(CustomRoles.AntiAdminer) && !isForMeeting)
             {
@@ -1633,6 +1652,7 @@ public static class Utils
                 //呪われている人
                 TargetMark.Append(Witch.GetSpelledMark(target.PlayerId, isForMeeting));
                 TargetMark.Append(HexMaster.GetHexedMark(target.PlayerId, isForMeeting));
+                TargetMark.Append(Occultist.GetCursedMark(target.PlayerId, isForMeeting));
              //   TargetMark.Append(Baker.GetPoisonMark(target, isForMeeting));
 
                 if (Main.ShroudList.ContainsKey(target.PlayerId) && isForMeeting && target.IsAlive())
@@ -1790,13 +1810,13 @@ public static class Utils
                         (seer.Is(CustomRoles.Sidekick) && (target.Is(CustomRoles.Jackal) || target.Is(CustomRoles.Recruit) || target.Is(CustomRoles.Sidekick))) ||
                         (seer.Is(CustomRoles.Recruit) && (target.Is(CustomRoles.Jackal) || target.Is(CustomRoles.Sidekick) || target.Is(CustomRoles.Recruit))) ||
                         (target.Is(CustomRoles.Workaholic) && Options.WorkaholicVisibleToEveryone.GetBool()) ||
-                        (target.Is(CustomRoles.Doctor) && !target.GetCustomRole().IsEvilAddons() && Options.DoctorVisibleToEveryone.GetBool()) ||
+                        (target.Is(CustomRoles.Doctor) && !target.IsEvilAddons() && Options.DoctorVisibleToEveryone.GetBool()) ||
                         (target.Is(CustomRoles.Mayor) && Options.MayorRevealWhenDoneTasks.GetBool() && target.GetPlayerTaskState().IsTaskFinished) ||
                         (seer.Is(CustomRoleTypes.Crewmate) && target.Is(CustomRoles.Marshall) && target.GetPlayerTaskState().IsTaskFinished) ||
                         (Totocalcio.KnowRole(seer, target)) ||
                         (Lawyer.KnowRole(seer, target)) ||
                         (EvilDiviner.IsShowTargetRole(seer, target)) ||
-                        (Ritualist.IsShowTargetRole(seer, target)) ||
+                        (PotionMaster.IsShowTargetRole(seer, target)) ||
                         (Executioner.KnowRole(seer, target)) ||
                         (Succubus.KnowRole(seer, target)) ||
                         (CursedSoul.KnowRole(seer, target)) ||
@@ -1879,6 +1899,15 @@ public static class Utils
                     }
                 }
 
+                if (seer.Is(CustomRoles.Doomsayer))
+                {
+                    if (seer.IsAlive() && target.IsAlive() && GuesserIsForMeeting)
+                    {
+                        TargetPlayerName = ColorString(GetRoleColor(CustomRoles.Doomsayer), target.PlayerId.ToString()) + " " + TargetPlayerName;
+                    }
+                }
+
+
                 if (seer.Is(CustomRoles.Lookout))
                 {
                     if (seer.IsAlive() && target.IsAlive())
@@ -1927,11 +1956,11 @@ public static class Utils
                     }
 
                     // Coven
-                    if (seer.IsAlive() && target.IsAlive() && GuesserIsForMeeting && !seer.Is(CustomRoles.Conjuror) && !seer.Is(CustomRoles.Necromancer) && Options.CovenMembersCanGuess.GetBool() && seer.GetCustomRole().IsCoven())
+                    if (seer.IsAlive() && target.IsAlive() && GuesserIsForMeeting && !seer.Is(CustomRoles.Ritualist) && !seer.Is(CustomRoles.Necromancer) && Options.CovenMembersCanGuess.GetBool() && seer.GetCustomRole().IsCoven())
                     {
                         TargetPlayerName = ColorString(GetRoleColor(seer.GetCustomRole()), target.PlayerId.ToString()) + " " + TargetPlayerName;
                     }
-                    else if (seer.Is(CustomRoles.Conjuror) && !Options.CovenMembersCanGuess.GetBool())
+                    else if (seer.Is(CustomRoles.Ritualist) && !Options.CovenMembersCanGuess.GetBool())
                     {
                         if (seer.IsAlive() && target.IsAlive() && GuesserIsForMeeting)
                         {
@@ -1941,7 +1970,7 @@ public static class Utils
                 }
                 else // Off Guesser Mode ID
                 {
-                    if (seer.Is(CustomRoles.NiceGuesser) || seer.Is(CustomRoles.EvilGuesser) || seer.Is(CustomRoles.Doomsayer) || seer.Is(CustomRoles.Guesser))
+                    if (seer.Is(CustomRoles.NiceGuesser) || seer.Is(CustomRoles.EvilGuesser) || seer.Is(CustomRoles.Guesser))
                     {
                         if (seer.IsAlive() && target.IsAlive() && GuesserIsForMeeting)
                         {
@@ -2043,8 +2072,10 @@ public static class Utils
         }
         Swooper.AfterMeetingTasks();
         Wraith.AfterMeetingTasks();
+        Shade.AfterMeetingTasks();
         Chameleon.AfterMeetingTasks();
         Eraser.AfterMeetingTasks();
+        Cleanser.AfterMeetingTasks();
         BountyHunter.AfterMeetingTasks();
         EvilTracker.AfterMeetingTasks();
         SerialKiller.AfterMeetingTasks();
@@ -2057,6 +2088,7 @@ public static class Utils
         Seeker.AfterMeetingTasks();
         Main.ShamanTarget = byte.MaxValue;
         Main.ShamanTargetChoosen = false;
+        Main.BurstBodies.Clear();
 
 
         if (Options.AirshipVariableElectrical.GetBool())

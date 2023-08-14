@@ -40,12 +40,12 @@ public static class Wraith
     {
         playerIdList.Add(playerId);
 
-                    if (!AmongUsClient.Instance.AmHost) return;
-                if (!Main.ResetCamPlayerList.Contains(playerId))
-                Main.ResetCamPlayerList.Add(playerId);
+        if (!AmongUsClient.Instance.AmHost) return;
+        if (!Main.ResetCamPlayerList.Contains(playerId))
+            Main.ResetCamPlayerList.Add(playerId);
 
     }
-    public static bool IsEnable => playerIdList.Count > 0;
+    public static bool IsEnable => playerIdList.Any();
     private static void SendRPC(PlayerControl pc)
     {
         if (pc.AmOwner) return;
@@ -181,6 +181,7 @@ public static class Wraith
     public static bool OnCheckMurder(PlayerControl killer, PlayerControl target)
     {
         if (Medic.ProtectList.Contains(target.PlayerId)) return true;
+        if (target.GetCustomRole().IsCoven()) return true;
         if (target.Is(CustomRoles.Bait)) return true;
         if (target.Is(CustomRoles.Pestilence)) return true;
         if (target.Is(CustomRoles.Veteran) && Main.VeteranInProtect.ContainsKey(target.PlayerId)) return true;

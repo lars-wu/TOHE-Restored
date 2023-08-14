@@ -1,6 +1,7 @@
 ﻿using AmongUs.GameOptions;
 using Hazel;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using static TOHE.Options;
 namespace TOHE.Roles.Neutral;
@@ -55,7 +56,7 @@ public static class Gamer
         if (!Main.ResetCamPlayerList.Contains(playerId))
             Main.ResetCamPlayerList.Add(playerId);
     }
-    public static bool IsEnable => playerIdList.Count > 0;
+    public static bool IsEnable => playerIdList.Any();
     public static void SetKillCooldown(byte id) => Main.AllPlayerKillCooldown[id] = KillCooldown.GetFloat();
     public static void ApplyGameOptions(IGameOptions opt) => opt.SetVision(HasImpostorVision.GetBool());
     public static void CanUseVent(PlayerControl player)
@@ -106,6 +107,7 @@ public static class Gamer
     }
     public static bool CheckMurder(PlayerControl killer, PlayerControl target)
     {
+        if (target.Is(CustomRoles.Pestilence)) return true;
         if (killer == null || target == null || !target.Is(CustomRoles.Gamer) || killer.Is(CustomRoles.Gamer)) return true;
 
         if (GamerHealth[target.PlayerId] - SelfDamage.GetInt() < 1)

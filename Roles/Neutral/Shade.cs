@@ -3,18 +3,19 @@ using Hazel;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using TOHE.Roles.Crewmate;
 using static TOHE.Options;
 using static TOHE.Translator;
 
-namespace TOHE.Roles.Crewmate;
+namespace TOHE.Roles.Neutral;
 
-public static class Chameleon
+public static class Shade
 {
-    private static readonly int Id = 6300;
+    private static readonly int Id = 13350;
     private static List<byte> playerIdList = new();
 
-    private static OptionItem ChameleonCooldown;
-    private static OptionItem ChameleonDuration;
+    private static OptionItem ShadeCooldown;
+    private static OptionItem ShadeDuration;
 
     private static Dictionary<byte, long> InvisTime = new();
     private static Dictionary<byte, long> lastTime = new();
@@ -22,10 +23,10 @@ public static class Chameleon
 
     public static void SetupCustomOption()
     {
-        SetupRoleOptions(Id, TabGroup.CrewmateRoles, CustomRoles.Chameleon);        
-        ChameleonCooldown = FloatOptionItem.Create(Id + 2, "ChameleonCooldown", new(1f, 999f, 1f), 30f, TabGroup.CrewmateRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Chameleon])
+        SetupSingleRoleOptions(Id, TabGroup.NeutralRoles, CustomRoles.Shade, 1, zeroOne: false);        
+        ShadeCooldown = FloatOptionItem.Create(Id + 2, "ShadeCooldown", new(1f, 999f, 1f), 30f, TabGroup.NeutralRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Shade])
             .SetValueFormat(OptionFormat.Seconds);
-        ChameleonDuration = FloatOptionItem.Create(Id + 4, "ChameleonDuration", new(1f, 999f, 1f), 15f, TabGroup.CrewmateRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Chameleon])
+        ShadeDuration = FloatOptionItem.Create(Id + 4, "ShadeDuration", new(1f, 999f, 1f), 15f, TabGroup.NeutralRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Shade])
             .SetValueFormat(OptionFormat.Seconds);
     }
     public static void Init()
@@ -38,12 +39,17 @@ public static class Chameleon
     public static void Add(byte playerId)
     {
         playerIdList.Add(playerId);
+
+        if (!AmongUsClient.Instance.AmHost) return;
+        if (!Main.ResetCamPlayerList.Contains(playerId))
+            Main.ResetCamPlayerList.Add(playerId);
+
     }
     public static bool IsEnable => playerIdList.Any();
     private static void SendRPC(PlayerControl pc)
     {
         if (pc.AmOwner) return;
-        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetChameleonTimer, SendOption.Reliable, pc.GetClientId());
+        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetShadeTimer, SendOption.Reliable, pc.GetClientId());
         writer.Write((InvisTime.TryGetValue(pc.PlayerId, out var x) ? x : -1).ToString());
         writer.Write((lastTime.TryGetValue(pc.PlayerId, out var y) ? y : -1).ToString());
         AmongUsClient.Instance.FinishRpcImmediately(writer);
@@ -74,14 +80,14 @@ public static class Chameleon
     }
     public static void OnFixedUpdate(PlayerControl player)
     {
-        if (!IsEnable) return;
+        if (!GameStates.IsInTask || !IsEnable) return;
 
         var now = Utils.GetTimeStamp();
 
-        if (lastTime.TryGetValue(player.PlayerId, out var time) && time + (long)ChameleonCooldown.GetFloat() < now)
+        if (lastTime.TryGetValue(player.PlayerId, out var time) && time + (long)ShadeCooldown.GetFloat() < now)
         {
             lastTime.Remove(player.PlayerId);
-            if (!player.IsModClient()) player.Notify(GetString("ChameleonCanVent"));
+            if (!player.IsModClient()) player.Notify(GetString("ShadeCanVent"));
             SendRPC(player);
         }
 
@@ -94,18 +100,18 @@ public static class Chameleon
             {
                 var pc = Utils.GetPlayerById(it.Key);
                 if (pc == null) continue;
-                var remainTime = it.Value + (long)ChameleonDuration.GetFloat() - now;
+                var remainTime = it.Value + (long)ShadeDuration.GetFloat() - now;
                 if (remainTime < 0)
                 {
                     lastTime.Add(pc.PlayerId, now);
                     pc?.MyPhysics?.RpcBootFromVent(ventedId.TryGetValue(pc.PlayerId, out var id) ? id : Main.LastEnteredVent[pc.PlayerId].Id);
-                    NameNotifyManager.Notify(pc, GetString("ChameleonInvisStateOut"));
+                    NameNotifyManager.Notify(pc, GetString("ShadeInvisStateOut"));
                     SendRPC(pc);
                     continue;
                 }
                 else if (remainTime <= 10)
                 {
-                    if (!pc.IsModClient()) pc.Notify(string.Format(GetString("ChameleonInvisStateCountdown"), remainTime + 1));
+                    if (!pc.IsModClient()) pc.Notify(string.Format(GetString("ShadeInvisStateCountdown"), remainTime + 1));
                 }
                 newList.Add(it.Key, it.Value);
             }
@@ -131,25 +137,25 @@ public static class Chameleon
 
                 InvisTime.Add(pc.PlayerId, Utils.GetTimeStamp());
                 SendRPC(pc);
-                NameNotifyManager.Notify(pc, GetString("ChameleonInvisState"), ChameleonDuration.GetFloat());
+                NameNotifyManager.Notify(pc, GetString("ShadeInvisState"), ShadeDuration.GetFloat());
             }
             else
             {
                 __instance.myPlayer.MyPhysics.RpcBootFromVent(ventId);
-                NameNotifyManager.Notify(pc, GetString("ChameleonInvisInCooldown"));
+                NameNotifyManager.Notify(pc, GetString("ShadeInvisInCooldown"));
             }
-        }, 0.5f, "Chameleon Vent");
+        }, 0.5f, "Shade Vent");
     }
     public static void OnEnterVent(PlayerControl pc, Vent vent)
     {
-        if (!pc.Is(CustomRoles.Chameleon) || !IsInvis(pc.PlayerId)) return;
+        if (!pc.Is(CustomRoles.Shade) || !IsInvis(pc.PlayerId)) return;
 
         InvisTime.Remove(pc.PlayerId);
         lastTime.Add(pc.PlayerId, Utils.GetTimeStamp());
         SendRPC(pc);
 
         pc?.MyPhysics?.RpcBootFromVent(vent.Id);
-        NameNotifyManager.Notify(pc, GetString("ChameleonInvisStateOut"));
+        NameNotifyManager.Notify(pc, GetString("ShadeInvisStateOut"));
     }
     public static string GetHudText(PlayerControl pc)
     {
@@ -157,23 +163,28 @@ public static class Chameleon
         var str = new StringBuilder();
         if (IsInvis(pc.PlayerId))
         {
-            var remainTime = InvisTime[pc.PlayerId] + (long)ChameleonDuration.GetFloat() - Utils.GetTimeStamp();
-            str.Append(string.Format(GetString("ChameleonInvisStateCountdown"), remainTime + 1));
+            var remainTime = InvisTime[pc.PlayerId] + (long)ShadeDuration.GetFloat() - Utils.GetTimeStamp();
+            str.Append(string.Format(GetString("ShadeInvisStateCountdown"), remainTime + 1));
         }
         else if (lastTime.TryGetValue(pc.PlayerId, out var time))
         {
-            var cooldown = time + (long)ChameleonCooldown.GetFloat() - Utils.GetTimeStamp();
-            str.Append(string.Format(GetString("ChameleonInvisCooldownRemain"), cooldown));
+            var cooldown = time + (long)ShadeCooldown.GetFloat() - Utils.GetTimeStamp();
+            str.Append(string.Format(GetString("ShadeInvisCooldownRemain"), cooldown + 1));
         }
         else
         {
-            str.Append(GetString("ChameleonCanVent"));
+            str.Append(GetString("ShadeCanVent"));
         }
         return str.ToString();
     }
 
     public static bool OnCheckMurder(PlayerControl killer, PlayerControl target)
     {
+        if (Medic.ProtectList.Contains(target.PlayerId)) return true;
+        if (target.Is(CustomRoles.Bait)) return true;
+        if (target.Is(CustomRoles.Pestilence)) return true;
+        if (target.Is(CustomRoles.Veteran) && Main.VeteranInProtect.ContainsKey(target.PlayerId)) return true;
+
         if (!IsInvis(killer.PlayerId)) return true;
         killer.SetKillCooldown();
         target.RpcCheckAndMurder(target);

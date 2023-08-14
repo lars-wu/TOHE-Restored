@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
+using System.Collections.Generic;
 using static TOHE.Options;
 using static TOHE.Translator;
 
@@ -41,29 +42,31 @@ public static class CopyCat
         playerIdList.Add(playerId);
         CurrentKillCooldown.Add(playerId, KillCooldown.GetFloat());
     //    MiscopyLimit.TryAdd(playerId, MiscopyLimitOpt.GetInt());
+
         if (!AmongUsClient.Instance.AmHost) return;
         if (!Main.ResetCamPlayerList.Contains(playerId))
             Main.ResetCamPlayerList.Add(playerId);
     }
 
-    public static bool IsEnable => playerIdList.Count > 0;
+    public static bool IsEnable => playerIdList.Any();
 
-  /*  private static void SendRPC(byte playerId)
-    {
-        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetCopyCatMiscopyLimit, SendOption.Reliable, -1);
-        writer.Write(playerId);
-        writer.Write(MiscopyLimit[playerId]);
-        AmongUsClient.Instance.FinishRpcImmediately(writer);
-    }
-    public static void ReceiveRPC(MessageReader reader)
-    {
-        byte CopyCatId = reader.ReadByte();
-        int Limit = reader.ReadInt32();
-        if (MiscopyLimit.ContainsKey(CopyCatId))
-            MiscopyLimit[CopyCatId] = Limit;
-        else
-            MiscopyLimit.Add(CopyCatId, MiscopyLimitOpt.GetInt());
-    } */
+
+    /*  private static void SendRPC(byte playerId)
+      {
+          MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetCopyCatMiscopyLimit, SendOption.Reliable, -1);
+          writer.Write(playerId);
+          writer.Write(MiscopyLimit[playerId]);
+          AmongUsClient.Instance.FinishRpcImmediately(writer);
+      }
+      public static void ReceiveRPC(MessageReader reader)
+      {
+          byte CopyCatId = reader.ReadByte();
+          int Limit = reader.ReadInt32();
+          if (MiscopyLimit.ContainsKey(CopyCatId))
+              MiscopyLimit[CopyCatId] = Limit;
+          else
+              MiscopyLimit.Add(CopyCatId, MiscopyLimitOpt.GetInt());
+      } */
     public static void SetKillCooldown(byte id) => Main.AllPlayerKillCooldown[id] = Utils.GetPlayerById(id).IsAlive() ? CurrentKillCooldown[id] : 0f;
 
     public static void AfterMeetingTasks()
@@ -73,6 +76,7 @@ public static class CopyCat
         foreach (var player in playerIdList)
         {
             var pc = Utils.GetPlayerById(player);
+            if (pc == null) continue;
             var role = pc.GetCustomRole();
             ////////////           /*remove the settings for current role*/             /////////////////////
             switch (role)
@@ -84,6 +88,11 @@ public static class CopyCat
                 //case CustomRoles.Bloodhound:
                 //    Bloodhound.BloodhoundTargets.Remove(player);
                 //    break;
+                case CustomRoles.Cleanser:
+                    Cleanser.CleanserTarget.Remove(pc.PlayerId);
+                    Cleanser.CleanserUses.Remove(pc.PlayerId);
+                    Cleanser.DidVote.Remove(pc.PlayerId);
+                    break;
                 case CustomRoles.ParityCop:
                     ParityCop.MaxCheckLimit.Remove(player);
                     ParityCop.RoundCheckLimit.Remove(player);
@@ -184,6 +193,7 @@ public static class CopyCat
         }
         if (CopyCrewVar.GetBool())
         {
+            if (role == CustomRoles.Eraser) role = CustomRoles.Cleanser;
             if (role == CustomRoles.Mafia || role == CustomRoles.Necromancer) role = CustomRoles.Retributionist;
             if (role == CustomRoles.Visionary) role = CustomRoles.Oracle;
             if (role == CustomRoles.Workaholic) role = CustomRoles.Snitch;
@@ -191,7 +201,7 @@ public static class CopyCat
             if (role == CustomRoles.Vindicator || role == CustomRoles.Pickpocket) role = CustomRoles.Mayor;
             else if (role == CustomRoles.Councillor) role = CustomRoles.Judge;
             else if (role == CustomRoles.Sans || role == CustomRoles.Juggernaut) role = CustomRoles.Reverie;
-            else if (role == CustomRoles.EvilGuesser || role == CustomRoles.Doomsayer || role == CustomRoles.Conjuror) role = CustomRoles.NiceGuesser;
+            else if (role == CustomRoles.EvilGuesser || role == CustomRoles.Doomsayer || role == CustomRoles.Ritualist) role = CustomRoles.NiceGuesser;
         }
         if (role.IsCrewmate()/* && (!tpc.GetCustomSubRoles().Any(x => x == CustomRoles.Rascal))*/)
         {
@@ -206,6 +216,11 @@ public static class CopyCat
                 //case CustomRoles.Bloodhound:
                 //    Bloodhound.BloodhoundTargets.Add(pc.PlayerId, new List<byte>());
                 //    break;
+                case CustomRoles.Cleanser:
+                    Cleanser.CleanserTarget.Add(pc.PlayerId, byte.MaxValue);
+                    Cleanser.CleanserUses.Add(pc.PlayerId, 0);
+                    Cleanser.DidVote.Add(pc.PlayerId, false);
+                    break;
                 case CustomRoles.Deputy:
                     Deputy.SetKillCooldown(pc.PlayerId);
                     break;

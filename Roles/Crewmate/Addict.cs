@@ -1,16 +1,10 @@
-﻿namespace TOHE.Roles.Crewmate
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-    using static TOHE.Options;
-    using static UnityEngine.GraphicsBuffer;
-    using static TOHE.Translator;
-    using UnityEngine;
-    using LibCpp2IL;
+﻿using UnityEngine;
+using System.Collections.Generic;
+using System.Linq;
+using static TOHE.Options;
 
+namespace TOHE.Roles.Crewmate
+{
     public static class Addict
     {
         private static readonly int Id = 5200;
@@ -55,7 +49,7 @@
             ImmortalTimer.TryAdd(playerId, 420f);
             DefaultSpeed = Main.AllPlayerSpeed[playerId];
         }
-        public static bool IsEnable => playerIdList.Count > 0;
+        public static bool IsEnable => playerIdList.Any();
 
         public static bool IsImmortal(PlayerControl player) => player.Is(CustomRoles.Addict) && ImmortalTimer[player.PlayerId] <= ImmortalTimeAfterVent.GetFloat();
 
