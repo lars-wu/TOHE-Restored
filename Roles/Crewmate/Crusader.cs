@@ -1,6 +1,6 @@
 using Hazel;
 using System.Collections.Generic;
-using TOHE.Modules;
+using System.Linq;
 using UnityEngine;
 
 namespace TOHE.Roles.Crewmate;
@@ -26,11 +26,12 @@ public static class Crusader
     {
         playerIdList = new();
         CrusaderLimit = new();
+        CurrentKillCooldown = new();
     }
     public static void Add(byte playerId)
     {
         playerIdList.Add(playerId);
-        CrusaderLimit.TryAdd(playerId, SkillLimitOpt.GetInt());
+        CrusaderLimit.Add(playerId, SkillLimitOpt.GetInt());
         CurrentKillCooldown.Add(playerId, SkillCooldown.GetFloat());
 
 
@@ -39,16 +40,8 @@ public static class Crusader
             Main.ResetCamPlayerList.Add(playerId);
     }
 
-    public static void Remove(byte playerId)
-    {
-        playerIdList.Remove(playerId);
-        CrusaderLimit.Remove(playerId);
+    public static bool IsEnable => playerIdList.Any();
 
-        if (!AmongUsClient.Instance.AmHost) return;
-        if (Main.ResetCamPlayerList.Contains(playerId))
-            Main.ResetCamPlayerList.Remove(playerId);
-    }
-    public static bool IsEnable => playerIdList.Count > 0;
     public static void ReceiveRPC(MessageReader reader)
     {
         byte PlayerId = reader.ReadByte();

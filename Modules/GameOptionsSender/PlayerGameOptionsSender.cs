@@ -149,6 +149,7 @@ public class PlayerGameOptionsSender : GameOptionsSender
                 opt.SetVision(PlagueBearer.PestilenceHasImpostorVision.GetBool());
                 break;
             case CustomRoles.Refugee:
+        //    case CustomRoles.Minion:
                 opt.SetVision(true);
                 break;
             case CustomRoles.Virus:
@@ -241,7 +242,7 @@ public class PlayerGameOptionsSender : GameOptionsSender
             case CustomRoles.FFF:
             case CustomRoles.Pursuer:
             case CustomRoles.Necromancer:
-            case CustomRoles.Conjuror:
+            case CustomRoles.Ritualist:
                 opt.SetVision(true);
                 break;
             case CustomRoles.NSerialKiller:
@@ -277,8 +278,8 @@ public class PlayerGameOptionsSender : GameOptionsSender
             case CustomRoles.Jinx:
                 Jinx.ApplyGameOptions(opt);
                 break;
-            case CustomRoles.Ritualist:
-                Ritualist.ApplyGameOptions(opt);
+            case CustomRoles.PotionMaster:
+                PotionMaster.ApplyGameOptions(opt);
                 break;
             case CustomRoles.Pickpocket:
                 Pickpocket.ApplyGameOptions(opt);
@@ -304,8 +305,11 @@ public class PlayerGameOptionsSender : GameOptionsSender
                 //Main.NormalOptions.CrewLightMod = Lawyer.LawyerVision.GetFloat();
                 break;
             case CustomRoles.Wraith:
+            case CustomRoles.Shade:
             case CustomRoles.HexMaster:
             case CustomRoles.Parasite:
+            case CustomRoles.Occultist:
+            case CustomRoles.Agitater:
                 opt.SetVision(true);
                 break;
         /*    case CustomRoles.Chameleon:
@@ -390,6 +394,9 @@ public class PlayerGameOptionsSender : GameOptionsSender
             case CustomRoles.Spiritcaller:
                 opt.SetVision(Spiritcaller.ImpostorVision.GetBool());
                 break;
+            case CustomRoles.Pitfall:
+                Pitfall.ApplyGameOptions();
+                break;
         }
 
         // Ϊ�Ի��ߵ�����
@@ -437,6 +444,7 @@ public class PlayerGameOptionsSender : GameOptionsSender
         Deathpact.SetDeathpactVision(player, opt);
 
         Spiritcaller.ReduceVision(opt, player);
+        Pitfall.ReduceVision(opt, player);
 
         foreach (var subRole in Main.PlayerStates[player.PlayerId].SubRoles)
         {

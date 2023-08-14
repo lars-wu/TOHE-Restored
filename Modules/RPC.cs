@@ -26,6 +26,7 @@ enum CustomRPC
     SetBountyTarget,
     SetKillOrSpell,
     SetKillOrHex,
+    SetKillOrCurse,
     SetSheriffShotLimit,
     //SetCopyCatMiscopyLimit,
     SetDousedPlayer,
@@ -33,6 +34,7 @@ enum CustomRPC
     SetNameColorData,
     DoSpell,
     DoHex,
+    DoCurse,
     SniperSync,
     SetLoversPlayers,
     SetExecutionerTarget,
@@ -58,6 +60,9 @@ enum CustomRPC
     SetDrawPlayer,
     SetCurrentDrawTarget,
     SetGamerHealth,
+    RpcPassBomb,
+    SetCleanserCleanLimit,
+    SetSoulCollectorLimit,
     SetPelicanEtenNum,
     SwordsManKill,
     SetCounterfeiterSellLimit,
@@ -89,6 +94,7 @@ enum CustomRPC
     NecromancerRevenge,
     SetSwooperTimer,
     SetWraithTimer,
+    SetShadeTimer,
     SetBKTimer,
     SetBansheeTimer,
     SyncTotocalcioTargetAndTimes,
@@ -113,7 +119,7 @@ enum CustomRPC
     SyncKBPlayer,
     SyncKBBackCountdown,
     SyncKBNameNotify,
-    SetRitualist,
+    SetPotionMaster,
     SetChameleonTimer,
     DoPoison,
     SetAdmireLimit,
@@ -291,6 +297,9 @@ internal class RPCHandlerPatch
             case CustomRPC.SetKillOrHex:
                 HexMaster.ReceiveRPC(reader, false);
                 break;
+            case CustomRPC.SetKillOrCurse:
+                Occultist.ReceiveRPC(reader, false);
+                break;
 
             case CustomRPC.SetSheriffShotLimit:
                 Sheriff.ReceiveRPC(reader);
@@ -327,6 +336,9 @@ internal class RPCHandlerPatch
                 break;
             case CustomRPC.DoHex:
                 HexMaster.ReceiveRPC(reader, true);
+                break;
+            case CustomRPC.DoCurse:
+                Occultist.ReceiveRPC(reader, true);
                 break;
             case CustomRPC.SniperSync:
                 Sniper.ReceiveRPC(reader);
@@ -516,6 +528,9 @@ internal class RPCHandlerPatch
             case CustomRPC.SetWraithTimer:
                 Wraith.ReceiveRPC(reader);
                 break;
+            case CustomRPC.SetShadeTimer:
+                Shade.ReceiveRPC(reader);
+                break;
             case CustomRPC.SetChameleonTimer:
                 Chameleon.ReceiveRPC(reader);
                 break;
@@ -543,8 +558,8 @@ internal class RPCHandlerPatch
             case CustomRPC.SetEvilDiviner:
                 EvilDiviner.ReceiveRPC(reader);
                 break;
-            case CustomRPC.SetRitualist:
-                Ritualist.ReceiveRPC(reader);
+            case CustomRPC.SetPotionMaster:
+                PotionMaster.ReceiveRPC(reader);
                 break;
             case CustomRPC.SetDeputyHandcuffLimit:
                 Deputy.ReceiveRPC(reader);
@@ -573,6 +588,15 @@ internal class RPCHandlerPatch
                 break;
             case CustomRPC.SetSeekerPoints:
                 Seeker.ReceiveRPC(reader, setTarget: false);
+                break;
+            case CustomRPC.RpcPassBomb:
+                Agitater.ReceiveRPC(reader);
+                break;
+            case CustomRPC.SetCleanserCleanLimit:
+                Cleanser.ReceiveRPC(reader);
+                break;
+            case CustomRPC.SetSoulCollectorLimit:
+                SoulCollector.ReceiveRPC(reader);
                 break;
         }
     }
@@ -781,6 +805,12 @@ internal static class RPC
             case CustomRoles.HexMaster:
                 HexMaster.Add(targetId);
                 break;
+            case CustomRoles.Occultist:
+                Occultist.Add(targetId);
+                break;
+            case CustomRoles.Camouflager:
+                Camouflager.Add(targetId);
+                break;
             case CustomRoles.Jackal:
                 Jackal.Add(targetId);
                 break;
@@ -795,6 +825,18 @@ internal static class RPC
                 break;
             case CustomRoles.CopyCat:
                 CopyCat.Add(targetId);
+                break;
+            case CustomRoles.Pickpocket:
+                Pickpocket.Add(targetId);
+                break;
+            case CustomRoles.Cleanser:
+                Cleanser.Add(targetId);
+                break;
+            case CustomRoles.SoulCollector:
+                SoulCollector.Add(targetId);
+                break;
+            case CustomRoles.Agitater:
+                Agitater.Add(targetId);
                 break;
             case CustomRoles.QuickShooter:
                 QuickShooter.Add(targetId);
@@ -811,6 +853,12 @@ internal static class RPC
             case CustomRoles.Chronomancer:
                 Chronomancer.Add(targetId);
                 break;
+            case CustomRoles.Medusa:
+                Medusa.Add(targetId);
+                break;
+            case CustomRoles.Necromancer:
+                Necromancer.Add(targetId);
+                break;
             case CustomRoles.Marshall:
                 Marshall.Add(targetId);
                 break;
@@ -823,6 +871,9 @@ internal static class RPC
             case CustomRoles.LastImpostor:
                 LastImpostor.Add(targetId);
                 break;
+            case CustomRoles.Aware:
+                Main.AwareInteracted[targetId] = new();
+                break;
             case CustomRoles.TimeManager:
                 TimeManager.Add(targetId);
                 break;
@@ -831,6 +882,9 @@ internal static class RPC
                 break;
             case CustomRoles.Pelican:
                 Pelican.Add(targetId);
+                break;
+            case CustomRoles.Glitch:
+                Glitch.Add(targetId);
                 break;
             case CustomRoles.Counterfeiter:
                 Counterfeiter.Add(targetId);
@@ -844,8 +898,8 @@ internal static class RPC
             case CustomRoles.EvilDiviner:
                 EvilDiviner.Add(targetId);
                 break;
-            case CustomRoles.Ritualist:
-                Ritualist.Add(targetId);
+            case CustomRoles.PotionMaster:
+                PotionMaster.Add(targetId);
                 break;
             case CustomRoles.Medic:
                 Medic.Add(targetId);
@@ -931,6 +985,9 @@ internal static class RPC
                 break;
             case CustomRoles.Wraith:
                 Wraith.Add(targetId);
+                break;
+            case CustomRoles.Shade:
+                Shade.Add(targetId);
                 break;
             case CustomRoles.Chameleon:
                 Chameleon.Add(targetId);
@@ -1042,6 +1099,9 @@ internal static class RPC
                 break;
             case CustomRoles.Seeker:
                 Seeker.Add(targetId);
+                break;
+            case CustomRoles.Pitfall:
+                Pitfall.Add(targetId);
                 break;
         }
         HudManager.Instance.SetHudActive(true);

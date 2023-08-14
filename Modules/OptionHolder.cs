@@ -61,10 +61,10 @@ public static class Options
     };
 
     // MapActive
-    public static bool IsActiveSkeld => AddedTheSkeld.GetBool() || Main.NormalOptions.MapId == 0;
-    public static bool IsActiveMiraHQ => AddedMiraHQ.GetBool() || Main.NormalOptions.MapId == 1;
-    public static bool IsActivePolus => AddedPolus.GetBool() || Main.NormalOptions.MapId == 2;
-    public static bool IsActiveAirship => AddedTheAirship.GetBool() || Main.NormalOptions.MapId == 4;
+    public static bool IsActiveSkeld => Main.NormalOptions.MapId == 0;
+    public static bool IsActiveMiraHQ => Main.NormalOptions.MapId == 1;
+    public static bool IsActivePolus => Main.NormalOptions.MapId == 2;
+    public static bool IsActiveAirship => Main.NormalOptions.MapId == 4;
 
     // 役職数・確率
     public static Dictionary<CustomRoles, int> roleCounts;
@@ -253,11 +253,6 @@ public static class Options
     public static OptionItem NukeRadius;
     public static OptionItem NukeCooldown;
 
-    public static OptionItem SkeldChance;
-    public static OptionItem MiraChance;
-    public static OptionItem PolusChance;
-    public static OptionItem AirshipChance;
-
     // UNDERDOG
     public static OptionItem UnderdogKillCooldown;
     public static OptionItem UnderdogMaximumPlayersNeededToKill;
@@ -402,6 +397,23 @@ public static class Options
     public static OptionItem DiseasedCDOpt;
     public static OptionItem DiseasedCDReset;
 
+    public static OptionItem ImpCanBeVoidBallot;
+    public static OptionItem CrewCanBeVoidBallot;
+    public static OptionItem NeutralCanBeVoidBallot;
+
+    public static OptionItem ImpCanBeAware;
+    public static OptionItem CrewCanBeAware;
+    public static OptionItem NeutralCanBeAware;
+    public static OptionItem AwareknowRole;
+
+    public static OptionItem ImpCanBeFragile;
+    public static OptionItem CrewCanBeFragile;
+    public static OptionItem NeutralCanBeFragile;
+    public static OptionItem ImpCanKillFragile;
+    public static OptionItem CrewCanKillFragile;
+    public static OptionItem NeutralCanKillFragile;
+    public static OptionItem FragileKillerLunge;
+
     public static OptionItem ImpCanBeAntidote;
     public static OptionItem CrewCanBeAntidote;
     public static OptionItem NeutralCanBeAntidote;
@@ -460,7 +472,7 @@ public static class Options
     public static OptionItem ConjGuessTaskDoneSnitch;
     public static OptionItem ConjCanGuessTime;
     public static OptionItem ConjTryHideMsg;
-    public static OptionItem ConjurorCanVent;
+    public static OptionItem RitualistCanVent;
 
     // Necromancer
     public static OptionItem NecromancerKillCD;
@@ -572,10 +584,14 @@ public static class Options
 
     // Maps
     public static OptionItem RandomMapsMode;
-    public static OptionItem AddedTheSkeld;
-    public static OptionItem AddedMiraHQ;
-    public static OptionItem AddedPolus;
-    public static OptionItem AddedTheAirship;
+    public static OptionItem SkeldChance;
+    public static OptionItem MiraChance;
+    public static OptionItem PolusChance;
+    public static OptionItem AirshipChance;
+    //public static OptionItem AddedTheSkeld;
+    //public static OptionItem AddedMiraHQ;
+    //public static OptionItem AddedPolus;
+    //public static OptionItem AddedTheAirship;
     public static OptionItem AddedDleks;
     public static OptionItem RandomSpawn;
     public static OptionItem AirshipAdditionalSpawn;
@@ -703,6 +719,7 @@ public static class Options
 
     // その他
     public static OptionItem FixFirstKillCooldown;
+    public static OptionItem FixKillCooldownValue;
     public static OptionItem ShieldPersonDiedFirst;
     public static OptionItem GhostCanSeeOtherRoles;
     public static OptionItem GhostCanSeeOtherVotes;
@@ -758,6 +775,7 @@ public static class Options
 
     public static OptionItem AutoPlayAgain;
     public static OptionItem AutoPlayAgainCountdown;
+    public static OptionItem ShowLobbyCode;
 
     public static OptionItem AllowSayCommand;
     public static OptionItem ApplyReminderMsg;
@@ -1037,6 +1055,7 @@ public static class Options
             .SetParent(NukerChance)
             .SetValueFormat(OptionFormat.Multiplier);
         BountyHunter.SetupCustomOption();
+        Chronomancer.SetupCustomOption();
         Councillor.SetupCustomOption();
         SetupRoleOptions(1000, TabGroup.ImpostorRoles, CustomRoles.CursedWolf); //TOH_Y
         GuardSpellTimes = IntegerOptionItem.Create(1010, "GuardSpellTimes", new(1, 15, 1), 3, TabGroup.ImpostorRoles, false)
@@ -1121,13 +1140,6 @@ public static class Options
             .SetGameMode(CustomGameMode.Standard)
             .SetColor(new Color32(255, 25, 25, byte.MaxValue));//CONCEALING
         SetupRoleOptions(3600, TabGroup.ImpostorRoles, CustomRoles.Escapee);
-        SetupRoleOptions(3700, TabGroup.ImpostorRoles, CustomRoles.ImperiusCurse);
-        ShapeImperiusCurseShapeshiftDuration = FloatOptionItem.Create(3710, "ShapeshiftDuration", new(2.5f, 999f, 2.5f), 300, TabGroup.ImpostorRoles, false)
-            .SetParent(CustomRoleSpawnChances[CustomRoles.ImperiusCurse])
-            .SetValueFormat(OptionFormat.Seconds);
-        ImperiusCurseShapeshiftCooldown = FloatOptionItem.Create(3711, "ShapeshiftCooldown", new(1f, 999f, 1f), 15f, TabGroup.ImpostorRoles, false)
-            .SetParent(CustomRoleSpawnChances[CustomRoles.ImperiusCurse])
-            .SetValueFormat(OptionFormat.Seconds);
         SetupRoleOptions(3800, TabGroup.ImpostorRoles, CustomRoles.Miner);
         SetupRoleOptions(3900, TabGroup.ImpostorRoles, CustomRoles.Puppeteer);
         SetupRoleOptions(4000, TabGroup.ImpostorRoles, CustomRoles.Scavenger);
@@ -1137,6 +1149,13 @@ public static class Options
         SetupRoleOptions(4100, TabGroup.ImpostorRoles, CustomRoles.ShapeMaster);
         ShapeMasterShapeshiftDuration = FloatOptionItem.Create(4110, "ShapeshiftDuration", new(1, 999, 1), 10, TabGroup.ImpostorRoles, false)
             .SetParent(CustomRoleSpawnChances[CustomRoles.ShapeMaster])
+            .SetValueFormat(OptionFormat.Seconds);
+        SetupRoleOptions(3700, TabGroup.ImpostorRoles, CustomRoles.ImperiusCurse);
+        ShapeImperiusCurseShapeshiftDuration = FloatOptionItem.Create(3710, "ShapeshiftDuration", new(2.5f, 999f, 2.5f), 300, TabGroup.ImpostorRoles, false)
+            .SetParent(CustomRoleSpawnChances[CustomRoles.ImperiusCurse])
+            .SetValueFormat(OptionFormat.Seconds);
+        ImperiusCurseShapeshiftCooldown = FloatOptionItem.Create(3711, "ShapeshiftCooldown", new(1f, 999f, 1f), 15f, TabGroup.ImpostorRoles, false)
+            .SetParent(CustomRoleSpawnChances[CustomRoles.ImperiusCurse])
             .SetValueFormat(OptionFormat.Seconds);
         Swooper.SetupCustomOption();
         SetupRoleOptions(4300, TabGroup.ImpostorRoles, CustomRoles.Trickster);
@@ -1157,8 +1176,8 @@ public static class Options
         Hacker.SetupCustomOption(); //anonymous
         Dazzler.SetupCustomOption();
         Devourer.SetupCustomOption();
+        Pitfall.SetupCustomOption();
         Twister.SetupCustomOption();
-
 
         TextOptionItem.Create(100004, "RoleType.Madmate", TabGroup.ImpostorRoles)
             .SetGameMode(CustomGameMode.Standard)
@@ -1201,6 +1220,7 @@ public static class Options
             .SetParent(CustomRoleSpawnChances[CustomRoles.CyberStar]);
         NeutralKnowCyberStarDead = BooleanOptionItem.Create(5500, "NeutralKnowCyberStarDead", false, TabGroup.CrewmateRoles, false)
             .SetParent(CustomRoleSpawnChances[CustomRoles.CyberStar]);
+        Cleanser.SetupCustomOption();
         SetupRoleOptions(5600, TabGroup.CrewmateRoles, CustomRoles.Doctor);
         DoctorTaskCompletedBatteryCharge = FloatOptionItem.Create(5610, "DoctorTaskCompletedBatteryCharge", new(0f, 250f, 1f), 50f, TabGroup.CrewmateRoles, false)
             .SetParent(CustomRoleSpawnChances[CustomRoles.Doctor])
@@ -1425,6 +1445,24 @@ public static class Options
             .SetParent(CustomRoleSpawnChances[CustomRoles.Phantom]);
         PhantomTasks = OverrideTasksData.Create(11413, TabGroup.NeutralRoles, CustomRoles.Phantom);
         Pirate.SetupCustomOption();
+        SetupRoleOptions(18500, TabGroup.NeutralRoles, CustomRoles.Provocateur);
+        SetupRoleOptions(18400, TabGroup.NeutralRoles, CustomRoles.Revolutionist);
+        RevolutionistDrawTime = FloatOptionItem.Create(18410, "RevolutionistDrawTime", new(0f, 10f, 1f), 3f, TabGroup.NeutralRoles, false)
+            .SetParent(CustomRoleSpawnChances[CustomRoles.Revolutionist])
+            .SetValueFormat(OptionFormat.Seconds);
+        RevolutionistCooldown = FloatOptionItem.Create(18411, "RevolutionistCooldown", new(5f, 100f, 1f), 10f, TabGroup.NeutralRoles, false)
+            .SetParent(CustomRoleSpawnChances[CustomRoles.Revolutionist])
+            .SetValueFormat(OptionFormat.Seconds);
+        RevolutionistDrawCount = IntegerOptionItem.Create(18412, "RevolutionistDrawCount", new(1, 14, 1), 6, TabGroup.NeutralRoles, false)
+            .SetParent(CustomRoleSpawnChances[CustomRoles.Revolutionist])
+            .SetValueFormat(OptionFormat.Players);
+        RevolutionistKillProbability = IntegerOptionItem.Create(18413, "RevolutionistKillProbability", new(0, 100, 5), 15, TabGroup.NeutralRoles, false)
+            .SetParent(CustomRoleSpawnChances[CustomRoles.Revolutionist])
+            .SetValueFormat(OptionFormat.Percent);
+        RevolutionistVentCountDown = FloatOptionItem.Create(18414, "RevolutionistVentCountDown", new(1f, 180f, 1f), 15f, TabGroup.NeutralRoles, false)
+            .SetParent(CustomRoleSpawnChances[CustomRoles.Revolutionist])
+            .SetValueFormat(OptionFormat.Seconds);
+        SoulCollector.SetupCustomOption();
         SetupRoleOptions(11500, TabGroup.NeutralRoles, CustomRoles.Terrorist);
         CanTerroristSuicideWin = BooleanOptionItem.Create(11510, "CanTerroristSuicideWin", false, TabGroup.NeutralRoles, false)
             .SetParent(CustomRoleSpawnChances[CustomRoles.Terrorist]);
@@ -1432,6 +1470,13 @@ public static class Options
             .SetParent(CustomRoleSpawnChances[CustomRoles.Terrorist]);
         //50220~50223を使用
         TerroristTasks = OverrideTasksData.Create(11512, TabGroup.NeutralRoles, CustomRoles.Terrorist);
+        SetupRoleOptions(18300, TabGroup.NeutralRoles, CustomRoles.Mario);
+        MarioVentNumWin = IntegerOptionItem.Create(18310, "MarioVentNumWin", new(5, 900, 5), 40, TabGroup.NeutralRoles, false)
+            .SetParent(CustomRoleSpawnChances[CustomRoles.Mario])
+            .SetValueFormat(OptionFormat.Times);
+        MarioVentCD = FloatOptionItem.Create(18311, "VentCooldown", new(0f, 999f, 1f), 15f, TabGroup.NeutralRoles, false)
+            .SetParent(CustomRoleSpawnChances[CustomRoles.Mario])
+            .SetValueFormat(OptionFormat.Seconds);
         Vulture.SetupCustomOption();
         SetupRoleOptions(11700, TabGroup.NeutralRoles, CustomRoles.Workaholic); //TOH_Y
         WorkaholicCannotWinAtDeath = BooleanOptionItem.Create(11710, "WorkaholicCannotWinAtDeath", false, TabGroup.NeutralRoles, false)
@@ -1450,7 +1495,7 @@ public static class Options
         TextOptionItem.Create(100013, "RoleType.NeutralKilling", TabGroup.NeutralRoles)
             .SetGameMode(CustomGameMode.Standard)
             .SetColor(new Color32(127, 140, 141, byte.MaxValue));
-
+        Agitater.SetupCustomOption();
         SetupRoleOptions(10400, TabGroup.NeutralRoles, CustomRoles.Arsonist);
         ArsonistDouseTime = FloatOptionItem.Create(10410, "ArsonistDouseTime", new(0f, 10f, 1f), 3f, TabGroup.NeutralRoles, false)
             .SetParent(CustomRoleSpawnChances[CustomRoles.Arsonist])
@@ -1465,10 +1510,12 @@ public static class Options
         Infectious.SetupCustomOption();
         Jackal.SetupCustomOption();
         Juggernaut.SetupCustomOption();
+        Occultist.SetupCustomOption();
         Pelican.SetupCustomOption();
         Pickpocket.SetupCustomOption();
         PlagueBearer.SetupCustomOption();
         NSerialKiller.SetupCustomOption(); // Serial Killer
+        Shade.SetupCustomOption();
         Shroud.SetupCustomOption();
         DarkHide.SetupCustomOption(); // Stalker (TOHY)
         Traitor.SetupCustomOption();
@@ -1488,20 +1535,9 @@ public static class Options
         CovenKnowAlliesRole = BooleanOptionItem.Create(212, "CovenKnowAlliesRole", true, TabGroup.NeutralRoles, false)
             .SetGameMode(CustomGameMode.Standard);
         Banshee.SetupCustomOption();
-    /*    SetupSingleRoleOptions(10450, TabGroup.NeutralRoles, CustomRoles.Conjuror, 1, zeroOne: false);
-        ConjCanGuessTime = IntegerOptionItem.Create(10460, "GuesserCanGuessTimes", new(1, 15, 1), 15, TabGroup.NeutralRoles, false)
-            .SetParent(CustomRoleSpawnChances[CustomRoles.Conjuror])
-            .SetValueFormat(OptionFormat.Times);
-        ConjCanGuessAdt = BooleanOptionItem.Create(10461, "ConjCanGuessAdt", false, TabGroup.NeutralRoles, false)
-            .SetParent(CustomRoleSpawnChances[CustomRoles.Conjuror]);
-        ConjTryHideMsg = BooleanOptionItem.Create(10462, "GuesserTryHideMsg", true, TabGroup.NeutralRoles, false)
-            .SetParent(CustomRoleSpawnChances[CustomRoles.Conjuror])
-            .SetColor(Color.green);
-        ConjurorCanVent = BooleanOptionItem.Create(10463, "CanVent", true, TabGroup.NeutralRoles, false)
-            .SetParent(CustomRoleSpawnChances[CustomRoles.Conjuror]); */
         CovenLeader.SetupCustomOption();
-        HexMaster.SetupCustomOption();
         Jinx.SetupCustomOption();
+        HexMaster.SetupCustomOption();
         Medusa.SetupCustomOption();
         SetupSingleRoleOptions(3150, TabGroup.NeutralRoles, CustomRoles.Necromancer, 1, zeroOne: false);
         NecromancerKillCD = FloatOptionItem.Create(3162, "KillCooldown", new(0f, 180f, 2.5f), 20f, TabGroup.NeutralRoles, false)
@@ -1513,7 +1549,18 @@ public static class Options
         NecromancerCanVent = BooleanOptionItem.Create(3161, "CanVent", true, TabGroup.NeutralRoles, false)
             .SetParent(CustomRoleSpawnChances[CustomRoles.Necromancer]); 
         Poisoner.SetupCustomOption();
-        Ritualist.SetupCustomOption();
+        PotionMaster.SetupCustomOption();
+        SetupSingleRoleOptions(10450, TabGroup.NeutralRoles, CustomRoles.Ritualist, 1, zeroOne: false);
+        ConjCanGuessTime = IntegerOptionItem.Create(10460, "GuesserCanGuessTimes", new(1, 15, 1), 15, TabGroup.NeutralRoles, false)
+            .SetParent(CustomRoleSpawnChances[CustomRoles.Ritualist])
+            .SetValueFormat(OptionFormat.Times);
+        ConjCanGuessAdt = BooleanOptionItem.Create(10461, "ConjCanGuessAdt", false, TabGroup.NeutralRoles, false)
+            .SetParent(CustomRoleSpawnChances[CustomRoles.Ritualist]);
+        ConjTryHideMsg = BooleanOptionItem.Create(10462, "GuesserTryHideMsg", true, TabGroup.NeutralRoles, false)
+            .SetParent(CustomRoleSpawnChances[CustomRoles.Ritualist])
+            .SetColor(Color.green);
+        RitualistCanVent = BooleanOptionItem.Create(10463, "CanVent", true, TabGroup.NeutralRoles, false)
+            .SetParent(CustomRoleSpawnChances[CustomRoles.Ritualist]);
         Wraith.SetupCustomOption();
 
 
@@ -1542,6 +1589,17 @@ public static class Options
             .SetParent(CustomRoleSpawnChances[CustomRoles.Autopsy]);
         NeutralCanBeAutopsy = BooleanOptionItem.Create(13612, "NeutralCanBeAutopsy", true, TabGroup.Addons, false)
             .SetParent(CustomRoleSpawnChances[CustomRoles.Autopsy]);
+
+        SetupAdtRoleOptions(42420, CustomRoles.Aware, canSetNum: true);
+        ImpCanBeAware = BooleanOptionItem.Create(42430, "ImpCanBeAware", true, TabGroup.Addons, false)
+            .SetParent(CustomRoleSpawnChances[CustomRoles.Aware]);
+        CrewCanBeAware = BooleanOptionItem.Create(42431, "CrewCanBeAware", true, TabGroup.Addons, false)
+            .SetParent(CustomRoleSpawnChances[CustomRoles.Aware]);
+        NeutralCanBeAware = BooleanOptionItem.Create(42432, "NeutralCanBeAware", true, TabGroup.Addons, false)
+            .SetParent(CustomRoleSpawnChances[CustomRoles.Aware]);
+        AwareknowRole = BooleanOptionItem.Create(42433, "AwareKnowRole", true, TabGroup.Addons, false)
+            .SetParent(CustomRoleSpawnChances[CustomRoles.Aware]);
+
         SetupAdtRoleOptions(13700, CustomRoles.Bait, canSetNum: true);
         ImpCanBeBait = BooleanOptionItem.Create(13710, "ImpCanBeBait", true, TabGroup.Addons, false)
             .SetParent(CustomRoleSpawnChances[CustomRoles.Bait]);
@@ -1724,6 +1782,24 @@ public static class Options
             .SetParent(CustomRoleSpawnChances[CustomRoles.Unreportable]);
         NeutralCanBeUnreportable = BooleanOptionItem.Create(15312, "NeutralCanBeUnreportable", true, TabGroup.Addons, false)
             .SetParent(CustomRoleSpawnChances[CustomRoles.Unreportable]);
+
+
+        SetupAdtRoleOptions(32420, CustomRoles.Fragile, canSetNum: true);
+        ImpCanBeFragile = BooleanOptionItem.Create(32430, "ImpCanBeFragile", true, TabGroup.Addons, false)
+            .SetParent(CustomRoleSpawnChances[CustomRoles.Fragile]);
+        CrewCanBeFragile = BooleanOptionItem.Create(32431, "CrewCanBeFragile", true, TabGroup.Addons, false)
+            .SetParent(CustomRoleSpawnChances[CustomRoles.Fragile]);
+        NeutralCanBeFragile = BooleanOptionItem.Create(32432, "NeutralCanBeFragile", true, TabGroup.Addons, false)
+            .SetParent(CustomRoleSpawnChances[CustomRoles.Fragile]);
+        ImpCanKillFragile = BooleanOptionItem.Create(32433, "ImpCanKillFragile", true, TabGroup.Addons, false)
+            .SetParent(CustomRoleSpawnChances[CustomRoles.Fragile]);
+        CrewCanKillFragile = BooleanOptionItem.Create(32434, "CrewCanKillFragile", true, TabGroup.Addons, false)
+            .SetParent(CustomRoleSpawnChances[CustomRoles.Fragile]);
+        NeutralCanKillFragile = BooleanOptionItem.Create(32435, "NeutralCanKillFragile", true, TabGroup.Addons, false)
+            .SetParent(CustomRoleSpawnChances[CustomRoles.Fragile]);
+        FragileKillerLunge = BooleanOptionItem.Create(32436, "FragileKillerLunge", true, TabGroup.Addons, false)
+            .SetParent(CustomRoleSpawnChances[CustomRoles.Fragile]);
+
         SetupAdtRoleOptions(15250, CustomRoles.Ghoul, canSetNum: true);
         SetupAdtRoleOptions(15400, CustomRoles.Oblivious, canSetNum: true);
         ImpCanBeOblivious = BooleanOptionItem.Create(15410, "ImpCanBeOblivious", true, TabGroup.Addons, false)
@@ -1769,6 +1845,15 @@ public static class Options
             .SetParent(CustomRoleSpawnChances[CustomRoles.Unlucky]);
         NeutralCanBeUnlucky = BooleanOptionItem.Create(14363, "NeutralCanBeUnlucky", true, TabGroup.Addons, false)
             .SetParent(CustomRoleSpawnChances[CustomRoles.Unlucky]);
+
+        SetupAdtRoleOptions(36420, CustomRoles.VoidBallot, canSetNum: true);
+        ImpCanBeVoidBallot = BooleanOptionItem.Create(36430, "ImpCanBeVoidBallot", true, TabGroup.Addons, false)
+            .SetParent(CustomRoleSpawnChances[CustomRoles.VoidBallot]);
+        CrewCanBeVoidBallot = BooleanOptionItem.Create(36431, "CrewCanBeVoidBallot", true, TabGroup.Addons, false)
+            .SetParent(CustomRoleSpawnChances[CustomRoles.VoidBallot]);
+        NeutralCanBeVoidBallot = BooleanOptionItem.Create(36432, "NeutralCanBeVoidBallot", true, TabGroup.Addons, false)
+            .SetParent(CustomRoleSpawnChances[CustomRoles.VoidBallot]);
+
         Workhorse.SetupCustomOption();
 
         TextOptionItem.Create(100016, "RoleType.Impostor", TabGroup.Addons) // IMPOSTOR
@@ -1820,6 +1905,13 @@ public static class Options
         TextOptionItem.Create(100017, "RoleType.Neut", TabGroup.Addons) // NEUTRAL
             .SetGameMode(CustomGameMode.Standard)
             .SetColor(new Color32(127, 140, 141, byte.MaxValue));
+        SetupAdtRoleOptions(18900, CustomRoles.Egoist, canSetNum: true, tab: TabGroup.Addons);
+        CrewCanBeEgoist = BooleanOptionItem.Create(18910, "CrewCanBeEgoist", true, TabGroup.Addons, false)
+            .SetParent(CustomRoleSpawnChances[CustomRoles.Egoist]);
+        ImpCanBeEgoist = BooleanOptionItem.Create(18911, "ImpCanBeEgoist", true, TabGroup.Addons, false)
+            .SetParent(CustomRoleSpawnChances[CustomRoles.Egoist]);
+        ImpEgoistVisibalToAllies = BooleanOptionItem.Create(18912, "ImpEgoistVisibalToAllies", true, TabGroup.Addons, false)
+            .SetParent(CustomRoleSpawnChances[CustomRoles.Egoist]);
         SetupLoversRoleOptionsToggle(16200);
 
         
@@ -1873,7 +1965,6 @@ public static class Options
         Eraser.SetupCustomOption();
         SetupRoleOptions(16900, TabGroup.OtherRoles, CustomRoles.OverKiller);
         Disperser.SetupCustomOption();
-        Chronomancer.SetupCustomOption();
 
         // 船员
         TextOptionItem.Create(100019, "OtherRoles.CrewmateRoles", TabGroup.OtherRoles)
@@ -1899,30 +1990,6 @@ public static class Options
             .SetParent(CustomRoleSpawnChances[CustomRoles.God]);
         GodCanGuess = BooleanOptionItem.Create(18211, "CanGuess", false, TabGroup.OtherRoles, false)
             .SetParent(CustomRoleSpawnChances[CustomRoles.God]);
-        SetupRoleOptions(18300, TabGroup.OtherRoles, CustomRoles.Mario);
-        MarioVentNumWin = IntegerOptionItem.Create(18310, "MarioVentNumWin", new(5, 900, 5), 40, TabGroup.OtherRoles, false)
-            .SetParent(CustomRoleSpawnChances[CustomRoles.Mario])
-            .SetValueFormat(OptionFormat.Times);
-        MarioVentCD = FloatOptionItem.Create(18311, "VentCooldown", new(0f, 999f, 1f), 15f, TabGroup.OtherRoles, false)
-            .SetParent(CustomRoleSpawnChances[CustomRoles.Mario])
-            .SetValueFormat(OptionFormat.Seconds);
-        SetupRoleOptions(18400, TabGroup.OtherRoles, CustomRoles.Revolutionist);
-        RevolutionistDrawTime = FloatOptionItem.Create(18410, "RevolutionistDrawTime", new(0f, 10f, 1f), 3f, TabGroup.OtherRoles, false)
-            .SetParent(CustomRoleSpawnChances[CustomRoles.Revolutionist])
-            .SetValueFormat(OptionFormat.Seconds);
-        RevolutionistCooldown = FloatOptionItem.Create(18411, "RevolutionistCooldown", new(5f, 100f, 1f), 10f, TabGroup.OtherRoles, false)
-            .SetParent(CustomRoleSpawnChances[CustomRoles.Revolutionist])
-            .SetValueFormat(OptionFormat.Seconds);
-        RevolutionistDrawCount = IntegerOptionItem.Create(18412, "RevolutionistDrawCount", new(1, 14, 1), 6, TabGroup.OtherRoles, false)
-            .SetParent(CustomRoleSpawnChances[CustomRoles.Revolutionist])
-            .SetValueFormat(OptionFormat.Players);
-        RevolutionistKillProbability = IntegerOptionItem.Create(18413, "RevolutionistKillProbability", new(0, 100, 5), 15, TabGroup.OtherRoles, false)
-            .SetParent(CustomRoleSpawnChances[CustomRoles.Revolutionist])
-            .SetValueFormat(OptionFormat.Percent);
-        RevolutionistVentCountDown = FloatOptionItem.Create(18414, "RevolutionistVentCountDown", new(1f, 180f, 1f), 15f, TabGroup.OtherRoles, false)
-            .SetParent(CustomRoleSpawnChances[CustomRoles.Revolutionist])
-            .SetValueFormat(OptionFormat.Seconds);
-        SetupRoleOptions(18500, TabGroup.OtherRoles, CustomRoles.Provocateur);
         Spiritcaller.SetupCustomOption();
 
         // 副职
@@ -1936,13 +2003,6 @@ public static class Options
         .SetParent(CustomRoleSpawnChances[CustomRoles.Flashman])
             .SetValueFormat(OptionFormat.Multiplier); */
         SetupAdtRoleOptions(18800, CustomRoles.Youtuber, canSetNum: true, tab: TabGroup.OtherRoles);
-        SetupAdtRoleOptions(18900, CustomRoles.Egoist, canSetNum: true, tab: TabGroup.OtherRoles);
-        CrewCanBeEgoist = BooleanOptionItem.Create(18910, "CrewCanBeEgoist", true, TabGroup.OtherRoles, false)
-            .SetParent(CustomRoleSpawnChances[CustomRoles.Egoist]);
-        ImpCanBeEgoist = BooleanOptionItem.Create(18911, "ImpCanBeEgoist", true, TabGroup.OtherRoles, false)
-            .SetParent(CustomRoleSpawnChances[CustomRoles.Egoist]);
-        ImpEgoistVisibalToAllies = BooleanOptionItem.Create(18912, "ImpEgoistVisibalToAllies", true, TabGroup.OtherRoles, false)
-            .SetParent(CustomRoleSpawnChances[CustomRoles.Egoist]);
     /*    SetupAdtRoleOptions(19000, CustomRoles.Sidekick, canSetNum: true, tab: TabGroup.OtherRoles);
         SidekickCountMode = StringOptionItem.Create(19010, "SidekickCountMode", sidekickCountMode, 0, TabGroup.OtherRoles, false)
         .SetParent(CustomRoleSpawnChances[CustomRoles.Sidekick]);
@@ -2028,6 +2088,8 @@ public static class Options
         AutoPlayAgainCountdown = IntegerOptionItem.Create(44425, "AutoPlayAgainCountdown", new(1, 20, 1), 10, TabGroup.SystemSettings, false)
             .SetParent(AutoPlayAgain)
             .SetValueFormat(OptionFormat.Seconds);
+        ShowLobbyCode = BooleanOptionItem.Create(44426, "ShowLobbyCode", true, TabGroup.SystemSettings, false)
+            .SetColor(Color.blue);
 
         LowLoadMode = BooleanOptionItem.Create(19316, "LowLoadMode", true, TabGroup.SystemSettings, false)
             .SetHeader(true)
@@ -2122,7 +2184,7 @@ public static class Options
             .SetColor(new Color32(19, 188, 233, byte.MaxValue));
 
         // Random Maps Mode
-        RandomMapsMode = BooleanOptionItem.Create(19900, "RandomMapsMode", false, TabGroup.GameSettings, false)
+        /*RandomMapsMode = BooleanOptionItem.Create(19900, "RandomMapsMode", false, TabGroup.GameSettings, false)
             .SetHeader(true)
             .SetColor(new Color32(19, 188, 233, byte.MaxValue));
         AddedTheSkeld = BooleanOptionItem.Create(19910, "AddedTheSkeld", false, TabGroup.GameSettings, false)
@@ -2133,23 +2195,28 @@ public static class Options
             .SetParent(RandomMapsMode);
         AddedTheAirship = BooleanOptionItem.Create(19913, "AddedTheAirship", false, TabGroup.GameSettings, false)
             .SetParent(RandomMapsMode);
-        // MapDleks = CustomOption.Create(19914, Color.white, "AddedDleks", false, RandomMapMode);
+        // MapDleks = CustomOption.Create(19914, Color.white, "AddedDleks", false, RandomMapMode); */
 
-/*
-        SkeldChance = IntegerOptionItem.Create(19910, "SkeldChance", new(0, 100, 5), 0, TabGroup.GameSettings, false)
+        RandomMapsMode = BooleanOptionItem.Create(19900, "RandomMapsMode", false, TabGroup.GameSettings, false)
+            .SetHeader(true)
+            .SetColor(new Color32(19, 188, 233, byte.MaxValue));
+        SkeldChance = IntegerOptionItem.Create(19910, "SkeldChance", new(0, 100, 5), 10, TabGroup.GameSettings, false)
             .SetParent(RandomMapsMode)
             .SetValueFormat(OptionFormat.Percent);
-        MiraChance = IntegerOptionItem.Create(19911, "MiraChance", new(0, 100, 5), 0, TabGroup.GameSettings, false)
+        MiraChance = IntegerOptionItem.Create(19911, "MiraChance", new(0, 100, 5), 10, TabGroup.GameSettings, false)
             .SetParent(RandomMapsMode)
             .SetValueFormat(OptionFormat.Percent);
-        PolusChance = IntegerOptionItem.Create(19912, "PolusChance", new(0, 100, 5), 0, TabGroup.GameSettings, false)
+        PolusChance = IntegerOptionItem.Create(19912, "PolusChance", new(0, 100, 5), 10, TabGroup.GameSettings, false)
             .SetParent(RandomMapsMode)
             .SetValueFormat(OptionFormat.Percent);
-        AirshipChance = IntegerOptionItem.Create(19913, "AirshipChance", new(0, 100, 5), 0, TabGroup.GameSettings, false)
+        AirshipChance = IntegerOptionItem.Create(19913, "AirshipChance", new(0, 100, 5), 10, TabGroup.GameSettings, false)
             .SetParent(RandomMapsMode)
             .SetValueFormat(OptionFormat.Percent);
+        //MapDleksChance = IntegerOptionItem.Create(19914, "MapDleks", new(0, 100, 5), 10, TabGroup.GameSettings, false)
+        //    .SetParent(RandomMapsMode)
+        //    .SetValueFormat(OptionFormat.Percent);
 
-*/
+
 
         // Random Spawn
         RandomSpawn = BooleanOptionItem.Create(22000, "RandomSpawn", false, TabGroup.GameSettings, false)
@@ -2620,6 +2687,11 @@ public static class Options
         FixFirstKillCooldown = BooleanOptionItem.Create(23900, "FixFirstKillCooldown", true, TabGroup.GameSettings, false)
             .SetGameMode(CustomGameMode.Standard)
            .SetColor(new Color32(193, 255, 209, byte.MaxValue));
+        FixKillCooldownValue = FloatOptionItem.Create(23905, "FixKillCooldownValue", new(0f, 180f, 2.5f), 15f, TabGroup.GameSettings, false)
+            .SetValueFormat(OptionFormat.Seconds)
+            .SetParent(FixFirstKillCooldown);
+
+
 
         // 首刀保护
         ShieldPersonDiedFirst = BooleanOptionItem.Create(24000, "ShieldPersonDiedFirst", false, TabGroup.GameSettings, false)

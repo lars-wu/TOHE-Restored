@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using AmongUs.GameOptions;
 using HarmonyLib;
 using Hazel;
@@ -8,7 +9,7 @@ using static TOHE.Options;
 
 namespace TOHE.Roles.Neutral
 {
-    public static class Ritualist
+    public static class PotionMaster
     {
         private static readonly int Id = 13000;
         public static List<byte> playerIdList = new();
@@ -24,13 +25,13 @@ namespace TOHE.Roles.Neutral
 
         public static void SetupCustomOption()
         {
-        SetupSingleRoleOptions(Id, TabGroup.NeutralRoles, CustomRoles.Ritualist, 1, zeroOne: false);
-            KillCooldown = FloatOptionItem.Create(Id + 10, "KillCooldown", new(0f, 180f, 2.5f), 30f, TabGroup.NeutralRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Ritualist])
+        SetupSingleRoleOptions(Id, TabGroup.NeutralRoles, CustomRoles.PotionMaster, 1, zeroOne: false);
+            KillCooldown = FloatOptionItem.Create(Id + 10, "KillCooldown", new(0f, 180f, 2.5f), 30f, TabGroup.NeutralRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.PotionMaster])
                 .SetValueFormat(OptionFormat.Seconds);
-            RitualMaxCount = IntegerOptionItem.Create(Id + 11, "RitualMaxCount", new(1, 15, 1), 5, TabGroup.NeutralRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Ritualist])
+            RitualMaxCount = IntegerOptionItem.Create(Id + 11, "RitualMaxCount", new(1, 15, 1), 5, TabGroup.NeutralRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.PotionMaster])
                 .SetValueFormat(OptionFormat.Times);
-        CanVent = BooleanOptionItem.Create(Id + 12, "CanVent", true, TabGroup.NeutralRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Ritualist]);
-    //    HasImpostorVision = BooleanOptionItem.Create(Id + 13, "ImpostorVision", true, TabGroup.NeutralRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Ritualist]);
+        CanVent = BooleanOptionItem.Create(Id + 12, "CanVent", true, TabGroup.NeutralRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.PotionMaster]);
+    //    HasImpostorVision = BooleanOptionItem.Create(Id + 13, "ImpostorVision", true, TabGroup.NeutralRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.PotionMaster]);
         }
         public static void Init()
         {
@@ -51,9 +52,11 @@ namespace TOHE.Roles.Neutral
                 Main.ResetCamPlayerList.Add(playerId);
         }
 
+        public static bool IsEnable => playerIdList.Any();
+
         private static void SendRPC(byte playerId, byte targetId)
         {
-            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetRitualist, SendOption.Reliable, -1);
+            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetPotionMaster, SendOption.Reliable, -1);
             writer.Write(playerId);
             writer.Write(RitualCount[playerId]);
             writer.Write(targetId);
@@ -74,15 +77,12 @@ namespace TOHE.Roles.Neutral
                     RitualTarget.Add(playerId, new());
             }
         }
-
-        public static bool IsEnable => playerIdList.Count > 0;
         public static void SetKillCooldown(byte id)
         {
             Main.AllPlayerKillCooldown[id] = KillCooldown.GetFloat();
         }
         public static bool OnCheckMurder(PlayerControl killer, PlayerControl target)
         {
-        if (target.Is(CustomRoles.Ritualist)) return true;
 
             if (RitualCount[killer.PlayerId] > 0)
             {
@@ -105,7 +105,7 @@ namespace TOHE.Roles.Neutral
             {
                 RitualCount[killer.PlayerId]--;
                 RitualTarget[killer.PlayerId].Add(target.PlayerId);
-                Logger.Info($"{killer.GetNameWithRole()}：占った 占い先→{target.GetNameWithRole()} || 残り{RitualCount[killer.PlayerId]}回", "Ritualist");
+                Logger.Info($"{killer.GetNameWithRole()}：占った 占い先→{target.GetNameWithRole()} || 残り{RitualCount[killer.PlayerId]}回", "PotionMaster");
                 Utils.NotifyRoles(SpecifySeer: killer);
 
                 SendRPC(killer.PlayerId, target.PlayerId);
@@ -132,6 +132,6 @@ namespace TOHE.Roles.Neutral
             player.Data.Role.CanVent = canUse;
         }
 
-        public static string GetRitualCount(byte playerId) => Utils.ColorString(RitualCount[playerId] > 0 ? Utils.GetRoleColor(CustomRoles.Ritualist).ShadeColor(0.25f) : Color.gray, RitualCount.TryGetValue(playerId, out var shotLimit) ? $"({shotLimit})" : "Invalid");
+        public static string GetRitualCount(byte playerId) => Utils.ColorString(RitualCount[playerId] > 0 ? Utils.GetRoleColor(CustomRoles.PotionMaster).ShadeColor(0.25f) : Color.gray, RitualCount.TryGetValue(playerId, out var shotLimit) ? $"({shotLimit})" : "Invalid");
     }
 }

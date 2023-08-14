@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using static TOHE.Options;
 using static TOHE.Translator;
 
@@ -35,7 +36,7 @@ public static class Divinator
         playerIdList.Add(playerId);
         CheckLimit.TryAdd(playerId, CheckLimitOpt.GetInt());
     }
-    public static bool IsEnable => playerIdList.Count > 0;
+    public static bool IsEnable => playerIdList.Any();
     public static void OnVote(PlayerControl player, PlayerControl target)
     {
         if (player == null || target == null) return;
@@ -97,6 +98,7 @@ public static class Divinator
                 CustomRoles.Counterfeiter or
                 CustomRoles.Greedier or
                 CustomRoles.Merchant or
+                CustomRoles.SoulCollector or
                 CustomRoles.Trickster
                 => "Result3",
 
@@ -121,13 +123,16 @@ public static class Divinator
                 CustomRoles.EvilTracker or
                 CustomRoles.Mortician or
                 CustomRoles.Tracefinder or
+                CustomRoles.Seeker or
                 CustomRoles.Tracker
                 => "Result6",
 
 
                 CustomRoles.Bodyguard or
                 CustomRoles.Bomber or
+                CustomRoles.Agitater or
                 CustomRoles.FireWorks or
+                CustomRoles.Lookout or
                 CustomRoles.Nuker
                 => "Result7",
 
@@ -151,12 +156,14 @@ public static class Divinator
                 CustomRoles.Dictator or
                 CustomRoles.Judge or
                 CustomRoles.CursedSoul or
+                CustomRoles.Cleanser or
                 CustomRoles.CursedWolf
                 => "Result10",
 
                 CustomRoles.Addict or
                 CustomRoles.Escapee or
                 CustomRoles.Miner or
+                CustomRoles.Chronomancer or
                 CustomRoles.Morphling
                 => "Result11",
 
@@ -193,6 +200,7 @@ public static class Divinator
                 CustomRoles.Masochist or
                 CustomRoles.Inhibitor or
                 CustomRoles.SabotageMaster or
+                CustomRoles.Shaman or
                 CustomRoles.Saboteur
                 => "Result16",
 
@@ -216,8 +224,9 @@ public static class Divinator
                 CustomRoles.EvilGuesser or
                 CustomRoles.NiceGuesser or
                 CustomRoles.DarkHide or
-                CustomRoles.Conjuror or
+                CustomRoles.Ritualist or
                 CustomRoles.Camouflager or
+                CustomRoles.Shade or
                 CustomRoles.Chameleon
                 => "Result19",
 
@@ -247,7 +256,8 @@ public static class Divinator
 
                 CustomRoles.Divinator or
                 CustomRoles.EvilDiviner or
-                CustomRoles.Ritualist or
+                CustomRoles.PotionMaster or
+                CustomRoles.Occultist or
                 CustomRoles.HexMaster or
                 CustomRoles.Witch
                 => "Result23",
@@ -264,7 +274,8 @@ public static class Divinator
                 CustomRoles.SwordsMan or
                 CustomRoles.Veteran or
                 CustomRoles.Shroud or
-                CustomRoles.Hangman
+                CustomRoles.Hangman or
+                CustomRoles.Pitfall
                 => "Result25",
 
                 CustomRoles.Mediumshiper or

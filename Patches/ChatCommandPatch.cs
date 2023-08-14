@@ -228,6 +228,20 @@ internal class ChatCommands
                     canceled = true;
                     Utils.ShowHelp(PlayerControl.LocalPlayer.PlayerId);
                     break;
+
+    /*        case "/icons":
+                { 
+                    Utils.SendMessage(GetString("Command.icons"), PlayerControl.LocalPlayer.PlayerId);
+                    break;
+                }
+
+            case "/iconhelp":
+                { 
+                    Utils.SendMessage(GetString("Command.icons"));
+                    break;
+                }*/
+
+
             case "/d":
             case "/death":
                     canceled = true;
@@ -249,6 +263,11 @@ internal class ChatCommands
                 if (Main.PlayerStates[PlayerControl.LocalPlayer.PlayerId].deathReason == PlayerState.DeathReason.Shrouded)
                 {
                     Utils.SendMessage(GetString("DeathCmd.YourName") + "<b>" + PlayerControl.LocalPlayer.GetRealName() + "</b>" + "\n\r" + GetString("DeathCmd.YourRole") + "<b>" + $"<color={Utils.GetRoleColorCode(PlayerControl.LocalPlayer.GetCustomRole())}>{Utils.GetRoleName(PlayerControl.LocalPlayer.GetCustomRole())}</color>" + "</b>" + "\n\r" + GetString("DeathCmd.Shrouded"), PlayerControl.LocalPlayer.PlayerId);
+                    break;
+                }
+                if (Main.PlayerStates[PlayerControl.LocalPlayer.PlayerId].deathReason == PlayerState.DeathReason.FollowingSuicide)
+                {
+                    Utils.SendMessage(GetString("DeathCmd.YourName") + "<b>" + PlayerControl.LocalPlayer.GetRealName() + "</b>" + "\n\r" + GetString("DeathCmd.YourRole") + "<b>" + $"<color={Utils.GetRoleColorCode(PlayerControl.LocalPlayer.GetCustomRole())}>{Utils.GetRoleName(PlayerControl.LocalPlayer.GetCustomRole())}</color>" + "</b>" + "\n\r" + GetString("DeathCmd.Lovers"), PlayerControl.LocalPlayer.PlayerId);
                     break;
                 }
                 var killer = PlayerControl.LocalPlayer.GetRealKiller();
@@ -595,7 +614,7 @@ internal class ChatCommands
             "膽小" or "胆小" => GetString("Oblivious"),
             "迷惑者" or "迷幻" => GetString("Bewilder"),
             "sun" => GetString("Sunglasses"),
-            "蠢蛋" or "笨蛋" or "蠢狗" or "傻逼" => GetString("Fool"),
+            "蠢蛋" or "蠢狗" or "傻逼" => GetString("Fool"),
             "冤罪師" or "冤罪" => GetString("Innocent"),
             "資本家" or "资本主义" or "资本" => GetString("Capitalism"),
             "老兵" => GetString("Veteran"),
@@ -863,6 +882,11 @@ internal class ChatCommands
                     else Utils.SendMessage("Winner: " + string.Join(", ", Main.winnerNameList), player.PlayerId);
                     break;
 
+    /*        case "/icons":
+                { 
+                    Utils.SendMessage(GetString("Command.icons"), player.PlayerId);
+                    break;
+                } */
 
 
             case "/d":
@@ -886,6 +910,11 @@ internal class ChatCommands
                 if (Main.PlayerStates[player.PlayerId].deathReason == PlayerState.DeathReason.Shrouded)
                 {
                     Utils.SendMessage(GetString("DeathCmd.YourName") + "<b>" + player.GetRealName() + "</b>" + "\n\r" + GetString("DeathCmd.YourRole") + "<b>" + $"<color={Utils.GetRoleColorCode(player.GetCustomRole())}>{Utils.GetRoleName(player.GetCustomRole())}</color>" + "</b>" + "\n\r" + GetString("DeathCmd.Shrouded"), player.PlayerId);
+                    break;
+                }
+                if (Main.PlayerStates[player.PlayerId].deathReason == PlayerState.DeathReason.FollowingSuicide)
+                {
+                    Utils.SendMessage(GetString("DeathCmd.YourName") + "<b>" + player.GetRealName() + "</b>" + "\n\r" + GetString("DeathCmd.YourRole") + "<b>" + $"<color={Utils.GetRoleColorCode(player.GetCustomRole())}>{Utils.GetRoleName(player.GetCustomRole())}</color>" + "</b>" + "\n\r" + GetString("DeathCmd.Lovers"), player.PlayerId);
                     break;
                 }
 

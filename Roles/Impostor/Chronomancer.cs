@@ -1,9 +1,5 @@
-using Hazel;
-using MS.Internal.Xml.XPath;
 using System.Collections.Generic;
 using System.Linq;
-using TOHE.Modules;
-using UnityEngine;
 using static TOHE.Options;
 
 namespace TOHE.Roles.Impostor;
@@ -19,8 +15,8 @@ public static class Chronomancer
 
     public static void SetupCustomOption()
     {
-        SetupRoleOptions(Id, TabGroup.OtherRoles, CustomRoles.Chronomancer);
-        KillCooldown = FloatOptionItem.Create(Id + 10, "ChronomancerKillCooldown", new(0f, 180f, 2.5f), 30f, TabGroup.OtherRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Chronomancer])
+        SetupRoleOptions(Id, TabGroup.ImpostorRoles, CustomRoles.Chronomancer);
+        KillCooldown = FloatOptionItem.Create(Id + 10, "ChronomancerKillCooldown", new(0f, 180f, 2.5f), 30f, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Chronomancer])
             .SetValueFormat(OptionFormat.Seconds);
     }
 
@@ -38,10 +34,10 @@ public static class Chronomancer
         firstKill.Add(playerId, -1);
         ChargedTime.Add(playerId, 0);
         lastCooldownStart.Add(playerId, now);
-
     }
 
-    public static bool IsEnable => playerIdList.Count > 0;
+    public static bool IsEnable => playerIdList.Any();
+
     public static void SetKillCooldown(byte id)
     {
         long now = Utils.GetTimeStamp();

@@ -54,13 +54,11 @@ public static class HexMaster
         var pc = Utils.GetPlayerById(playerId);
         pc.AddDoubleTrigger();
 
-            if (!AmongUsClient.Instance.AmHost) return;
-                if (!Main.ResetCamPlayerList.Contains(playerId))
-                Main.ResetCamPlayerList.Add(playerId);
-
-
+        if (!AmongUsClient.Instance.AmHost) return;
+        if (!Main.ResetCamPlayerList.Contains(playerId))
+            Main.ResetCamPlayerList.Add(playerId);
     }
-    public static bool IsEnable => playerIdList.Count > 0;
+    public static bool IsEnable => playerIdList.Any();
     private static void SendRPC(bool doHex, byte hexId, byte target = 255)
     {
         if (doHex)
@@ -170,6 +168,7 @@ public static class HexMaster
         if (Medic.ProtectList.Contains(target.PlayerId)) return false;
         if (target.Is(CustomRoles.Pestilence)) return true;
         if (target.Is(CustomRoles.HexMaster)) return true;
+        if (target.GetCustomRole().IsCoven()) return false;
 
         if (NowSwitchTrigger == SwitchTrigger.DoubleTrigger)
         {
