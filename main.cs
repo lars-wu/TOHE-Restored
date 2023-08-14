@@ -683,6 +683,7 @@ public enum CustomRoles
     Reverie,
     Lookout,
     Monitor,
+    Enigma,
     //Neutral
     Arsonist,
     Seeker,
