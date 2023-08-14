@@ -446,7 +446,7 @@ public class PlayerGameOptionsSender : GameOptionsSender
         Dazzler.SetDazzled(player, opt);
         Deathpact.SetDeathpactVision(player, opt);
         Spiritcaller.ReduceVision(opt, player);
-        Pitfall.ReduceVision(opt, player);
+        Pitfall.SetPitfallTrapVision(opt, player);
 
         foreach (var subRole in Main.PlayerStates[player.PlayerId].SubRoles)
         {
