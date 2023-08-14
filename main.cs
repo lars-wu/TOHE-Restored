@@ -901,6 +901,7 @@ public enum CustomWinner
     Coven = CustomRoles.CovenLeader,
     Seeker = CustomRoles.Seeker,
     SoulCollector = CustomRoles.SoulCollector,
+    Famine = CustomRoles.Famine
 }
 public enum AdditionalWinners
 {

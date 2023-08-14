@@ -10,7 +10,6 @@ using UnityEngine;
 using TOHE.Roles.Neutral;
 using Object = UnityEngine.Object;
 using static TOHE.Translator;
-using TOHE.Roles.Neutral;
 
 namespace TOHE;
 
