@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static TOHE.Options;
-using static UnityEngine.GraphicsBuffer;
-using static TOHE.Translator;
 using Hazel;
-using MS.Internal.Xml.XPath;
+using static TOHE.Options;
+using static TOHE.Translator;
 
 namespace TOHE.Roles.Crewmate
 {
@@ -15,123 +10,111 @@ namespace TOHE.Roles.Crewmate
     {
         private static readonly int Id = 8100;
         private static List<byte> playerIdList = new();
+        private static Dictionary<byte, List<EnigmaClue>> ShownClues = new();
 
-        private static string HatClue1 = "The Killer wears a Hat!";
-        private static string HatClue2 = "The Killer does not wear a Hat!";
-        private static string HatClue3 = "The Killer wears {0} as a Hat!";
-        private static string SkinClue1 = "The Killer wears a Skin!";
-        private static string SkinClue2 = "The Killer does not wear a Skin!";
-        private static string SkinClue3 = "The Killer wears {0} as a Skin!";
-        private static string VisorClue1 = "The Killer wears a Visor!";
-        private static string VisorClue2 = "The Killer does not wear a Visor!";
-        private static string VisorClue3 = "The Killer wears {0} as a Visor!";
-        private static string PetClue1 = "The Killer does have a Pet!";
-        private static string PetClue2 = "The Killer does not have as a Pet!";
-        private static string PetClue3 = "The Killer has {0} as a Pet!";
-        private static string NameClue1 = "The Name of the Killer contains a {0}!";
-        private static string NameClue2 = "The Name of the Killer contains a {0} and a {1}!";
-        private static string NameClue3 = "The Name of the Killer contains a {0} and a {1} and a {2}!";
-        private static string ColorClue1 = "The Killer has a light color!";
-        private static string ColorClue2 = "The Killer has a dark color!";
-        private static string LocationClue = "The Last Room the Killer was in is {0}!";
-        private static string KillerStatusClue1 = "The Killer is still Alive!";
-        private static string KillerStatusClue2 = "The Killer is already Dead!";
-        private static string KillerStatusClue3 = "The Killer is currently inside a Vent!";
-        private static string KillerRoleClue1 = "The Killer is an Impostor!";
-        private static string KillerRoleClue2 = "The Killer is Neutral!";
-        private static string KillerRoleClue3 = "The Killer is a Crewmate!";
-        private static string KillerRoleClue4 = "The Killer's Role is {0}!";
-        private static string KillerRoleClue5 = "The Killer's killing method resulted in {0}!"; // deathreason
-        private static string KillerRoleClue6 = "The Killer can change his appearance!";
-        private static string KillerRoleTypeClue1 = "The Killer is a Concealing Impostor!";
-        private static string KillerRoleTypeClue2 = "The Killer is a Hindering Impostor!";
-        private static string KillerRoleTypeClue3 = "The Killer is a Killing Impostor!";
-        private static string KillerRoleTypeClue4 = "The Killer is a Support Impostor!";
-        
-        //private static string KillerKillAmountClue = "The Killer has already killed {0} people!";
-        //private static string RandomClue1 = "The Killer killed with a Knife!";
-        //private static string RandomClue2 = "The Killer killed with a Pistol!";
-        //private static string RandomClue3 = "The Killer killed with a Laserbeam!";
-        //private static string RandomClue4 = "The Killer killed with a Neck Twist!";
+        public static OptionItem EnigmaClueStage1Tasks;
+        public static OptionItem EnigmaClueStage2Tasks;
+        public static OptionItem EnigmaClueStage3Tasks;
+        public static OptionItem EnigmaClueStage2Probability;
+        public static OptionItem EnigmaClueStage3Probability;
 
-        private static List<string> EnigmaCluesStage1 = new List<string>
-        {
-            HatClue1,
-            HatClue2,
-            SkinClue1,
-            SkinClue2,
-            VisorClue1,
-            VisorClue2,
-            PetClue1,
-            PetClue2,
-            NameClue1,
-            KillerStatusClue1,
-            KillerStatusClue2,
-            KillerStatusClue3,
-            KillerRoleClue1,
-            KillerRoleClue2,
-            KillerRoleClue3,
-            KillerRoleClue6,
-        };
-
-        private static List<string> EnigmaCluesStage2 = new List<string>
-        {
-            ColorClue1,
-            ColorClue2,
-            LocationClue,
-            KillerRoleClue4,
-            KillerRoleClue5,
-        };
-
-        private static List<string> EnigmaCluesStage3 = new List<string>
-        {
-            HatClue3,
-            SkinClue3,
-            VisorClue3,
-            PetClue3,
-            NameClue2,
-            NameClue3,
+        private static List<EnigmaClue> EnigmaClues = new List<EnigmaClue>
+        { 
+            new EnigmaClue { ClueStage = 1, EnigmaClueType = EnigmaClueType.HatClue },
+            new EnigmaClue { ClueStage = 3, EnigmaClueType = EnigmaClueType.HatClue },
+            new EnigmaClue { ClueStage = 1, EnigmaClueType = EnigmaClueType.VisorClue },
+            new EnigmaClue { ClueStage = 3, EnigmaClueType = EnigmaClueType.VisorClue },
+            new EnigmaClue { ClueStage = 1, EnigmaClueType = EnigmaClueType.SkinClue },
+            new EnigmaClue { ClueStage = 3, EnigmaClueType = EnigmaClueType.SkinClue },
+            new EnigmaClue { ClueStage = 1, EnigmaClueType = EnigmaClueType.PetClue },
+            new EnigmaClue { ClueStage = 3, EnigmaClueType = EnigmaClueType.PetClue },
+            new EnigmaClue { ClueStage = 1, EnigmaClueType = EnigmaClueType.NameClue },
+            new EnigmaClue { ClueStage = 2, EnigmaClueType = EnigmaClueType.NameClue },
+            new EnigmaClue { ClueStage = 3, EnigmaClueType = EnigmaClueType.NameClue },
+            new EnigmaClue { ClueStage = 1, EnigmaClueType = EnigmaClueType.NameLengthClue },
+            new EnigmaClue { ClueStage = 2, EnigmaClueType = EnigmaClueType.NameLengthClue },
+            new EnigmaClue { ClueStage = 3, EnigmaClueType = EnigmaClueType.NameLengthClue },
+            new EnigmaClue { ClueStage = 1, EnigmaClueType = EnigmaClueType.ColorClue },
+            new EnigmaClue { ClueStage = 2, EnigmaClueType = EnigmaClueType.LocationClue },
+            new EnigmaClue { ClueStage = 1, EnigmaClueType = EnigmaClueType.KillerStatusClue },
+            new EnigmaClue { ClueStage = 1, EnigmaClueType = EnigmaClueType.KillerRoleClue },
+            new EnigmaClue { ClueStage = 2, EnigmaClueType = EnigmaClueType.KillerRoleClue }
         };
 
         public static void SetupCustomOption()
         {
             SetupRoleOptions(Id, TabGroup.CrewmateRoles, CustomRoles.Enigma);
+            EnigmaClueStage1Tasks = FloatOptionItem.Create(Id + 11, "EnigmaClueStage1Tasks", new(1f, 10f, 1f), 1f, TabGroup.CrewmateRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Enigma])
+                .SetValueFormat(OptionFormat.Times);
+            EnigmaClueStage2Tasks = FloatOptionItem.Create(Id + 12, "EnigmaClueStage2Tasks", new(1f, 10f, 1f), 3f, TabGroup.CrewmateRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Enigma])
+                .SetValueFormat(OptionFormat.Times);
+            EnigmaClueStage3Tasks = FloatOptionItem.Create(Id + 13, "EnigmaClueStage3Tasks", new(1f, 10f, 1f), 6f, TabGroup.CrewmateRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Enigma])
+                .SetValueFormat(OptionFormat.Times);
+            EnigmaClueStage2Probability = IntegerOptionItem.Create(Id + 14, "EnigmaClueStage2Probability", new(0, 100, 5), 80, TabGroup.CrewmateRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Enigma])
+                .SetValueFormat(OptionFormat.Percent);
+            EnigmaClueStage3Probability = IntegerOptionItem.Create(Id + 15, "EnigmaClueStage3Probability", new(0, 100, 5), 80, TabGroup.CrewmateRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Enigma])
+                .SetValueFormat(OptionFormat.Percent);
+
+            OverrideTasksData.Create(Id + 20, TabGroup.CrewmateRoles, CustomRoles.Enigma);
         }
         public static void Init()
         {
             playerIdList = new();
+            ShownClues = new();
         }
         public static void Add(byte playerId)
         {
             playerIdList.Add(playerId);
+            ShownClues.Add(playerId, new List<EnigmaClue>());
         }
         public static bool IsEnable => playerIdList.Count > 0;
 
-        public static void OnReportDeadBody(PlayerControl pc, GameData.PlayerInfo target)
+        public static void OnReportDeadBody(GameData.PlayerInfo targetInfo)
         {
-            if (target == null || pc.PlayerId == target.PlayerId) return;
+            if (targetInfo == null || !IsEnable) return;
 
-            string title = "Enigma Clue!";
-            string msg = "";
+            var target = Utils.GetPlayerById(targetInfo.PlayerId);
+            if (target == null) return;
 
-            var rd = new System.Random();
-            int tasksDone = 0;
-            if (tasksDone > 6)
+            PlayerControl killer = target.GetRealKiller();
+            string title;
+            string msg;
+            var rd = IRandom.Instance;
+
+            foreach (var playerId in playerIdList)
             {
+                var enigmaPlayer = Utils.GetPlayerById(playerId);
+                int tasksCompleted = enigmaPlayer.GetPlayerTaskState().CompletedTasksCount;
+                int stage = 0;
+                bool showStageClue = false;
+
+                if (tasksCompleted >= EnigmaClueStage3Tasks.GetInt())
+                {
+                    stage = 3;
+                    showStageClue = rd.Next(0, 100) < EnigmaClueStage3Probability.GetInt();
+                }
+                else if (tasksCompleted >= EnigmaClueStage2Tasks.GetInt())
+                {
+                    stage = 2;
+                    showStageClue = rd.Next(0, 100) < EnigmaClueStage2Probability.GetInt();
+                }
+                else if (tasksCompleted >= EnigmaClueStage1Tasks.GetInt())
+                    stage = 1;
+
+                var clues = EnigmaClues.Where(a => a.ClueStage <= stage && 
+                    !ShownClues[playerId].Any(b => b.EnigmaClueType == a.EnigmaClueType && b.ClueStage == a.ClueStage))
+                    .ToList();
+                if (clues.Count == 0)
+                    continue;
+                if (showStageClue && clues.Any(a => a.ClueStage == stage))
+                    clues = clues.Where(a => a.ClueStage == stage).ToList();
+
+                EnigmaClue clue = clues[rd.Next(0, clues.Count)];
                 
-            }
-            else if (tasksDone > 2)
-            {
+                ShownClues[playerId].Add(new EnigmaClue { ClueStage = clue.ClueStage, EnigmaClueType = clue.EnigmaClueType });
 
-            }
-            else
-            {
-                msg = EnigmaCluesStage1[rd.Next(0, EnigmaCluesStage1.Count)];
-            }
-
-            foreach (var enigma in playerIdList)
-            {
-                var enigmaPlayer = Utils.GetPlayerById(enigma);
+                title = GetTitleForClue(clue.EnigmaClueType);
+                msg = GetMessageForClue(stage, clue.EnigmaClueType, killer, showStageClue);
 
                 var writer = CustomRpcSender.Create("EngimaClueMessage", SendOption.None);
                 writer.StartMessage(enigmaPlayer.GetClientId());
@@ -148,18 +131,292 @@ namespace TOHE.Roles.Crewmate
                 writer.SendMessage();
             }
         }
+
+        private static string GetMessageForClue(int stage, EnigmaClueType clueType, PlayerControl killer, bool showStageClue)
+        {
+            var rd = IRandom.Instance;
+            GameData.PlayerOutfit killerOutfit;
+            string killerName;
+
+            switch (clueType)
+            {
+                case EnigmaClueType.HatClue:
+                    killerOutfit = Camouflage.PlayerSkins[killer.PlayerId];
+                    if (string.IsNullOrEmpty(killerOutfit.HatId))
+                        return GetString("EnigmaClueHat2");
+
+                    switch (stage)
+                    {
+                        case 1:
+                        case 2:
+                            return GetString("EnigmaClueHat1");
+                        case 3:
+                            if (showStageClue)
+                                return string.Format(GetString("EnigmaClueHat3"), killerOutfit.HatId);
+                            return GetString("EnigmaClueHat1");
+                    }
+                    
+                    break;
+                case EnigmaClueType.VisorClue:
+                    killerOutfit = Camouflage.PlayerSkins[killer.PlayerId];
+                    if (string.IsNullOrEmpty(killerOutfit.VisorId))
+                        return GetString("EnigmaClueVisor2");
+
+                    switch (stage)
+                    {
+                        case 1:
+                        case 2:
+                            return GetString("EnigmaClueVisor1");
+                        case 3:
+                            if (showStageClue)
+                                return string.Format(GetString("EnigmaClueVisor3"), killerOutfit.VisorId);
+                            return GetString("EnigmaClueVisor1");
+                    }
+
+                    break;
+                case EnigmaClueType.SkinClue:
+                    killerOutfit = Camouflage.PlayerSkins[killer.PlayerId];
+                    if (string.IsNullOrEmpty(killerOutfit.SkinId))
+                        return GetString("EnigmaClueSkin2");
+
+                    switch (stage)
+                    {
+                        case 1:
+                        case 2:
+                            return GetString("EnigmaClueSkin1");
+                        case 3:
+                            if (showStageClue)
+                                return string.Format(GetString("EnigmaClueSkin3"), killerOutfit.SkinId);
+                            return GetString("EnigmaClueSkin1");
+                    }
+
+                    break;
+                case EnigmaClueType.PetClue:
+                    killerOutfit = Camouflage.PlayerSkins[killer.PlayerId];
+                    if (string.IsNullOrEmpty(killerOutfit.PetId))
+                        return GetString("EnigmaCluePet2");
+
+                    switch (stage)
+                    {
+                        case 1:
+                        case 2:
+                            return GetString("EnigmaCluePet1");
+                        case 3:
+                            if (showStageClue)
+                                return string.Format(GetString("EnigmaCluePet3"), killerOutfit.PetId);
+                            return GetString("EnigmaCluePet1");
+                    }
+
+                    break;
+                case EnigmaClueType.NameClue:
+                    killerName = killer.GetRealName();
+                    string letter = killerName[rd.Next(0, killerName.Length - 1)].ToString();
+                    string letter2 = string.Empty;
+                    string letter3 = string.Empty;
+
+                    switch (stage)
+                    {
+                        case 1:
+                            return string.Format(string.Format(GetString("EnigmaClueName1"), letter));
+                        case 2:
+                            if (showStageClue)
+                            {
+                                string tmpName = killerName.Where(a => a.ToString() != letter).ToString();
+                                if (!string.IsNullOrEmpty(tmpName))
+                                    letter2 = tmpName[rd.Next(0, tmpName.Length - 1)].ToString();
+                                return string.Format(GetString("EnigmaClueName2"), letter, letter2);
+                            }
+
+                            return GetString("EnigmaClueName1");
+                        case 3:
+                            if (showStageClue)
+                            {
+                                string tmpName = killerName.Where(a => a.ToString() != letter).ToString();
+                                if (!string.IsNullOrEmpty(tmpName))
+                                { 
+                                    letter2 = tmpName[rd.Next(0, tmpName.Length - 1)].ToString();
+                                    
+                                    tmpName = killerName.Where(a => a.ToString() != letter && a.ToString() != letter2).ToString();
+                                    if (!string.IsNullOrEmpty(tmpName))
+                                        letter3 = tmpName[rd.Next(0, tmpName.Length - 1)].ToString();
+                                }
+
+                                return string.Format(GetString("EnigmaClueName3"), letter, letter2, letter3);
+                            }
+                            if (rd.Next(0, 100) < EnigmaClueStage2Probability.GetInt())
+                            {
+                                string tmpName = killerName.Where(a => a.ToString() != letter).ToString();
+                                if (!string.IsNullOrEmpty(tmpName))
+                                    letter2 = tmpName[rd.Next(0, tmpName.Length - 1)].ToString();
+                                return string.Format(GetString("EnigmaClueName2"), letter, letter2);
+                            }
+
+                            return GetString("EnigmaClueName1");
+                    }
+
+                    break;
+                case EnigmaClueType.NameLengthClue:
+                    killerName = killer.GetRealName();
+                    
+                    int length = killerName.Length;
+                    int start = 0;
+                    int end = 0;
+
+                    switch (stage)
+                    {
+                        case 1:
+                            start = length - rd.Next(1, length) - 2;
+                            start = start < 0 ? 0 : start;
+                            end = length + rd.Next(1, length) + 2;
+                            break;
+
+                        case 2:
+                            if (showStageClue)
+                            {
+                                start = length - rd.Next(1, length);
+                                end = length + rd.Next(1, length);
+                            }
+                            else
+                            {
+                                start = length - rd.Next(1, length) - 2;
+                                start = start < 0 ? 0 : start;
+                                end = length + rd.Next(1, length) + 2;
+                            }
+                            break;
+
+                        case 3:
+                            if (showStageClue)
+                                return string.Format(string.Format(GetString("EnigmaClueNameLength2")), length);
+
+                            if (rd.Next(0, 100) < EnigmaClueStage2Probability.GetInt())
+                            {
+                                start = length - rd.Next(1, length);
+                                end = length + rd.Next(1, length);
+                            }
+                            else
+                            {
+                                start = length - rd.Next(1, length) - 2;
+                                start = start < 0 ? 0 : start;
+                                end = length + rd.Next(1, length) + 2;
+                            }
+                            break;
+                    }
+
+                    return string.Format(string.Format(GetString("EnigmaClueNameLength1")), start, end);
+                case EnigmaClueType.ColorClue:
+                    killerOutfit = Camouflage.PlayerSkins[killer.PlayerId];
+
+                    switch (killerOutfit.ColorId)
+                    {
+                        case 0:
+                        case 3:
+                        case 4:
+                        case 5:
+                        case 7:
+                        case 10:
+                        case 11:
+                        case 13:
+                        case 14:
+                        case 17:
+                            return GetString("EnigmaClueColor1");
+                        case 1:
+                        case 2:
+                        case 6:
+                        case 8:
+                        case 9:
+                        case 12:
+                        case 15:
+                        case 16:
+                            return GetString("EnigmaClueColor2");
+                    }
+
+                    break;
+                case EnigmaClueType.LocationClue:
+                    string room = string.Empty;
+                    var targetRoom = Main.PlayerStates[killer.PlayerId].LastRoom;
+                    if (targetRoom == null) room += GetString("FailToTrack");
+                    else room += GetString(targetRoom.RoomId.ToString());
+                    return string.Format(GetString("EnigmaClueLocation"), room);
+                case EnigmaClueType.KillerStatusClue:
+                    if (killer.inVent)
+                        return GetString("EnigmaClueStatus1");
+                    if (killer.onLadder)
+                        return GetString("EnigmaClueStatus2");
+                    if (killer.Data.IsDead)
+                        return GetString("EnigmaClueStatus3");
+                    return GetString("EnigmaClueStatus4");
+                case EnigmaClueType.KillerRoleClue:
+                    CustomRoles role = killer.GetCustomRole();
+                    switch (stage)
+                    {
+                        case 1:
+                            if (role.IsImpostor())
+                                return GetString("EnigmaClueRole1");
+                            if (role.IsNeutral())
+                                return GetString("EnigmaClueRole2");
+                            return GetString("EnigmaClueRole3");
+                        case 2:
+                            if (showStageClue)
+                                string.Format(GetString("EnigmaClueRole4"), killer.GetDisplayRoleName());
+                            if (role.IsImpostor())
+                                return GetString("EnigmaClueRole1");
+                            if (role.IsNeutral())
+                                return GetString("EnigmaClueRole2");
+                            return GetString("EnigmaClueRole3");
+                    }
+
+                    break;
+                //case EnigmaClueType.SecurityClue:
+                //    break;
+                //case EnigmaClueType.SabotageClue:
+                //    break;
+                //case EnigmaClueType.RandomClue:
+                //    break;
+                default:
+                    break;
+            }
+
+            return string.Empty;
+        }
+
+        private static string GetTitleForClue(EnigmaClueType clueType)
+        {
+            switch (clueType)
+            {
+                case EnigmaClueType.HatClue:
+                    return GetString("EnigmaClueHatTitle");
+                case EnigmaClueType.SkinClue:
+                    return GetString("EnigmaClueSkinTitle");
+                case EnigmaClueType.PetClue:
+                    return GetString("EnigmaCluePetTitle");
+                case EnigmaClueType.NameClue:
+                    return GetString("EnigmaClueNameTitle");
+                case EnigmaClueType.NameLengthClue:
+                    return GetString("EnigmaClueNameLengthTitle");
+                case EnigmaClueType.ColorClue:
+                    return GetString("EnigmaClueColorTitle");
+                case EnigmaClueType.LocationClue:
+                    return GetString("EnigmaClueLocationTitle");
+                case EnigmaClueType.KillerStatusClue:
+                    return GetString("EnigmaClueKillerStatusTitle");
+                case EnigmaClueType.KillerRoleClue:
+                    return GetString("EnigmaClueKillerRoleTitle");
+                default:
+                    return GetString("EnigmaClueTitle");
+            }
+        }
     }
 
     public class EnigmaClue
     {
-        public string Title { get; set; }
-        public string Message { get; set; }
-        public EnigmaClueTypes EnigmaClueType { get; set; }
+        public int ClueStage { get; set; }
+        public EnigmaClueType EnigmaClueType { get; set; }
     }
 
-    public enum EnigmaClueTypes
+    public enum EnigmaClueType
     {
-        HatClue = 0,
+        HatClue,
+        VisorClue,
         SkinClue,
         PetClue,
         NameClue,
@@ -167,10 +424,9 @@ namespace TOHE.Roles.Crewmate
         ColorClue,
         LocationClue,
         KillerStatusClue,
-        KillerColeClue,
-        KillerRoleTypeClue,
-        SecurityClue,
-        SabotageClue,
-        RandomClue
+        KillerRoleClue,
+        //SecurityClue,
+        //SabotageClue,
+        //RandomClue
     }
 }
