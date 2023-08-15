@@ -19,7 +19,7 @@ namespace TOHE.Roles.Crewmate
         public static OptionItem EnigmaClueStage3Probability;
 
         private static List<EnigmaClue> EnigmaClues = new List<EnigmaClue>
-        { 
+        {
             new EnigmaClue { ClueStage = 1, EnigmaClueType = EnigmaClueType.HatClue },
             new EnigmaClue { ClueStage = 3, EnigmaClueType = EnigmaClueType.HatClue },
             new EnigmaClue { ClueStage = 1, EnigmaClueType = EnigmaClueType.VisorClue },
@@ -77,6 +77,8 @@ namespace TOHE.Roles.Crewmate
             if (target == null) return;
 
             PlayerControl killer = target.GetRealKiller();
+            if (killer == null) return;
+
             string title;
             string msg;
             var rd = IRandom.Instance;

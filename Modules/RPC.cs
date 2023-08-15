@@ -1103,6 +1103,9 @@ internal static class RPC
             case CustomRoles.Pitfall:
                 Pitfall.Add(targetId);
                 break;
+            case CustomRoles.Enigma:
+                Enigma.Add(targetId);
+                break;
         }
         HudManager.Instance.SetHudActive(true);
     //    HudManager.Instance.Chat.SetVisible(true);

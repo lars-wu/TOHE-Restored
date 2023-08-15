@@ -2843,6 +2843,13 @@
 "PitfallTrapCauseVisionTime","陷阱造成的玩家视野大小的持续时间","Trap caused vision time","","",""
 "PitfallTrap","你掉进了一个陷阱！","You have fallen into a trap!","","",""
 
+"## Enigma Text Strings"
+"EnigmaClueStage1Tasks","","Number of Tasks to complete to see Stage 1 <color=#676798>Clues</color>","","",""
+"EnigmaClueStage2Tasks","","Number of Tasks to complete to see Stage 2 <color=#676798>Clues</color>","","",""
+"EnigmaClueStage3Tasks","","Number of Tasks to complete to see Stage 3 <color=#676798>Clues</color>","","",""
+"EnigmaClueStage2Probability","","Probability to see Stage 2 <color=#676798>Clues</color>","","",""
+"EnigmaClueStage3Probability","","Probability to see Stage 3 <color=#676798>Clues</color>","","",""
+
 "## Consigliere Text Strings"
 "DivinationMaxCount","最大显示次数","Maximum Reveals","Максимум раскрытий","",""
 
