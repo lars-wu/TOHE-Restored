@@ -295,6 +295,7 @@ internal class ChangeRoleSettings
             Seeker.Init();
             Pitfall.Init();
             Agitater.Init();
+            Enigma.Init();
 
             SoloKombatManager.Init();
             CustomWinnerHolder.Reset();
@@ -835,6 +836,9 @@ internal class SelectRolesPatch
                         break;
                     case CustomRoles.Pitfall:
                         Pitfall.Add(pc.PlayerId);
+                        break;
+                    case CustomRoles.Enigma:
+                        Enigma.Add(pc.PlayerId);
                         break;
                 }
                 foreach (var subRole in pc.GetCustomSubRoles())
