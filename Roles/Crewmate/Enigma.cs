@@ -147,6 +147,7 @@ namespace TOHE.Roles.Crewmate
             {
                 case EnigmaClueType.HatClue:
                     killerOutfit = Camouflage.PlayerSkins[killer.PlayerId];
+                    Logger.Info($"{killerOutfit.HatId}", "EnigmaClue");
                     if (string.IsNullOrEmpty(killerOutfit.HatId))
                         return GetString("EnigmaClueHat2");
 
@@ -164,6 +165,7 @@ namespace TOHE.Roles.Crewmate
                     break;
                 case EnigmaClueType.VisorClue:
                     killerOutfit = Camouflage.PlayerSkins[killer.PlayerId];
+                    Logger.Info($"{killerOutfit.VisorId}", "EnigmaClue");
                     if (string.IsNullOrEmpty(killerOutfit.VisorId))
                         return GetString("EnigmaClueVisor2");
 
@@ -181,6 +183,7 @@ namespace TOHE.Roles.Crewmate
                     break;
                 case EnigmaClueType.SkinClue:
                     killerOutfit = Camouflage.PlayerSkins[killer.PlayerId];
+                    Logger.Info($"{killerOutfit.SkinId}", "EnigmaClue");
                     if (string.IsNullOrEmpty(killerOutfit.SkinId))
                         return GetString("EnigmaClueSkin2");
 
@@ -198,6 +201,7 @@ namespace TOHE.Roles.Crewmate
                     break;
                 case EnigmaClueType.PetClue:
                     killerOutfit = Camouflage.PlayerSkins[killer.PlayerId];
+                    Logger.Info($"{killerOutfit.PetId}", "EnigmaClue");
                     if (string.IsNullOrEmpty(killerOutfit.PetId))
                         return GetString("EnigmaCluePet2");
 
@@ -219,6 +223,8 @@ namespace TOHE.Roles.Crewmate
                     string letter2 = string.Empty;
                     string letter3 = string.Empty;
 
+                    Logger.Info($"Letter1 {letter}", "EnigmaClue");
+
                     switch (stage)
                     {
                         case 1:
@@ -229,6 +235,8 @@ namespace TOHE.Roles.Crewmate
                                 string tmpName = killerName.Where(a => a.ToString() != letter).ToString();
                                 if (!string.IsNullOrEmpty(tmpName))
                                     letter2 = tmpName[rd.Next(0, tmpName.Length - 1)].ToString();
+
+                                Logger.Info($"tmpName {tmpName} Letter2 {letter2}", "EnigmaClue");
                                 return string.Format(GetString("EnigmaClueName2"), letter, letter2);
                             }
 
@@ -240,10 +248,13 @@ namespace TOHE.Roles.Crewmate
                                 if (!string.IsNullOrEmpty(tmpName))
                                 { 
                                     letter2 = tmpName[rd.Next(0, tmpName.Length - 1)].ToString();
-                                    
+                                    Logger.Info($"tmpName {tmpName} Letter2 {letter2}", "EnigmaClue");
+
                                     tmpName = killerName.Where(a => a.ToString() != letter && a.ToString() != letter2).ToString();
                                     if (!string.IsNullOrEmpty(tmpName))
                                         letter3 = tmpName[rd.Next(0, tmpName.Length - 1)].ToString();
+
+                                    Logger.Info($"tmpName {tmpName} letter3 {letter3}", "EnigmaClue");
                                 }
 
                                 return string.Format(GetString("EnigmaClueName3"), letter, letter2, letter3);
@@ -253,6 +264,8 @@ namespace TOHE.Roles.Crewmate
                                 string tmpName = killerName.Where(a => a.ToString() != letter).ToString();
                                 if (!string.IsNullOrEmpty(tmpName))
                                     letter2 = tmpName[rd.Next(0, tmpName.Length - 1)].ToString();
+
+                                Logger.Info($"tmpName {tmpName} letter2 {letter2}", "EnigmaClue");
                                 return string.Format(GetString("EnigmaClueName2"), letter, letter2);
                             }
 
