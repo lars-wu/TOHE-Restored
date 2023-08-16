@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Hazel;
+using MS.Internal.Xml.XPath;
 using static TOHE.Options;
 using static TOHE.Translator;
 
@@ -8,15 +9,18 @@ namespace TOHE.Roles.Crewmate
 {
     public class Enigma
     {
-        private static readonly int Id = 8100;
+        private static readonly int Id = 8460;
         private static List<byte> playerIdList = new();
         private static Dictionary<byte, List<EnigmaClue>> ShownClues = new();
-
+        
         public static OptionItem EnigmaClueStage1Tasks;
         public static OptionItem EnigmaClueStage2Tasks;
         public static OptionItem EnigmaClueStage3Tasks;
         public static OptionItem EnigmaClueStage2Probability;
         public static OptionItem EnigmaClueStage3Probability;
+
+        public static Dictionary<byte, string> MsgToSend = new();
+        public static Dictionary<byte, string> MsgToSendTitle = new(); 
 
         private static List<EnigmaClue> EnigmaClues = new List<EnigmaClue>
         {
@@ -61,6 +65,8 @@ namespace TOHE.Roles.Crewmate
         {
             playerIdList = new();
             ShownClues = new();
+            MsgToSend = new();
+            MsgToSendTitle = new();
         }
         public static void Add(byte playerId)
         {
@@ -118,19 +124,16 @@ namespace TOHE.Roles.Crewmate
                 title = GetTitleForClue(clue.EnigmaClueType);
                 msg = GetMessageForClue(stage, clue.EnigmaClueType, killer, showStageClue);
 
-                var writer = CustomRpcSender.Create("EngimaClueMessage", SendOption.None);
-                writer.StartMessage(enigmaPlayer.GetClientId());
-                writer.StartRpc(enigmaPlayer.NetId, (byte)RpcCalls.SetName)
-                    .Write(title)
-                    .EndRpc();
-                writer.StartRpc(enigmaPlayer.NetId, (byte)RpcCalls.SendChat)
-                    .Write(msg)
-                    .EndRpc();
-                writer.StartRpc(enigmaPlayer.NetId, (byte)RpcCalls.SetName)
-                    .Write(enigmaPlayer.Data.PlayerName)
-                    .EndRpc();
-                writer.EndMessage();
-                writer.SendMessage();
+                if (MsgToSend.ContainsKey(playerId))
+                {
+                    MsgToSend[playerId] = msg;
+                    MsgToSendTitle[playerId] = title;
+                }
+                else
+                {
+                    MsgToSend.Add(playerId, msg);
+                    MsgToSendTitle.Add(playerId, title);
+                }
             }
         }
 
@@ -400,9 +403,9 @@ namespace TOHE.Roles.Crewmate
                 case EnigmaClueType.LocationClue:
                     return GetString("EnigmaClueLocationTitle");
                 case EnigmaClueType.KillerStatusClue:
-                    return GetString("EnigmaClueKillerStatusTitle");
+                    return GetString("EnigmaClueStatusTitle");
                 case EnigmaClueType.KillerRoleClue:
-                    return GetString("EnigmaClueKillerRoleTitle");
+                    return GetString("EnigmaClueRoleTitle");
                 default:
                     return GetString("EnigmaClueTitle");
             }

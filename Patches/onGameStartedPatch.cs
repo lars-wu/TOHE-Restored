@@ -834,7 +834,7 @@ internal class SelectRolesPatch
                         break;
                     case CustomRoles.Enigma:
                         Enigma.Add(pc.PlayerId);
-                        break:
+                        break;
                 }
                 foreach (var subRole in pc.GetCustomSubRoles())
                 {
