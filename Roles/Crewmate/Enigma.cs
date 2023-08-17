@@ -148,8 +148,6 @@ namespace TOHE.Roles.Crewmate
             GameData.PlayerOutfit killerOutfit;
             string killerName;
 
-            clueType = EnigmaClueType.PetClue;
-
             switch (clueType)
             {
                 case EnigmaClueType.HatClue:
