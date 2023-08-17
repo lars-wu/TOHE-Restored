@@ -45,14 +45,19 @@ namespace TOHE.Roles.Crewmate
             new EnigmaClue { ClueStage = 2, EnigmaClueType = EnigmaClueType.KillerRoleClue }
         };
 
+        private static List<string> Letters = new List<string>
+        {
+            "a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"
+        };
+
         public static void SetupCustomOption()
         {
             SetupRoleOptions(Id, TabGroup.CrewmateRoles, CustomRoles.Enigma);
-            EnigmaClueStage1Tasks = FloatOptionItem.Create(Id + 11, "EnigmaClueStage1Tasks", new(1f, 10f, 1f), 1f, TabGroup.CrewmateRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Enigma])
+            EnigmaClueStage1Tasks = FloatOptionItem.Create(Id + 11, "EnigmaClueStage1Tasks", new(0f, 10f, 1f), 1f, TabGroup.CrewmateRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Enigma])
                 .SetValueFormat(OptionFormat.Times);
-            EnigmaClueStage2Tasks = FloatOptionItem.Create(Id + 12, "EnigmaClueStage2Tasks", new(1f, 10f, 1f), 3f, TabGroup.CrewmateRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Enigma])
+            EnigmaClueStage2Tasks = FloatOptionItem.Create(Id + 12, "EnigmaClueStage2Tasks", new(0f, 10f, 1f), 3f, TabGroup.CrewmateRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Enigma])
                 .SetValueFormat(OptionFormat.Times);
-            EnigmaClueStage3Tasks = FloatOptionItem.Create(Id + 13, "EnigmaClueStage3Tasks", new(1f, 10f, 1f), 6f, TabGroup.CrewmateRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Enigma])
+            EnigmaClueStage3Tasks = FloatOptionItem.Create(Id + 13, "EnigmaClueStage3Tasks", new(0f, 10f, 1f), 6f, TabGroup.CrewmateRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Enigma])
                 .SetValueFormat(OptionFormat.Times);
             EnigmaClueStage2Probability = IntegerOptionItem.Create(Id + 14, "EnigmaClueStage2Probability", new(0, 100, 5), 80, TabGroup.CrewmateRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Enigma])
                 .SetValueFormat(OptionFormat.Percent);
@@ -143,11 +148,14 @@ namespace TOHE.Roles.Crewmate
             GameData.PlayerOutfit killerOutfit;
             string killerName;
 
+            clueType = EnigmaClueType.PetClue;
+
             switch (clueType)
             {
                 case EnigmaClueType.HatClue:
                     killerOutfit = Camouflage.PlayerSkins[killer.PlayerId];
-                    if (string.IsNullOrEmpty(killerOutfit.HatId))
+                    Logger.Info($"{killerOutfit.HatId}", "EnigmaClue");
+                    if (killerOutfit.HatId == "hat_EmptyHat")
                         return GetString("EnigmaClueHat2");
 
                     switch (stage)
@@ -164,7 +172,8 @@ namespace TOHE.Roles.Crewmate
                     break;
                 case EnigmaClueType.VisorClue:
                     killerOutfit = Camouflage.PlayerSkins[killer.PlayerId];
-                    if (string.IsNullOrEmpty(killerOutfit.VisorId))
+                    Logger.Info($"{killerOutfit.VisorId}", "EnigmaClue");
+                    if (killerOutfit.VisorId == "visor_EmptyVisor")
                         return GetString("EnigmaClueVisor2");
 
                     switch (stage)
@@ -181,7 +190,8 @@ namespace TOHE.Roles.Crewmate
                     break;
                 case EnigmaClueType.SkinClue:
                     killerOutfit = Camouflage.PlayerSkins[killer.PlayerId];
-                    if (string.IsNullOrEmpty(killerOutfit.SkinId))
+                    Logger.Info($"{killerOutfit.SkinId}", "EnigmaClue");
+                    if (killerOutfit.SkinId == "skin_EmptySkin")
                         return GetString("EnigmaClueSkin2");
 
                     switch (stage)
@@ -198,7 +208,8 @@ namespace TOHE.Roles.Crewmate
                     break;
                 case EnigmaClueType.PetClue:
                     killerOutfit = Camouflage.PlayerSkins[killer.PlayerId];
-                    if (string.IsNullOrEmpty(killerOutfit.PetId))
+                    Logger.Info($"{killerOutfit.PetId}", "EnigmaClue");
+                    if (killerOutfit.PetId == "pet_EmptyPet")
                         return GetString("EnigmaCluePet2");
 
                     switch (stage)
@@ -217,22 +228,33 @@ namespace TOHE.Roles.Crewmate
                     killerName = killer.GetRealName();
                     string letter = killerName[rd.Next(0, killerName.Length - 1)].ToString();
                     string letter2 = string.Empty;
-                    string letter3 = string.Empty;
+                    string randomLetter;
+                    int random;
+
+                    Logger.Info($"Letter1 {letter}", "EnigmaClue");
 
                     switch (stage)
                     {
                         case 1:
-                            return string.Format(string.Format(GetString("EnigmaClueName1"), letter));
+                            randomLetter = Letters.Where(a => a != letter).ToArray()[rd.Next(0, Letters.Count - 2)];
+                            random = rd.Next(1, 2);
+                            if (random == 1) 
+                                return string.Format(string.Format(GetString("EnigmaClueName1"), letter, randomLetter));
+                            else 
+                                return string.Format(string.Format(GetString("EnigmaClueName1"), randomLetter, letter));
                         case 2:
                             if (showStageClue)
                             {
-                                string tmpName = killerName.Where(a => a.ToString() != letter).ToString();
-                                if (!string.IsNullOrEmpty(tmpName))
-                                    letter2 = tmpName[rd.Next(0, tmpName.Length - 1)].ToString();
-                                return string.Format(GetString("EnigmaClueName2"), letter, letter2);
+                                Logger.Info($"letter = {letter}", "EnigmaClue");
+                                return string.Format(GetString("EnigmaClueName2"), letter);
                             }
 
-                            return GetString("EnigmaClueName1");
+                            randomLetter = Letters.Where(a => a != letter).ToArray()[rd.Next(0, Letters.Count - 2)];
+                            random = rd.Next(1, 2);
+                            if (random == 1)
+                                return string.Format(string.Format(GetString("EnigmaClueName1"), letter, randomLetter));
+                            else
+                                return string.Format(string.Format(GetString("EnigmaClueName1"), randomLetter, letter));
                         case 3:
                             if (showStageClue)
                             {
@@ -240,23 +262,22 @@ namespace TOHE.Roles.Crewmate
                                 if (!string.IsNullOrEmpty(tmpName))
                                 { 
                                     letter2 = tmpName[rd.Next(0, tmpName.Length - 1)].ToString();
-                                    
-                                    tmpName = killerName.Where(a => a.ToString() != letter && a.ToString() != letter2).ToString();
-                                    if (!string.IsNullOrEmpty(tmpName))
-                                        letter3 = tmpName[rd.Next(0, tmpName.Length - 1)].ToString();
+                                    Logger.Info($"tmpName {tmpName} Letter2 {letter2}", "EnigmaClue");
                                 }
 
-                                return string.Format(GetString("EnigmaClueName3"), letter, letter2, letter3);
+                                return string.Format(GetString("EnigmaClueName3"), letter, letter2);
                             }
                             if (rd.Next(0, 100) < EnigmaClueStage2Probability.GetInt())
                             {
-                                string tmpName = killerName.Where(a => a.ToString() != letter).ToString();
-                                if (!string.IsNullOrEmpty(tmpName))
-                                    letter2 = tmpName[rd.Next(0, tmpName.Length - 1)].ToString();
-                                return string.Format(GetString("EnigmaClueName2"), letter, letter2);
+                                return string.Format(GetString("EnigmaClueName2"), letter);
                             }
 
-                            return GetString("EnigmaClueName1");
+                            randomLetter = Letters.Where(a => a != letter).ToArray()[rd.Next(0, Letters.Count - 2)];
+                            random = rd.Next(1, 2);
+                            if (random == 1)
+                                return string.Format(string.Format(GetString("EnigmaClueName1"), letter, randomLetter));
+                            else
+                                return string.Format(string.Format(GetString("EnigmaClueName1"), randomLetter, letter));
                     }
 
                     break;
