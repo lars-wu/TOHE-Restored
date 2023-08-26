@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 using static TOHE.Translator;
-using Object = UnityEngine.Object;
 
 namespace TOHE;
 
@@ -37,7 +36,7 @@ internal class ControllerManagerUpdatePatch
         //捕捉全屏快捷键
         if (GetKeysDown(KeyCode.LeftAlt, KeyCode.Return))
         {
-            new LateTask(SetResolutionManager.Postfix, 0.01f, "Fix Button Position");
+            _ = new LateTask(SetResolutionManager.Postfix, 0.01f, "Fix Button Position");
         }
         //职业介绍
         if (Input.GetKeyDown(KeyCode.F1) && GameStates.InGame && Options.CurrentGameMode == CustomGameMode.Standard)
@@ -84,7 +83,7 @@ internal class ControllerManagerUpdatePatch
             }
         }
         //更改分辨率
-        if (Input.GetKeyDown(KeyCode.F11))
+        if (GetKeysDown(KeyCode.F11, KeyCode.LeftAlt))
         {
             resolutionIndex++;
             if (resolutionIndex >= resolutions.Length) resolutionIndex = 0;

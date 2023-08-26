@@ -39,7 +39,7 @@ public static class Seeker
         DefaultSpeed = Main.AllPlayerSpeed[playerId];
 
         if (AmongUsClient.Instance.AmHost)
-            new LateTask(() =>
+            _ = new LateTask(() =>
             {
                 ResetTarget(Utils.GetPlayerById(playerId));
             }, 10f, "SeekerRound1");
@@ -97,7 +97,7 @@ public static class Seeker
             TotalPoints[killer.PlayerId] -= 1;
         }
         killer.SyncSettings();  //IDK WHAT DOES THIS DO!!
-        killer.RpcGuardAndKill();
+        if (!Options.DisableShieldAnimations.GetBool()) killer.RpcGuardAndKill();
         SetKillCooldown(killer.PlayerId);
         SendRPC(killer.PlayerId, setTarget: false);
     }
@@ -145,7 +145,7 @@ public static class Seeker
         Main.AllPlayerSpeed[player.PlayerId] = Main.MinSpeed;
         ReportDeadBodyPatch.CanReport[player.PlayerId] = false;
         player.MarkDirtySettings();
-        new LateTask(() =>
+        _ = new LateTask(() =>
         {
             Main.AllPlayerSpeed[player.PlayerId] = DefaultSpeed;
             ReportDeadBodyPatch.CanReport[player.PlayerId] = true;

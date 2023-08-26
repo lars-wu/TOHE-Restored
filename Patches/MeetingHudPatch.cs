@@ -110,6 +110,9 @@ class CheckForEndVotingPatch
                                 if (pc == null || voteTarget == null) break;
                                 Main.GodfatherTarget.Add(voteTarget.PlayerId);
                                 break;
+                            case CustomRoles.Jailer:
+                                Jailer.OnVote(pc, voteTarget);
+                                break;
                         }
                         if (voteTarget.Is(CustomRoles.Aware))
                         {
@@ -459,12 +462,12 @@ class CheckForEndVotingPatch
 
 
         name += "<size=0>";
-        new LateTask(() =>
+        _ = new LateTask(() =>
         {
             Main.DoBlockNameChange = true;
             if (GameStates.IsInGame) player.RpcSetName(name);
         }, 3.0f, "Change Exiled Player Name");
-        new LateTask(() =>
+        _ = new LateTask(() =>
         {
             if (GameStates.IsInGame && !player.Data.Disconnected)
             {
@@ -591,6 +594,8 @@ static class ExtendedMeetingHud
                 // 主动叛变模式下自票无效
                 if (ps.TargetPlayerId == ps.VotedFor && Options.MadmateSpawnMode.GetInt() == 2) VoteNum = 0;
                 if (CheckForEndVotingPatch.CheckRole(ps.TargetPlayerId, CustomRoles.VoidBallot)) VoteNum = 0;
+                if (Jailer.JailerTarget.ContainsValue(ps.VotedFor) || Jailer.JailerTarget.ContainsValue(ps.TargetPlayerId)) VoteNum = 0; //jailed can't vote and can't get voted
+
 
                 //投票を1追加 キーが定義されていない場合は1で上書きして定義
                 dic[ps.VotedFor] = !dic.TryGetValue(ps.VotedFor, out int num) ? VoteNum : num + VoteNum;//统计该玩家被投的数量
@@ -631,7 +636,7 @@ class MeetingHudStartPatch
         if (msgToSend.Count >= 1)
         {
             var msgTemp = msgToSend.ToList();
-            new LateTask(() => { msgTemp.Do(x => Utils.SendMessage(x.Item1, x.Item2, x.Item3)); }, 3f, "Skill Description First Meeting");
+            _ = new LateTask(() => { msgTemp.Do(x => Utils.SendMessage(x.Item1, x.Item2, x.Item3)); }, 3f, "Skill Description First Meeting");
         }
         msgToSend = new();
 
@@ -716,7 +721,7 @@ class MeetingHudStartPatch
         msgToSend.Do(x => Logger.Info($"To:{x.Item2} {x.Item3} => {x.Item1}", "Skill Notice OnMeeting Start"));
 
         //总体延迟发送
-        new LateTask(() => { msgToSend.Do(x => Utils.SendMessage(x.Item1, x.Item2, x.Item3)); }, 3f, "Skill Notice OnMeeting Start");
+        _ = new LateTask(() => { msgToSend.Do(x => Utils.SendMessage(x.Item1, x.Item2, x.Item3)); }, 3f, "Skill Notice OnMeeting Start");
 
         Main.CyberStarDead.Clear();
         Main.DetectiveNotify.Clear();
@@ -782,6 +787,7 @@ class MeetingHudStartPatch
                 (pc.Is(CustomRoles.Mayor) && Options.MayorRevealWhenDoneTasks.GetBool() && pc.GetPlayerTaskState().IsTaskFinished) ||
                 (pc.Is(CustomRoles.Marshall) && PlayerControl.LocalPlayer.Is(CustomRoleTypes.Crewmate) && pc.GetPlayerTaskState().IsTaskFinished) ||
                 (Totocalcio.KnowRole(PlayerControl.LocalPlayer, pc)) ||
+                (Romantic.KnowRole(PlayerControl.LocalPlayer, pc)) ||
                 (EvilDiviner.IsShowTargetRole(PlayerControl.LocalPlayer, pc)) ||
                 (PotionMaster.IsShowTargetRole(PlayerControl.LocalPlayer, pc)) ||
                 (Lawyer.KnowRole(PlayerControl.LocalPlayer, pc)) ||
@@ -825,7 +831,7 @@ class MeetingHudStartPatch
         }
         if (AntiBlackout.OverrideExiledPlayer)
         {
-            new LateTask(() =>
+            _ = new LateTask(() =>
             {
                 Utils.SendMessage(GetString("Warning.OverrideExiledPlayer"), 255, Utils.ColorString(Color.red, GetString("DefaultSystemMessageTitle")));
             }, 5f, "Warning OverrideExiledPlayer");
@@ -951,6 +957,7 @@ class MeetingHudStartPatch
                 case CustomRoles.BloodKnight:
                 case CustomRoles.Banshee:
                 case CustomRoles.Infectious:
+                case CustomRoles.RuthlessRomantic:
                 case CustomRoles.Virus:
                 case CustomRoles.Medusa:
                 case CustomRoles.Succubus:
@@ -1004,7 +1011,6 @@ class MeetingHudStartPatch
                     if (!seer.Data.IsDead && !target.Data.IsDead)
                         pva.NameText.text = Utils.ColorString(Utils.GetRoleColor(seer.Is(CustomRoles.NiceGuesser) ? CustomRoles.NiceGuesser : CustomRoles.EvilGuesser), target.PlayerId.ToString()) + " " + pva.NameText.text;
                     break;
-           //     case CustomRoles.Guesser:
                 case CustomRoles.Judge:
                     if (!seer.Data.IsDead && !target.Data.IsDead)
                         pva.NameText.text = Utils.ColorString(Utils.GetRoleColor(CustomRoles.Judge), target.PlayerId.ToString()) + " " + pva.NameText.text;
@@ -1046,9 +1052,21 @@ class MeetingHudStartPatch
             }
 
             bool isLover = false;
-            foreach (var subRole in target.GetCustomSubRoles())
+
+            foreach (var SeerSubRole in seer.GetCustomSubRoles())
             {
-                switch (subRole)
+                switch (SeerSubRole)
+                {
+                    case CustomRoles.Guesser:
+                        if (!seer.Data.IsDead && !target.Data.IsDead)
+                            pva.NameText.text = Utils.ColorString(Utils.GetRoleColor(CustomRoles.Guesser), target.PlayerId.ToString()) + " " + pva.NameText.text;
+                        break;
+                }
+            }
+
+            foreach (var TargetSubRole in target.GetCustomSubRoles())
+            {
+                switch (TargetSubRole)
                 {
                     case CustomRoles.Lovers:
                         if ((seer.Is(CustomRoles.Lovers) && Amor.IsLoverPair(seer, target)) || seer.Data.IsDead)
@@ -1057,26 +1075,16 @@ class MeetingHudStartPatch
                             isLover = true;
                         }
                         break;
-              /*      case CustomRoles.Guesser:
-                        if (!target.Data.IsDead)
-                        {
-                            sb.Append(Utils.ColorString(Utils.GetRoleColor(CustomRoles.Lookout), " " + target.PlayerId.ToString()) + " ");
-                        }
-                        break;
-               /*     case CustomRoles.Sidekick:
-                    if (seer.Is(CustomRoles.Sidekick) && target.Is(CustomRoles.Sidekick) && Options.SidekickKnowOtherSidekick.GetBool())
-                    {
-                        sb.Append(Utils.ColorString(Utils.GetRoleColor(CustomRoles.Jackal), " ♥")); //変更対象にSnitchマークをつける
-                    sb.Append(Snitch.GetWarningMark(seer, target));
-                    }
-                    break; */
-                 //   case CustomRoles.Guesser:
-                //    if (!seer.Data.IsDead && !target.Data.IsDead)
-                 //       pva.NameText.text = Utils.ColorString(Utils.GetRoleColor(seer.GetCustomRole()), target.PlayerId.ToString()) + " " + pva.NameText.text;
-
-                //    break;
+                     /*     case CustomRoles.Sidekick:
+                          if (seer.Is(CustomRoles.Sidekick) && target.Is(CustomRoles.Sidekick) && Options.SidekickKnowOtherSidekick.GetBool())
+                          {
+                              sb.Append(Utils.ColorString(Utils.GetRoleColor(CustomRoles.Jackal), " ♥")); //変更対象にSnitchマークをつける
+                          sb.Append(Snitch.GetWarningMark(seer, target));
+                          }
+                          break; */
                 }
             }
+            //add checks for both seer and target's subrole, maybe one day we can use them...
 
             //海王相关显示
             if ((seer.Is(CustomRoles.Ntr) || target.Is(CustomRoles.Ntr)) && !seer.Data.IsDead && !isLover)
@@ -1120,6 +1128,7 @@ class MeetingHudStartPatch
 
             //赌徒提示
             sb.Append(Totocalcio.TargetMark(seer, target));
+            sb.Append(Romantic.TargetMark(seer, target));
             sb.Append(Lawyer.LawyerMark(seer, target));
 
             //会議画面ではインポスター自身の名前にSnitchマークはつけません。

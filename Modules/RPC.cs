@@ -61,6 +61,10 @@ enum CustomRPC
     SetCurrentDrawTarget,
     SetGamerHealth,
     RpcPassBomb,
+    SyncRomanticTarget,
+    SyncVengefulRomanticTarget,
+    SetJailerTarget,
+    SetJailerExeLimit,
     SetCleanserCleanLimit,
     SetSoulCollectorLimit,
     SetPelicanEtenNum,
@@ -195,11 +199,11 @@ internal class RPCHandlerPatch
                     Logger.Fatal($"{__instance?.Data?.PlayerName}({__instance.PlayerId}): {reader.ReadString()} 错误，根据设定终止游戏", "Anti-black");
                     ChatUpdatePatch.DoBlockChat = true;
                     Main.OverrideWelcomeMsg = string.Format(GetString("RpcAntiBlackOutNotifyInLobby"), __instance?.Data?.PlayerName, GetString("EndWhenPlayerBug"));
-                    new LateTask(() =>
+                    _ = new LateTask(() =>
                     {
                         Logger.SendInGame(string.Format(GetString("RpcAntiBlackOutEndGame"), __instance?.Data?.PlayerName), true);
                     }, 3f, "Anti-Black Msg SendInGame");
-                    new LateTask(() =>
+                    _ = new LateTask(() =>
                     {
                         CustomWinnerHolder.ResetAndSetWinner(CustomWinner.Error);
                         GameManager.Instance.LogicFlow.CheckEndCriteria();
@@ -209,7 +213,7 @@ internal class RPCHandlerPatch
                 else if (GameStates.IsOnlineGame)
                 {
                     Logger.Fatal($"{__instance?.Data?.PlayerName}({__instance.PlayerId}): Change Role Setting Postfix 错误，根据设定继续游戏", "Anti-black");
-                    new LateTask(() =>
+                    _ = new LateTask(() =>
                     {
                         Logger.SendInGame(string.Format(GetString("RpcAntiBlackOutIgnored"), __instance?.Data?.PlayerName), true);
                     }, 3f, "Anti-Black Msg SendInGame");
@@ -232,7 +236,7 @@ internal class RPCHandlerPatch
                     if (AmongUsClient.Instance.AmHost && tag != $"{ThisAssembly.Git.Commit}({ThisAssembly.Git.Branch})")
                     {
                         if (forkId != Main.ForkId)
-                            new LateTask(() =>
+                            _ = new LateTask(() =>
                             {
                                 if (__instance?.Data?.Disconnected is not null and not true)
                                 {
@@ -248,7 +252,7 @@ internal class RPCHandlerPatch
                 catch
                 {
                     Logger.Warn($"{__instance?.Data?.PlayerName}({__instance.PlayerId}): バージョン情報が無効です", "RpcVersionCheck");
-                    new LateTask(() =>
+                    _ = new LateTask(() =>
                     {
                         MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.RequestRetryVersionCheck, SendOption.Reliable, __instance.GetClientId());
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
@@ -403,6 +407,12 @@ internal class RPCHandlerPatch
             case CustomRPC.SetCounterfeiterSellLimit:
                 Counterfeiter.ReceiveRPC(reader);
                 break;
+            case CustomRPC.SetJailerExeLimit:
+                Jailer.ReceiveRPC(reader, setTarget: false);
+                break;
+            case CustomRPC.SetJailerTarget:
+                Jailer.ReceiveRPC(reader, setTarget: true);
+                break;
             case CustomRPC.SetPursuerSellLimit:
                 Pursuer.ReceiveRPC(reader);
                 break;
@@ -543,6 +553,12 @@ internal class RPCHandlerPatch
                 break;
             case CustomRPC.SyncTotocalcioTargetAndTimes:
                 Totocalcio.ReceiveRPC(reader);
+                break;
+            case CustomRPC.SyncRomanticTarget:
+                Romantic.ReceiveRPC(reader);
+                break;
+            case CustomRPC.SyncVengefulRomanticTarget:
+                VengefulRomantic.ReceiveRPC(reader);
                 break;
             case CustomRPC.SetSuccubusCharmLimit:
                 Succubus.ReceiveRPC(reader);
@@ -893,6 +909,9 @@ internal static class RPC
             case CustomRoles.Counterfeiter:
                 Counterfeiter.Add(targetId);
                 break;
+            case CustomRoles.Jailer:
+                Jailer.Add(targetId);
+                break;
             case CustomRoles.Pursuer:
                 Pursuer.Add(targetId);
                 break;
@@ -984,6 +1003,15 @@ internal static class RPC
             case CustomRoles.Veteran:
                 Main.VeteranNumOfUsed.Add(targetId, Options.VeteranSkillMaxOfUseage.GetInt());
                 break;
+            case CustomRoles.Grenadier:
+                Main.GrenadierNumOfUsed.Add(targetId, Options.GrenadierSkillMaxOfUseage.GetInt());
+                break;
+            case CustomRoles.Lighter:
+                Main.LighterNumOfUsed.Add(targetId, Options.LighterSkillMaxOfUseage.GetInt());
+                break;
+            case CustomRoles.TimeMaster:
+                Main.TimeMasterNumOfUsed.Add(targetId, Options.TimeMasterMaxUses.GetInt());
+                break;
             case CustomRoles.Swooper:
                 Swooper.Add(targetId);
                 break;
@@ -1004,6 +1032,15 @@ internal static class RPC
                 break;
             case CustomRoles.Totocalcio:
                 Totocalcio.Add(targetId);
+                break;
+            case CustomRoles.Romantic:
+                Romantic.Add(targetId);
+                break;
+            case CustomRoles.VengefulRomantic:
+                VengefulRomantic.Add(targetId);
+                break;
+            case CustomRoles.RuthlessRomantic:
+                RuthlessRomantic.Add(targetId);
                 break;
             case CustomRoles.Succubus:
                 Succubus.Add(targetId);

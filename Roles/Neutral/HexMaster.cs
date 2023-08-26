@@ -35,9 +35,9 @@ public static class HexMaster
     public static SwitchTrigger NowSwitchTrigger;
     public static void SetupCustomOption()
     {
-        SetupSingleRoleOptions(Id, TabGroup.NeutralRoles, CustomRoles.HexMaster, 1, zeroOne: false);        
-        ModeSwitchAction = StringOptionItem.Create(Id + 10, "WitchModeSwitchAction", SwitchTriggerText, 2, TabGroup.NeutralRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.HexMaster]);
-        HexesLookLikeSpells = BooleanOptionItem.Create(Id + 11, "HexesLookLikeSpells",  false, TabGroup.NeutralRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.HexMaster]);
+        SetupSingleRoleOptions(Id, TabGroup.CovenRoles, CustomRoles.HexMaster, 1, zeroOne: false);        
+        ModeSwitchAction = StringOptionItem.Create(Id + 10, "WitchModeSwitchAction", SwitchTriggerText, 2, TabGroup.CovenRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.HexMaster]);
+        HexesLookLikeSpells = BooleanOptionItem.Create(Id + 11, "HexesLookLikeSpells",  false, TabGroup.CovenRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.HexMaster]);
     }
     public static void Init()
     {
@@ -126,10 +126,7 @@ public static class HexMaster
     {
         foreach (var hexmaster in playerIdList)
         {
-            if (HexedPlayer[hexmaster].Count != 0)
-            {
-                return true;
-            }
+            if (HexedPlayer[hexmaster].Count != 0) return true;
         }
         return false;
 
@@ -138,10 +135,7 @@ public static class HexMaster
     {
         foreach (var hexmaster in playerIdList)
         {
-            if (HexedPlayer[hexmaster].Contains(target))
-            {
-                return true;
-            }
+            if (HexedPlayer[hexmaster].Contains(target)) return true;
         }
         return false;
     }
@@ -199,7 +193,7 @@ public static class HexMaster
         foreach (var pc in Main.AllAlivePlayerControls)
         {
             var dic = HexedPlayer.Where(x => x.Value.Contains(pc.PlayerId));
-            if (dic.Count() == 0) continue;
+            if (!dic.Any()) continue;
             var whichId = dic.FirstOrDefault().Key;
             var hexmaster = Utils.GetPlayerById(whichId);
             if (hexmaster != null && hexmaster.IsAlive())

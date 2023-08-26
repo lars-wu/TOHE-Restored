@@ -136,6 +136,7 @@ static class ExtendedPlayerControl
         //seer: 上の変更を確認することができるプレイヤー
         if (player == null || name == null || !AmongUsClient.Instance.AmHost) return;
         if (seer == null) seer = player;
+
         if (!force && Main.LastNotifyNames[(player.PlayerId, seer.PlayerId)] == name)
         {
             //Logger.info($"Cancel:{player.name}:{name} for {seer.name}", "RpcSetNamePrivate");
@@ -169,7 +170,11 @@ static class ExtendedPlayerControl
     public static void RpcGuardAndKill(this PlayerControl killer, PlayerControl target = null, int colorId = 0, bool forObserver = false)
     {
         if (target == null) target = killer;
-        if (!forObserver && !MeetingStates.FirstMeeting) Main.AllPlayerControls.Where(x => x.Is(CustomRoles.Observer) && killer.PlayerId != x.PlayerId).Do(x => x.RpcGuardAndKill(target, colorId, true));
+        if (!forObserver && !MeetingStates.FirstMeeting)
+            Main.AllPlayerControls
+                .Where(x => x.Is(CustomRoles.Observer) && killer.PlayerId != x.PlayerId)
+                .Do(x => x.RpcGuardAndKill(target, colorId, true));
+        
         // Host
         if (killer.AmOwner)
         {
@@ -192,7 +197,7 @@ static class ExtendedPlayerControl
             sender.SendMessage();
         }
     }
-    public static void SetKillCooldown(this PlayerControl player, float time = -1f)
+    public static void SetKillCooldownV2(this PlayerControl player, float time = -1f)
     {
         if (player == null) return;
         if (!player.CanUseKillButton()) return;
@@ -202,14 +207,14 @@ static class ExtendedPlayerControl
         player.RpcGuardAndKill();
         player.ResetKillCooldown();
     }
-    public static void SetKillCooldownV2(this PlayerControl player, float time = -1f, PlayerControl target = null, bool forceAnime = false)
+    public static void SetKillCooldown(this PlayerControl player, float time = -1f, PlayerControl target = null, bool forceAnime = false)
     {
         if (player == null) return;
         if (!player.CanUseKillButton()) return;
         if (target == null) target = player;
         if (time >= 0f) Main.AllPlayerKillCooldown[player.PlayerId] = time * 2;
         else Main.AllPlayerKillCooldown[player.PlayerId] *= 2;
-        if (forceAnime || !player.IsModClient())
+        if (forceAnime || !player.IsModClient() || !Options.DisableShieldAnimations.GetBool())
         {
             player.SyncSettings();
             player.RpcGuardAndKill(target, 11);
@@ -235,7 +240,7 @@ static class ExtendedPlayerControl
         if (target == null) target = player;
         if (time >= 0f) Main.AllPlayerKillCooldown[player.PlayerId] = time * 2;
         else Main.AllPlayerKillCooldown[player.PlayerId] *= 2;
-        if (forceAnime || !player.IsModClient() || player.IsModClient())
+        if (forceAnime || !player.IsModClient() || !Options.DisableShieldAnimations.GetBool())
         {
             player.SyncSettings();
             player.RpcGuardAndKill(target, 11);
@@ -392,17 +397,17 @@ static class ExtendedPlayerControl
         var systemtypes = SystemTypes.Reactor;
         if (Main.NormalOptions.MapId == 2) systemtypes = SystemTypes.Laboratory;
 
-        new LateTask(() =>
+        _ = new LateTask(() =>
         {
             pc.RpcDesyncRepairSystem(systemtypes, 128);
         }, 0f + delay, "Reactor Desync");
 
-        new LateTask(() =>
+        _ = new LateTask(() =>
         {
             pc.RpcSpecificMurderPlayer();
         }, 0.2f + delay, "Murder To Reset Cam");
 
-        new LateTask(() =>
+        _ = new LateTask(() =>
         {
             pc.RpcDesyncRepairSystem(systemtypes, 16);
             if (Main.NormalOptions.MapId == 4) //Airship用
@@ -420,7 +425,7 @@ static class ExtendedPlayerControl
 
         pc.RpcDesyncRepairSystem(systemtypes, 128);
 
-        new LateTask(() =>
+        _ = new LateTask(() =>
         {
             pc.RpcDesyncRepairSystem(systemtypes, 16);
 
@@ -451,6 +456,7 @@ static class ExtendedPlayerControl
             CustomRoles.Saboteur => Utils.IsActive(SystemTypes.Electrical) || Utils.IsActive(SystemTypes.Laboratory) || Utils.IsActive(SystemTypes.Comms) || Utils.IsActive(SystemTypes.LifeSupp) || Utils.IsActive(SystemTypes.Reactor),
             CustomRoles.Sniper => Sniper.CanUseKillButton(pc),
             CustomRoles.Sheriff => Sheriff.CanUseKillButton(pc.PlayerId),
+            CustomRoles.Jailer => pc.IsAlive(),
             CustomRoles.Crusader => Crusader.CanUseKillButton(pc.PlayerId),
             CustomRoles.CopyCat => pc.IsAlive(),
             CustomRoles.Pelican => pc.IsAlive(),
@@ -478,6 +484,7 @@ static class ExtendedPlayerControl
             CustomRoles.Refugee => pc.IsAlive(),
     //        CustomRoles.Minion => pc.IsAlive(),
             CustomRoles.NWitch => pc.IsAlive(),
+            CustomRoles.Witness => pc.IsAlive(),
             CustomRoles.CovenLeader => pc.IsAlive(),
             CustomRoles.Ritualist => pc.IsAlive(),
             CustomRoles.Shroud => pc.IsAlive(),
@@ -499,6 +506,9 @@ static class ExtendedPlayerControl
             CustomRoles.Banshee => pc.IsAlive(),
             CustomRoles.Crewpostor => false,
             CustomRoles.Totocalcio => Totocalcio.CanUseKillButton(pc),
+            CustomRoles.Romantic => pc.IsAlive(),
+            CustomRoles.RuthlessRomantic => pc.IsAlive(),
+            CustomRoles.VengefulRomantic => VengefulRomantic.CanUseKillButton(pc),
             CustomRoles.Succubus => Succubus.CanUseKillButton(pc),
             CustomRoles.CursedSoul => CursedSoul.CanUseKillButton(pc),
             CustomRoles.Admirer => Admirer.CanUseKillButton(pc),
@@ -524,6 +534,8 @@ static class ExtendedPlayerControl
     {
         if (!pc.IsAlive() || pc.Data.Role.Role == RoleTypes.GuardianAngel) return false;
         if (CopyCat.playerIdList.Contains(pc.PlayerId)) return true;
+        if (pc.Is(CustomRoles.Nimble)) return true;
+     //   if (pc.Is(CustomRoles.Circumvent)) return false;
 
         return pc.GetCustomRole() switch
         {
@@ -537,6 +549,7 @@ static class ExtendedPlayerControl
       //      CustomRoles.NWitch or
             CustomRoles.DarkHide or
             CustomRoles.Monarch or
+            CustomRoles.Romantic or
             CustomRoles.Provocateur or
             CustomRoles.Totocalcio or
             CustomRoles.Succubus or
@@ -551,6 +564,8 @@ static class ExtendedPlayerControl
             => false,
 
             CustomRoles.Jackal => Jackal.CanVent.GetBool(),
+            CustomRoles.VengefulRomantic => Romantic.VengefulCanVent.GetBool(),
+            CustomRoles.RuthlessRomantic => Romantic.RuthlessCanVent.GetBool(),
             CustomRoles.Sidekick => Jackal.CanVentSK.GetBool(),
             CustomRoles.Poisoner => Poisoner.CanVent.GetBool(),
             CustomRoles.NSerialKiller => NSerialKiller.CanVent.GetBool(),
@@ -714,15 +729,21 @@ static class ExtendedPlayerControl
             case CustomRoles.SerialKiller:
                 SerialKiller.ApplyKillCooldown(player.PlayerId); //シリアルキラーはシリアルキラーのキルクールに。
                 break;
+            case CustomRoles.Jailer:
+                Jailer.SetKillCooldown(player.PlayerId); //シリアルキラーはシリアルキラーのキルクールに。
+                break;
             case CustomRoles.TimeThief:
                 TimeThief.SetKillCooldown(player.PlayerId); //タイムシーフはタイムシーフのキルクールに。
                 break;
             case CustomRoles.Agitater:
                 Agitater.SetKillCooldown(player.PlayerId);
                 break;
-        /*    case CustomRoles.Mare:
-                Mare.SetKillCooldown(player.PlayerId);
-                break; */
+            case CustomRoles.Cultivator:
+                Main.AllPlayerKillCooldown[player.PlayerId] = Options.CultivatorKillCooldown.GetFloat();
+                break;
+            /*    case CustomRoles.Mare:
+                    Mare.SetKillCooldown(player.PlayerId);
+                    break; */
             case CustomRoles.EvilDiviner:
                 EvilDiviner.SetKillCooldown(player.PlayerId);
                 break;
@@ -844,6 +865,9 @@ static class ExtendedPlayerControl
                 else
                 Main.AllPlayerKillCooldown[player.PlayerId] = 300f;
                 break;
+            case CustomRoles.Witness:
+                Main.AllPlayerKillCooldown[player.PlayerId] = Options.WitnessCD.GetFloat();
+                break;
             case CustomRoles.Capitalism:
                 Main.AllPlayerKillCooldown[player.PlayerId] = Options.CapitalismSkillCooldown.GetFloat();
                 break;
@@ -888,7 +912,7 @@ static class ExtendedPlayerControl
                 QuickShooter.SetKillCooldown(player.PlayerId);
                 break;
             case CustomRoles.Provocateur:
-                Main.AllPlayerKillCooldown[player.PlayerId] = 0f;
+                Main.AllPlayerKillCooldown[player.PlayerId] = Options.ProvKillCD.GetFloat();
                 break;
             case CustomRoles.Assassin:
                 Assassin.SetKillCooldown(player.PlayerId);
@@ -916,6 +940,15 @@ static class ExtendedPlayerControl
                 break;
             case CustomRoles.Totocalcio:
                 Totocalcio.SetKillCooldown(player.PlayerId);
+                break;
+            case CustomRoles.Romantic:
+                Romantic.SetKillCooldown(player.PlayerId);
+                break;
+            case CustomRoles.VengefulRomantic:
+                Main.AllPlayerKillCooldown[player.PlayerId] = Romantic.VengefulKCD.GetFloat();
+                break;
+            case CustomRoles.RuthlessRomantic:
+                Main.AllPlayerKillCooldown[player.PlayerId] = Romantic.RuthlessKCD.GetFloat();
                 break;
             case CustomRoles.Gangster:
                 Gangster.SetKillCooldown(player.PlayerId);
@@ -1020,7 +1053,7 @@ static class ExtendedPlayerControl
         Main.AllPlayerSpeed[killer.PlayerId] = Main.MinSpeed;    //tmpSpeedで後ほど値を戻すので代入しています。
         ReportDeadBodyPatch.CanReport[killer.PlayerId] = false;
         killer.MarkDirtySettings();
-        new LateTask(() =>
+        _ = new LateTask(() =>
         {
             Main.AllPlayerSpeed[killer.PlayerId] = Main.AllPlayerSpeed[killer.PlayerId] - Main.MinSpeed + tmpSpeed;
             ReportDeadBodyPatch.CanReport[killer.PlayerId] = true;
@@ -1054,7 +1087,7 @@ static class ExtendedPlayerControl
 
         if (killer.PlayerId == target.PlayerId && killer.shapeshifting)
         {
-            new LateTask(() => { killer.RpcMurderPlayer(target); }, 1.5f, "Shapeshifting Suicide Delay");
+            _ = new LateTask(() => { killer.RpcMurderPlayer(target); }, 1.5f, "Shapeshifting Suicide Delay");
             return;
         }
 

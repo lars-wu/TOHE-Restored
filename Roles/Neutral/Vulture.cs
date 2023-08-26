@@ -51,15 +51,15 @@ public static class Vulture
         BodyReportCount[playerId] = 0;
         AbilityLeftInRound[playerId] = MaxEaten.GetInt();
         LastReport[playerId] = Utils.GetTimeStamp();
-        new LateTask(() =>
+        _ = new LateTask(() =>
         {
             if (GameStates.IsInTask)
-            { 
-                Utils.GetPlayerById(playerId).RpcGuardAndKill(Utils.GetPlayerById(playerId));
+            {
+                if (!DisableShieldAnimations.GetBool()) Utils.GetPlayerById(playerId).RpcGuardAndKill(Utils.GetPlayerById(playerId));
                 Utils.GetPlayerById(playerId).Notify(GetString("VultureCooldownUp"));
             }
             return;
-        }, Vulture.VultureReportCD.GetFloat() + 8f, "Vulture CD");  //for some reason that idk vulture cd completes 8s faster when the game starts, so I added 8f for now 
+        }, VultureReportCD.GetFloat() + 8f, "Vulture CD");  //for some reason that idk vulture cd completes 8s faster when the game starts, so I added 8f for now 
     }
     public static bool IsEnable => playerIdList.Any();
 
@@ -108,11 +108,11 @@ public static class Vulture
             {
                 AbilityLeftInRound[apc] = MaxEaten.GetInt();
                 LastReport[apc] = Utils.GetTimeStamp();
-                new LateTask(() =>
+                _ = new LateTask(() =>
                 {
                     if (GameStates.IsInTask)
                     {
-                        Utils.GetPlayerById(apc).RpcGuardAndKill(Utils.GetPlayerById(apc));
+                        if (!DisableShieldAnimations.GetBool()) Utils.GetPlayerById(apc).RpcGuardAndKill(Utils.GetPlayerById(apc));
                         Utils.GetPlayerById(apc).Notify(GetString("VultureCooldownUp"));
                     }
                     return;

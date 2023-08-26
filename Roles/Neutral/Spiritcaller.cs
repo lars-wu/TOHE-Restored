@@ -85,7 +85,7 @@ namespace TOHE.Roles.Neutral
 
         public static void OnCheckMurder(PlayerControl target)
         {
-            if (SpiritLimit < 1) return; // || target.GetCustomRole().IsAbleToBeSidekicked() || target.GetCustomRole().IsImpostor()
+            if (SpiritLimit < 1 || target.GetCustomRole().IsAbleToBeSidekicked() || target.GetCustomRole().IsImpostor()) return; // 
 
 
             SpiritLimit--;
@@ -145,7 +145,7 @@ namespace TOHE.Roles.Neutral
                 Main.AllPlayerSpeed[target.PlayerId] = Main.MinSpeed;
                 ReportDeadBodyPatch.CanReport[target.PlayerId] = false;
                 target.MarkDirtySettings();
-                new LateTask(() =>
+                _ = new LateTask(() =>
                 {
                     Main.AllPlayerSpeed[target.PlayerId] = Main.AllPlayerSpeed[target.PlayerId] - Main.MinSpeed + tmpSpeed;
                     ReportDeadBodyPatch.CanReport[target.PlayerId] = true;

@@ -1,5 +1,6 @@
 using AmongUs.Data;
 using HarmonyLib;
+using System.Linq;
 using System.Collections.Generic;
 using TOHE.Roles.Impostor;
 
@@ -82,11 +83,25 @@ public static class Camouflage
 
         var oldIsCamouflage = IsCamouflage;
 
-        IsCamouflage = (Utils.IsActive(SystemTypes.Comms) && Options.CommsCamouflage.GetBool()) || Camouflager.IsActive;
+        IsCamouflage = (Utils.IsActive(SystemTypes.Comms) && Options.CommsCamouflage.GetBool()
+            && !(Options.DisableOnSomeMaps.GetBool() &&
+            ((Options.DisableOnSkeld.GetBool() && Options.IsActiveSkeld) ||
+             (Options.DisableOnMira.GetBool() && Options.IsActiveMiraHQ) ||
+             (Options.DisableOnPolus.GetBool() && Options.IsActivePolus) ||
+             (Options.DisableOnAirship.GetBool() && Options.IsActiveAirship)
+            )))
+            || Camouflager.IsActive;
 
         if (oldIsCamouflage != IsCamouflage)
         {
             Main.AllPlayerControls.Do(pc => RpcSetSkin(pc));
+
+            if (Options.RemovePetsAtDeadPlayers.GetBool())
+            {
+                Main.AllPlayerControls
+                    .Where(pc => PlayerSkins[pc.PlayerId].PetId != "" && pc.Data.IsDead && !pc.IsAlive())
+                    .Do(pc => pc.RpcSetPet(""));
+            }
             Utils.NotifyRoles();
         }
     }

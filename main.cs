@@ -22,26 +22,33 @@ namespace TOHE;
 public class Main : BasePlugin
 {
     // == プログラム設定 / Program Config ==
+    public const string OriginalForkId = "OriginalTOH";
+
     public static readonly string ModName = "Town of Host Re-Edited";
+    public static readonly string ForkId = "TOHE";
     public static readonly string ModColor = "#ffc0cb";
     public static readonly bool AllowPublicRoom = true;
-    public static readonly string ForkId = "TOHE";
-    public const string OriginalForkId = "OriginalTOH";
+
     public static HashAuth DebugKeyAuth { get; private set; }
     public const string DebugKeyHash = "c0fd562955ba56af3ae20d7ec9e64c664f0facecef4b3e366e109306adeae29d";
     public const string DebugKeySalt = "59687b";
     public static ConfigEntry<string> DebugKeyInput { get; private set; }
     public static readonly string MainMenuText = " ";
+
     public const string PluginGuid = "com.karped1em.townofhostedited";
-    public const string PluginVersion = "3.0.0.001";
-    public const string PluginDisplayVersion = "3.0.0 dev 1";
-    public const int PluginCreate = 3;
+    public const string PluginVersion = "3.0.0.073";
+    public const string PluginDisplayVersion = "3.0.0 dev 3.1";
+    public static readonly string SupportedVersionAU = "2023.7.11";
     public const bool Canary = false;
 
-    public static readonly bool ShowQQButton = true;
-    public static readonly string QQInviteUrl = "https://jq.qq.com/?_wv=1027&k=2RpigaN6";
+    public static readonly bool ShowGitHubButton = true;
+    public static readonly string GitHubInviteUrl = "https://github.com/Loonie-Toons/TownOfHost-ReEdited";
+
     public static readonly bool ShowDiscordButton = true;
-    public static readonly string DiscordInviteUrl = "https://discord.gg/hkk2p9ggv4";
+    public static readonly string DiscordInviteUrl = "https://dsc.gg/tohe";
+
+    public static readonly bool ShowWebsiteButton = true;
+    public static readonly string WebsiteInviteUrl = "https://tohre.dev";
 
     public Harmony Harmony { get; } = new Harmony(PluginGuid);
     public static Version version = Version.Parse(PluginVersion);
@@ -66,6 +73,7 @@ public class Main : BasePlugin
     public static ConfigEntry<bool> EnableCustomSoundEffect { get; private set; }
     public static ConfigEntry<bool> ShowTextOverlay { get; private set; }
     public static ConfigEntry<bool> ModeForSmallScreen { get; private set; }
+    public static ConfigEntry<bool> EnableRoleSummary { get; private set; }
     public static ConfigEntry<bool> SwitchVanilla { get; private set; }
     public static ConfigEntry<bool> VersionCheat { get; private set; }
     public static ConfigEntry<bool> GodMode { get; private set; }
@@ -109,6 +117,7 @@ public class Main : BasePlugin
     public static Dictionary<byte, Vector2> LastEnteredVentLocation = new();
     public static Dictionary<byte, Vector2> TimeMasterBackTrack = new();
     public static Dictionary<byte, int> MasochistKillMax = new();
+    public static Dictionary<byte, int> CultivatorKillMax = new();
     public static Dictionary<byte, int> TimeMasterNum = new();
     public static Dictionary<byte, long> TimeMasterInProtect = new();
     //public static Dictionary<byte, long> FlashbangInProtect = new();
@@ -168,9 +177,14 @@ public class Main : BasePlugin
     public static Dictionary<byte, int> ParaUsedButtonCount = new();
     public static Dictionary<byte, int> MarioVentCount = new();
     public static Dictionary<byte, long> VeteranInProtect = new();
-    public static Dictionary<byte, int> VeteranNumOfUsed = new();
+    public static Dictionary<byte, float> VeteranNumOfUsed = new();
     public static Dictionary<byte, long> GrenadierBlinding = new();
     public static Dictionary<byte, long> MadGrenadierBlinding = new();
+    public static Dictionary<byte, float> GrenadierNumOfUsed = new();
+    public static Dictionary<byte, long> Lighter = new();
+    public static Dictionary<byte, float> LighterNumOfUsed = new();
+    public static Dictionary<byte, long> AllKillers = new();
+    public static Dictionary<byte, float> TimeMasterNumOfUsed = new();
     public static Dictionary<byte, int> CursedWolfSpellCount = new();
     public static Dictionary<byte, int> JinxSpellCount = new();
     public static int AliveImpostorCount;
@@ -197,7 +211,7 @@ public class Main : BasePlugin
     public static int MadmateNum = 0;
     public static int BardCreations = 0;
     public static Dictionary<byte, byte> Provoked = new();
-    public static Dictionary<byte, int> DovesOfNeaceNumOfUsed = new();
+    public static Dictionary<byte, float> DovesOfNeaceNumOfUsed = new();
 
     public static Dictionary<byte, CustomRoles> DevRole = new();
     public static List<byte> GodfatherTarget = new();
@@ -242,6 +256,7 @@ public class Main : BasePlugin
         EnableCustomSoundEffect = Config.Bind("Client Options", "EnableCustomSoundEffect", true);
         ShowTextOverlay = Config.Bind("Client Options", "ShowTextOverlay", false);
         ModeForSmallScreen = Config.Bind("Client Options", "ModeForSmallScreen", false);
+        EnableRoleSummary = Config.Bind("Client Options", "EnableRoleSummary", true);
         SwitchVanilla = Config.Bind("Client Options", "SwitchVanilla", false);
         VersionCheat = Config.Bind("Client Options", "VersionCheat", false);
         GodMode = Config.Bind("Client Options", "GodMode", false);
@@ -332,7 +347,10 @@ public class Main : BasePlugin
                 {CustomRoles.Veteran, "#a77738"},
                 {CustomRoles.Bodyguard, "#185abd"},
                 {CustomRoles.Counterfeiter, "#BE29EC"},
+                {CustomRoles.Witness, "#e70052"},
                 {CustomRoles.Grenadier, "#3c4a16"},
+                {CustomRoles.Lighter, "#eee5be"},
+                {CustomRoles.TaskManager, "#00ffa5" },
                 {CustomRoles.Medic, "#00ff97"},
                 {CustomRoles.Divinator, "#882c83"},
                 {CustomRoles.Glitch, "#39FF14"},
@@ -348,6 +366,7 @@ public class Main : BasePlugin
                 {CustomRoles.Merchant, "#D27D2D"},
                 {CustomRoles.Retributionist, "#228B22"},
                 {CustomRoles.Deputy, "#df9026"},
+                {CustomRoles.Jailer,"#aa900d"},
                 {CustomRoles.Guardian, "#2E8B57"},
                 {CustomRoles.Addict, "#008000"},
                 {CustomRoles.Tracefinder, "#0066CC"},
@@ -394,6 +413,9 @@ public class Main : BasePlugin
                 {CustomRoles.Banshee, "#663399"},
                 {CustomRoles.NWitch, "#BF5FFF"},
                 {CustomRoles.Totocalcio, "#ff9409"},
+                {CustomRoles.Romantic, "#FF1493"},
+                {CustomRoles.VengefulRomantic, "#8B0000"},
+                {CustomRoles.RuthlessRomantic, "#D2691E"},
                 {CustomRoles.Succubus, "#cf6acd"},
                 {CustomRoles.HexMaster, "#663399"},
                 {CustomRoles.Occultist, "#375d91"},
@@ -444,7 +466,7 @@ public class Main : BasePlugin
                 {CustomRoles.Madmate, "#ff1919"},
                 {CustomRoles.Watcher, "#800080"},
                 {CustomRoles.Flashman, "#ff8400"},
-                {CustomRoles.Lighter, "#eee5be"},
+                {CustomRoles.Torch, "#eee5be"},
                 {CustomRoles.Seer, "#61b26c"},
                 {CustomRoles.Brakar, "#1447af"},
                 {CustomRoles.Oblivious, "#424242"},
@@ -498,6 +520,7 @@ public class Main : BasePlugin
                 {CustomRoles.Ghoul, "#B22222"},
                 {CustomRoles.Sleuth, "#803333" },
                 {CustomRoles.Clumsy, "#ff1919"},
+                {CustomRoles.Nimble, "#FFFAA6"},
 
           //      {CustomRoles.Cyber, "#ee4a55" },
 
@@ -542,7 +565,7 @@ public class Main : BasePlugin
 
         IRandom.SetInstance(new NetRandomWrapper());
 
-        TOHE.Logger.Info($"{Application.version}", "AmongUs Version");
+        TOHE.Logger.Info($" {Application.version}", "Among Us Version");
 
         var handler = TOHE.Logger.Handler("GitVersion");
         handler.Info($"{nameof(ThisAssembly.Git.BaseTag)}: {ThisAssembly.Git.BaseTag}");
@@ -631,6 +654,7 @@ public enum CustomRoles
     Twister,
     Lurker,
     Convict,
+    Cultivator,
     Visionary,
     Refugee,
     Underdog,
@@ -659,6 +683,7 @@ public enum CustomRoles
     SabotageMaster,
     Sheriff,
     Snitch,
+    Jailer,
     Marshall,
     SpeedBooster,
     Dictator,
@@ -671,7 +696,10 @@ public enum CustomRoles
     Veteran,
     Bodyguard,
     Counterfeiter,
+    Witness,
     Grenadier,
+    Lighter,
+    TaskManager,
     Medic,
     Divinator,
     Glitch,
@@ -736,6 +764,9 @@ public enum CustomRoles
     BloodKnight,
     Wraith,
     Totocalcio,
+    Romantic,
+    VengefulRomantic,
+    RuthlessRomantic,
     Succubus,
     Virus,
     Pursuer,
@@ -785,7 +816,7 @@ public enum CustomRoles
     Madmate,
     Watcher,
     Flashman,
-    Lighter,
+    Torch,
     Seer,
     Brakar,
     Oblivious,
@@ -838,6 +869,7 @@ public enum CustomRoles
     Burst,
     Sleuth,
     Clumsy,
+    Nimble,
   //  Cyber,
     // QuickFix
 }
@@ -903,7 +935,7 @@ public enum CustomWinner
     Coven = CustomRoles.CovenLeader,
     Seeker = CustomRoles.Seeker,
     SoulCollector = CustomRoles.SoulCollector,
-    Famine = CustomRoles.Famine
+    RuthlessRomantic = CustomRoles.RuthlessRomantic,
 }
 public enum AdditionalWinners
 {
@@ -917,6 +949,9 @@ public enum AdditionalWinners
     Sunnyboy = CustomRoles.Sunnyboy,
     Witch = CustomRoles.NWitch,
     Totocalcio = CustomRoles.Totocalcio,
+    Romantic = CustomRoles.Romantic,
+    VengefulRomantic = CustomRoles.VengefulRomantic,
+    RuthlessRomantic = CustomRoles.RuthlessRomantic,
     Jackal = CustomRoles.Jackal,
     Sidekick = CustomRoles.Sidekick,
     Pursuer = CustomRoles.Pursuer,
