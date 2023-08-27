@@ -157,9 +157,9 @@ public static class GameOptionsMenuPatch
         for (var i = 0; i < tabs.Count; i++)
         {
             if (!Main.ModeForSmallScreen.Value)
-                tabs[i].transform.localPosition = new(0.7f * (i - 1) - tabs.Count / 3.25f, tabs[i].transform.localPosition.y, tabs[i].transform.localPosition.z);
+                tabs[i].transform.localPosition = new(0.65f * (i - 1) - tabs.Count / 3.23f, tabs[i].transform.localPosition.y, tabs[i].transform.localPosition.z);
             else
-                tabs[i].transform.localPosition = new(0.65f * (i - 1) - tabs.Count / 3f, tabs[i].transform.localPosition.y, tabs[i].transform.localPosition.z);
+                tabs[i].transform.localPosition = new(0.6f * (i - 1) - tabs.Count / 3.25f, tabs[i].transform.localPosition.y, tabs[i].transform.localPosition.z);
 
             var button = tabs[i].GetComponentInChildren<PassiveButton>();
             if (button == null) continue;
@@ -199,7 +199,7 @@ public class GameOptionsMenuUpdatePatch
                 TabGroup.NeutralRoles => "#7f8c8d",
                 TabGroup.Addons => "#ff9ace",
                 TabGroup.OtherRoles => "#76b8e0",
-          //      TabGroup.CovenRoles => "#663399",
+                TabGroup.CovenRoles => "#663399",
                 _ => "#ffffff",
             };
             if (__instance.transform.parent.parent.name != tab + "Tab") continue;

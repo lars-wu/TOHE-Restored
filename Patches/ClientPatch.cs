@@ -19,9 +19,10 @@ internal class MakePublicPatch
             Logger.SendInGame(message);
             return false;
         }
-        if (ModUpdater.isBroken || (ModUpdater.hasUpdate && ModUpdater.forceUpdate))
+        if (ModUpdater.isBroken || (ModUpdater.hasUpdate && ModUpdater.forceUpdate) || !VersionChecker.IsSupported)
         {
             var message = "";
+            if (!VersionChecker.IsSupported) message = GetString("UnsupportedVersion");
             if (ModUpdater.isBroken) message = GetString("ModBrokenMessage");
             if (ModUpdater.hasUpdate) message = GetString("CanNotJoinPublicRoomNoLatest");
             Logger.Info(message, "MakePublicPatch");
@@ -36,7 +37,7 @@ internal class MMOnlineManagerStartPatch
 {
     public static void Postfix(MMOnlineManager __instance)
     {
-        if (!((ModUpdater.hasUpdate && ModUpdater.forceUpdate) || ModUpdater.isBroken)) return;
+        if (!((ModUpdater.hasUpdate && ModUpdater.forceUpdate) || ModUpdater.isBroken || !VersionChecker.IsSupported)) return;
         var obj = GameObject.Find("FindGameButton");
         if (obj)
         {
@@ -45,9 +46,21 @@ internal class MMOnlineManagerStartPatch
             var textObj = Object.Instantiate(obj.transform.FindChild("Text_TMP").GetComponent<TMPro.TextMeshPro>());
             textObj.transform.position = new Vector3(1f, -0.3f, 0);
             textObj.name = "CanNotJoinPublic";
-            var message = ModUpdater.isBroken ? $"<size=2>{Utils.ColorString(Color.red, GetString("ModBrokenMessage"))}</size>"
-                : $"<size=2>{Utils.ColorString(Color.red, GetString("CanNotJoinPublicRoomNoLatest"))}</size>";
-            new LateTask(() => { textObj.text = message; }, 0.01f, "CanNotJoinPublic");
+
+            string message = "";
+            if (!VersionChecker.IsSupported)
+            {
+                message = GetString("UnsupportedVersion");
+            }
+            else if (ModUpdater.isBroken)
+            {
+                message = GetString("ModBrokenMessage");
+            }
+            else if (ModUpdater.hasUpdate)
+            {
+                message = GetString("CanNotJoinPublicRoomNoLatest");
+            }
+            _ = new LateTask(() => { textObj.text = $"<size=2>{Utils.ColorString(Color.red, message)}</size>"; }, 0.01f, "CanNotJoinPublic");
         }
     }
 }
@@ -115,8 +128,8 @@ internal class SetResolutionManager
         //    MainMenuManagerPatch.qqButton.transform.localPosition = Vector3.Reflect(MainMenuManagerPatch.template.transform.localPosition, Vector3.left);
         //if (MainMenuManagerPatch.discordButton != null)
         //    MainMenuManagerPatch.discordButton.transform.localPosition = Vector3.Reflect(MainMenuManagerPatch.template.transform.localPosition, Vector3.left);
-        if (MainMenuManagerPatch.updateButton != null)
-            MainMenuManagerPatch.updateButton.transform.localPosition = MainMenuManagerPatch.template.transform.localPosition + new Vector3(0.25f, 0.75f);
+        //if (MainMenuManagerPatch.updateButton != null)
+        //    MainMenuManagerPatch.updateButton.transform.localPosition = MainMenuManagerPatch.template.transform.localPosition + new Vector3(0.25f, 0.75f);
     }
 }
 

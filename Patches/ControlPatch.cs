@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 using static TOHE.Translator;
-using Object = UnityEngine.Object;
 
 namespace TOHE;
 
@@ -37,7 +36,7 @@ internal class ControllerManagerUpdatePatch
         //捕捉全屏快捷键
         if (GetKeysDown(KeyCode.LeftAlt, KeyCode.Return))
         {
-            new LateTask(SetResolutionManager.Postfix, 0.01f, "Fix Button Position");
+            _ = new LateTask(SetResolutionManager.Postfix, 0.01f, "Fix Button Position");
         }
         //职业介绍
         if (Input.GetKeyDown(KeyCode.F1) && GameStates.InGame && Options.CurrentGameMode == CustomGameMode.Standard)
@@ -84,7 +83,7 @@ internal class ControllerManagerUpdatePatch
             }
         }
         //更改分辨率
-        if (Input.GetKeyDown(KeyCode.F11))
+        if (GetKeysDown(KeyCode.F11, KeyCode.LeftAlt))
         {
             resolutionIndex++;
             if (resolutionIndex >= resolutions.Length) resolutionIndex = 0;
@@ -125,7 +124,12 @@ internal class ControllerManagerUpdatePatch
         {
             HudManager.Instance.Chat.SetVisible(true);
         }
-
+        //获取现在的坐标
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            Logger.Info(PlayerControl.LocalPlayer.GetTruePosition().ToString(), "GetLocalPlayerPos GetTruePosition()");
+            Logger.Info(PlayerControl.LocalPlayer.transform.position.ToString(), "GetLocalPlayerPos transform.position");
+        }
 
 
         //-- 下面是主机专用的命令--//
@@ -254,10 +258,6 @@ internal class ControllerManagerUpdatePatch
             Main.VisibleTasksCount = !Main.VisibleTasksCount;
             DestroyableSingleton<HudManager>.Instance.Notifier.AddItem("VisibleTaskCountが" + Main.VisibleTasksCount.ToString() + "に変更されました。");
         }
-
-        //获取现在的坐标
-        if (Input.GetKeyDown(KeyCode.I))
-            Logger.Info(PlayerControl.LocalPlayer.GetTruePosition().ToString(), "GetLocalPlayerPos");
 
         //マスゲーム用コード
         if (Input.GetKeyDown(KeyCode.C))

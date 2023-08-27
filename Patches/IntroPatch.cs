@@ -15,7 +15,7 @@ class SetUpRoleTextPatch
     public static void Postfix(IntroCutscene __instance)
     {
         if (!GameStates.IsModHost) return;
-        new LateTask(() =>
+        _ = new LateTask(() =>
         {
             if (Options.CurrentGameMode == CustomGameMode.SoloKombat)
             {
@@ -237,6 +237,8 @@ class BeginCrewmatePatch
                 break;
 
             case CustomRoles.Workaholic:
+            case CustomRoles.Snitch:
+            case CustomRoles.TaskManager:
                 PlayerControl.LocalPlayer.Data.Role.IntroSound = DestroyableSingleton<HudManager>.Instance.TaskCompleteSound;
                 break;
 
@@ -263,6 +265,28 @@ class BeginCrewmatePatch
                 __instance.ImpostorText.gameObject.SetActive(false);
                 PlayerControl.LocalPlayer.Data.Role.IntroSound = DestroyableSingleton<HudManager>.Instance.TaskCompleteSound;
                 break;
+            case CustomRoles.Sheriff:
+            case CustomRoles.Veteran:
+            case CustomRoles.SwordsMan:
+            case CustomRoles.Minimalism:
+            case CustomRoles.Reverie:
+            case CustomRoles.NiceGuesser:
+                PlayerControl.LocalPlayer.Data.Role.IntroSound = PlayerControl.LocalPlayer.KillSfx;
+                break;
+            case CustomRoles.Swooper:
+            case CustomRoles.Wraith:
+            case CustomRoles.Chameleon:
+                PlayerControl.LocalPlayer.Data.Role.IntroSound = PlayerControl.LocalPlayer.MyPhysics.ImpostorDiscoveredSound;
+                break;
+            case CustomRoles.Addict:
+                PlayerControl.LocalPlayer.Data.Role.IntroSound = ShipStatus.Instance.VentEnterSound;
+                break;
+        /*    case CustomRoles.ParityCop:
+            case CustomRoles.Mediumshiper:
+            case CustomRoles.Mayor:
+            case CustomRoles.Dictator:
+                PlayerControl.LocalPlayer.Data.Role.IntroSound = HudManager.Instance.Chat.messageSound;
+                break; */
         }
 
         if (PlayerControl.LocalPlayer.Is(CustomRoles.Madmate))
@@ -385,7 +409,7 @@ class BeginImpostorPatch
             __instance.overlayHandle.color = Palette.ImpostorRed;
             return true;
         }
-        else if (role is CustomRoles.Sheriff or CustomRoles.SwordsMan or CustomRoles.Medic or CustomRoles.Counterfeiter or CustomRoles.Monarch or CustomRoles.Farseer or CustomRoles.Reverie or CustomRoles.Admirer or CustomRoles.Deputy or CustomRoles.Crusader or CustomRoles.CopyCat)
+        else if (role is CustomRoles.Sheriff or CustomRoles.Jailer or CustomRoles.SwordsMan or CustomRoles.Medic or CustomRoles.Counterfeiter or CustomRoles.Witness or CustomRoles.Monarch or CustomRoles.Farseer or CustomRoles.Reverie or CustomRoles.Admirer or CustomRoles.Deputy or CustomRoles.Crusader or CustomRoles.CopyCat)
         {
             yourTeam = new Il2CppSystem.Collections.Generic.List<PlayerControl>();
             yourTeam.Add(PlayerControl.LocalPlayer);
@@ -394,7 +418,7 @@ class BeginImpostorPatch
             __instance.overlayHandle.color = Palette.CrewmateBlue;
             return false;
         }
-        else if (role is CustomRoles.NSerialKiller or CustomRoles.Jackal or CustomRoles.Seeker or CustomRoles.Agitater or CustomRoles.Occultist or CustomRoles.Shade or CustomRoles.CursedSoul or CustomRoles.Pirate or CustomRoles.Amnesiac or CustomRoles.Arsonist or CustomRoles.Sidekick or CustomRoles.Innocent or CustomRoles.Pelican or CustomRoles.Pursuer or CustomRoles.Revolutionist or CustomRoles.FFF or CustomRoles.Gamer or CustomRoles.Glitch or CustomRoles.Juggernaut or CustomRoles.DarkHide or CustomRoles.Provocateur or CustomRoles.BloodKnight or CustomRoles.NSerialKiller or CustomRoles.Werewolf or CustomRoles.Maverick or CustomRoles.NWitch or CustomRoles.Shroud or CustomRoles.Totocalcio or CustomRoles.Succubus or CustomRoles.Pelican or CustomRoles.Infectious or CustomRoles.Virus or CustomRoles.Pickpocket or CustomRoles.Traitor or CustomRoles.PlagueBearer or CustomRoles.Pestilence or CustomRoles.Spiritcaller)
+        else if (role is CustomRoles.Romantic or CustomRoles.RuthlessRomantic or CustomRoles.VengefulRomantic or CustomRoles.NSerialKiller or CustomRoles.Jackal or CustomRoles.Seeker or CustomRoles.Agitater or CustomRoles.Occultist or CustomRoles.Shade or CustomRoles.CursedSoul or CustomRoles.Pirate or CustomRoles.Amnesiac or CustomRoles.Arsonist or CustomRoles.Sidekick or CustomRoles.Innocent or CustomRoles.Pelican or CustomRoles.Pursuer or CustomRoles.Revolutionist or CustomRoles.FFF or CustomRoles.Gamer or CustomRoles.Glitch or CustomRoles.Juggernaut or CustomRoles.DarkHide or CustomRoles.Provocateur or CustomRoles.BloodKnight or CustomRoles.NSerialKiller or CustomRoles.Werewolf or CustomRoles.Maverick or CustomRoles.NWitch or CustomRoles.Shroud or CustomRoles.Totocalcio or CustomRoles.Succubus or CustomRoles.Pelican or CustomRoles.Infectious or CustomRoles.Virus or CustomRoles.Pickpocket or CustomRoles.Traitor or CustomRoles.PlagueBearer or CustomRoles.Pestilence or CustomRoles.Spiritcaller)
         {
             yourTeam = new Il2CppSystem.Collections.Generic.List<PlayerControl>();
             yourTeam.Add(PlayerControl.LocalPlayer);
@@ -433,13 +457,13 @@ class IntroCutsceneDestroyPatch
             {
                 Main.AllPlayerControls.Do(pc => pc.RpcResetAbilityCooldown());
                 if (Options.FixFirstKillCooldown.GetBool() && Options.CurrentGameMode != CustomGameMode.SoloKombat)
-                    new LateTask(() =>
+                    _ = new LateTask(() =>
                     {
                         Main.AllPlayerControls.Do(x => x.ResetKillCooldown());
                         Main.AllPlayerControls.Where(x => (Main.AllPlayerKillCooldown[x.PlayerId] - 2f) > 0f).Do(pc => pc.SetKillCooldown(Options.FixKillCooldownValue.GetFloat() - 2f));
                     }, 2f, "FixKillCooldownTask");
             }
-            new LateTask(() => Main.AllPlayerControls.Do(pc => pc.RpcSetRoleDesync(RoleTypes.Shapeshifter, -3)), 2f, "SetImpostorForServer");
+            _ = new LateTask(() => Main.AllPlayerControls.Do(pc => pc.RpcSetRoleDesync(RoleTypes.Shapeshifter, -3)), 2f, "SetImpostorForServer");
             if (PlayerControl.LocalPlayer.Is(CustomRoles.GM))
             {
                 PlayerControl.LocalPlayer.RpcExile();

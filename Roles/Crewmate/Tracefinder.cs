@@ -1,4 +1,5 @@
 using Hazel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -11,14 +12,22 @@ public static class Tracefinder
     private static List<byte> playerIdList = new();
     private static OptionItem VitalsDuration;
     private static OptionItem VitalsCooldown;
+    private static OptionItem ArrowDelayMin;
+    private static OptionItem ArrowDelayMax;
 
     public static void SetupCustomOption()
     {
         SetupRoleOptions(Id, TabGroup.CrewmateRoles, CustomRoles.Tracefinder);
-        VitalsCooldown = FloatOptionItem.Create(Id + 10, "VitalsCooldown", new(1f, 250f, 1f), 5f, TabGroup.CrewmateRoles, false)
+        VitalsCooldown = FloatOptionItem.Create(Id + 10, "VitalsCooldown", new(1f, 60f, 1f), 5f, TabGroup.CrewmateRoles, false)
             .SetParent(CustomRoleSpawnChances[CustomRoles.Tracefinder])
             .SetValueFormat(OptionFormat.Seconds);
-        VitalsDuration = FloatOptionItem.Create(Id + 11, "VitalsDuration", new(1f, 250f, 1f), 25f, TabGroup.CrewmateRoles, false)
+        VitalsDuration = FloatOptionItem.Create(Id + 11, "VitalsDuration", new(1f, 30f, 1f), 25f, TabGroup.CrewmateRoles, false)
+            .SetParent(CustomRoleSpawnChances[CustomRoles.Tracefinder])
+            .SetValueFormat(OptionFormat.Seconds);
+        ArrowDelayMin = FloatOptionItem.Create(Id + 12, "ArrowDelayMin", new(0f, 30f, 1f), 2f, TabGroup.CrewmateRoles, false)
+            .SetParent(CustomRoleSpawnChances[CustomRoles.Tracefinder])
+            .SetValueFormat(OptionFormat.Seconds);
+        ArrowDelayMax = FloatOptionItem.Create(Id + 13, "ArrowDelayMax", new(0f, 30f, 1f), 7f, TabGroup.CrewmateRoles, false)
             .SetParent(CustomRoleSpawnChances[CustomRoles.Tracefinder])
             .SetValueFormat(OptionFormat.Seconds);
     }
@@ -70,13 +79,13 @@ public static class Tracefinder
 
     public static void OnPlayerDead(PlayerControl target)
     {
-        var pos = target.GetTruePosition();
+        Vector2 pos = target.transform.position;
         float minDis = float.MaxValue;
         string minName = "";
         foreach (var pc in Main.AllAlivePlayerControls)
         {
             if (pc.PlayerId == target.PlayerId) continue;
-            var dis = Vector2.Distance(pc.GetTruePosition(), pos);
+            var dis = Vector2.Distance(pc.transform.position, pos);
             if (dis < minDis && dis < 1.5f)
             {
                 minDis = dis;
@@ -84,13 +93,20 @@ public static class Tracefinder
             }
         }
 
-        foreach (var pc in playerIdList)
-        {
-            var player = Utils.GetPlayerById(pc);
-            if (player == null || !player.IsAlive()) continue;
-            LocateArrow.Add(pc, target.transform.position);
-            SendRPC(pc, true, target.transform.position);
-        }
+        float delay;
+        if (ArrowDelayMax.GetFloat() < ArrowDelayMin.GetFloat()) delay = 0f;
+        else delay = IRandom.Instance.Next((int)ArrowDelayMin.GetFloat(), (int)ArrowDelayMax.GetFloat() + 1);
+        delay = Math.Max(delay, 0.15f);
+
+        _ = new LateTask(() => {
+            foreach (var pc in playerIdList)
+            {
+                var player = Utils.GetPlayerById(pc);
+                if (player == null || !player.IsAlive()) continue;
+                LocateArrow.Add(pc, target.transform.position);
+                SendRPC(pc, true, target.transform.position);
+            }
+        }, delay);
 
         Utils.NotifyRoles();
     }

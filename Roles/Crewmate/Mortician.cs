@@ -10,12 +10,15 @@ public static class Mortician
     private static readonly int Id = 7400;
     private static List<byte> playerIdList = new();
 
+    private static OptionItem ShowArrows;
+
     private static Dictionary<byte, string> lastPlayerName = new();
     public static Dictionary<byte, string> msgToSend = new();
 
     public static void SetupCustomOption()
     {
         SetupRoleOptions(Id, TabGroup.CrewmateRoles, CustomRoles.Mortician);
+        ShowArrows = BooleanOptionItem.Create(Id + 2, "ShowArrows", false, TabGroup.CrewmateRoles, false).SetParent(Options.CustomRoleSpawnChances[CustomRoles.Mortician]);
     }
     public static void Init()
     {
@@ -53,13 +56,13 @@ public static class Mortician
     }
     public static void OnPlayerDead(PlayerControl target)
     {
-        var pos = target.GetTruePosition();
+        Vector2 pos = target.transform.position;
         float minDis = float.MaxValue;
         string minName = "";
         foreach (var pc in Main.AllAlivePlayerControls)
         {
             if (pc.PlayerId == target.PlayerId) continue;
-            var dis = Vector2.Distance(pc.GetTruePosition(), pos);
+            var dis = Vector2.Distance(pc.transform.position, pos);
             if (dis < minDis && dis < 1.5f)
             {
                 minDis = dis;
@@ -91,9 +94,13 @@ public static class Mortician
     }
     public static string GetTargetArrow(PlayerControl seer, PlayerControl target = null)
     {
-        if (!seer.Is(CustomRoles.Mortician)) return "";
-        if (target != null && seer.PlayerId != target.PlayerId) return "";
-        if (GameStates.IsMeeting) return "";
-        return Utils.ColorString(Color.white, LocateArrow.GetArrows(seer));
+        if (ShowArrows.GetBool())
+        {
+            if (!seer.Is(CustomRoles.Mortician)) return "";
+            if (target != null && seer.PlayerId != target.PlayerId) return "";
+            if (GameStates.IsMeeting) return "";
+            return Utils.ColorString(Color.white, LocateArrow.GetArrows(seer));
+        }
+        else return "";
     }
 }

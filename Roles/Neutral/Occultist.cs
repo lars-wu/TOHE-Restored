@@ -126,10 +126,7 @@ public static class Occultist
     {
         foreach (var occultist in playerIdList)
         {
-            if (CursedPlayer[occultist].Count != 0)
-            {
-                return true;
-            }
+            if (CursedPlayer[occultist].Count != 0) return true;
         }
         return false;
 
@@ -198,7 +195,7 @@ public static class Occultist
         foreach (var pc in Main.AllAlivePlayerControls)
         {
             var dic = CursedPlayer.Where(x => x.Value.Contains(pc.PlayerId));
-            if (dic.Count() == 0) continue;
+            if (!dic.Any()) continue;
             var whichId = dic.FirstOrDefault().Key;
             var occultist = Utils.GetPlayerById(whichId);
             if (occultist != null && occultist.IsAlive())

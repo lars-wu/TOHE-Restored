@@ -286,6 +286,7 @@ public class PlayerState
         Shrouded,
         Mauled,
         Drained,
+        Shattered,
 
         etc = -1,
     }
@@ -401,9 +402,9 @@ public class TaskState
                     var tar1 = AllAlivePlayer[rd.Next(0, AllAlivePlayer.Count)];
                     AllAlivePlayer.Remove(tar1);
                     var tar2 = AllAlivePlayer[rd.Next(0, AllAlivePlayer.Count)];
-                    var pos = tar1.GetTruePosition();
-                    Utils.TP(tar1.NetTransform, tar2.GetTruePosition());
-                    Utils.TP(tar2.NetTransform, pos);
+                    var posTar1 = tar1.transform.position;
+                    tar1.RpcTeleport(tar2.transform.position);
+                    tar2.RpcTeleport(posTar1);
                     tar1.RPCPlayCustomSound("Teleport");
                     tar2.RPCPlayCustomSound("Teleport");
                     tar1.Notify(Utils.ColorString(Utils.GetRoleColor(CustomRoles.Transporter), string.Format(Translator.GetString("TeleportedByTransporter"), tar2.GetRealName())));
@@ -424,9 +425,65 @@ public class TaskState
 
                 }
             }
+            if (player.Is(CustomRoles.Divinator) && player.IsAlive())
+            {
+                Divinator.CheckLimit[player.PlayerId] += Divinator.AbilityUseGainWithEachTaskCompleted.GetFloat();
+            }
+            if (player.Is(CustomRoles.Veteran) && player.IsAlive())
+            {
+                Main.VeteranNumOfUsed[player.PlayerId] += Options.VeteranAbilityUseGainWithEachTaskCompleted.GetFloat();
+            }
+            if (player.Is(CustomRoles.Grenadier) && player.IsAlive())
+            {
+                Main.GrenadierNumOfUsed[player.PlayerId] += Options.GrenadierAbilityUseGainWithEachTaskCompleted.GetFloat();
+            }
+            if (player.Is(CustomRoles.Lighter) && player.IsAlive())
+            {
+                Main.LighterNumOfUsed[player.PlayerId] += Options.LighterAbilityUseGainWithEachTaskCompleted.GetFloat();
+            }
+            if (player.Is(CustomRoles.DovesOfNeace) && player.IsAlive())
+            {
+                Main.DovesOfNeaceNumOfUsed[player.PlayerId] += Options.DovesOfNeaceAbilityUseGainWithEachTaskCompleted.GetFloat();
+            }
+            if (player.Is(CustomRoles.TimeMaster) && player.IsAlive())
+            {
+                Main.TimeMasterNumOfUsed[player.PlayerId] += Options.TimeMasterAbilityUseGainWithEachTaskCompleted.GetFloat();
+            }
+            if (player.Is(CustomRoles.Mediumshiper) && player.IsAlive())
+            {
+                Mediumshiper.ContactLimit[player.PlayerId] += Mediumshiper.MediumAbilityUseGainWithEachTaskCompleted.GetFloat();
+            }
+            if (player.Is(CustomRoles.ParityCop) && player.IsAlive())
+            {
+                ParityCop.MaxCheckLimit[player.PlayerId] += ParityCop.ParityAbilityUseGainWithEachTaskCompleted.GetFloat();
+            }
+            if (player.Is(CustomRoles.Oracle) && player.IsAlive())
+            {
+                Oracle.CheckLimit[player.PlayerId] += Oracle.OracleAbilityUseGainWithEachTaskCompleted.GetFloat();
+            }
+    /*        if (player.Is(CustomRoles.Cleanser) && player.IsAlive())
+            {
+                Cleanser.CleanserUses[player.PlayerId] += Cleanser.AbilityUseGainWithEachTaskCompleted.GetInt();
+            } */
+            if (player.Is(CustomRoles.SabotageMaster) && player.IsAlive())
+            {
+                SabotageMaster.UsedSkillCount -= SabotageMaster.SMAbilityUseGainWithEachTaskCompleted.GetFloat();
+            }
+            if (player.Is(CustomRoles.Tracker) && player.IsAlive())
+            {
+                Tracker.TrackLimit[player.PlayerId] += Tracker.TrackerAbilityUseGainWithEachTaskCompleted.GetFloat();
+            }
+            if (player.Is(CustomRoles.Bloodhound) && player.IsAlive())
+            {
+                Bloodhound.UseLimit[player.PlayerId] += Bloodhound.BloodhoundAbilityUseGainWithEachTaskCompleted.GetFloat();
+            }
+            if (player.Is(CustomRoles.Chameleon) && player.IsAlive())
+            {
+                Chameleon.UseLimit[player.PlayerId] += Chameleon.ChameleonAbilityUseGainWithEachTaskCompleted.GetFloat();
+            }
 
             if (player.Is(CustomRoles.Ghoul) && (CompletedTasksCount + 1) >= AllTasksCount && player.IsAlive())
-            new LateTask(() =>
+            _ = new LateTask(() =>
             {
                 player.RpcMurderPlayerV3(player);
                 Main.PlayerStates[player.PlayerId].deathReason = PlayerState.DeathReason.Suicide;
@@ -491,7 +548,7 @@ public class TaskState
                 else
                 {
                     {
-                        list = list.OrderBy(x => Vector2.Distance(player.GetTruePosition(), x.GetTruePosition())).ToList();
+                        list = list.OrderBy(x => Vector2.Distance(player.transform.position, x.transform.position)).ToList();
                             var target = list[0];
                         if (!target.Is(CustomRoles.Pestilence))
                         {

@@ -15,7 +15,7 @@ public static class Pirate
     private static Dictionary<byte, bool> DuelDone = new();
     private static int pirateChose, targetChose;
     public static int NumWin = 0;
-    private static List<string> OptionList = new()
+    public static readonly string[] OptionList =
     {
         "Rock",
         "Paper",
@@ -35,7 +35,7 @@ public static class Pirate
                 .SetValueFormat(OptionFormat.Seconds);
         TryHideMsg = BooleanOptionItem.Create(Id + 10, "PirateTryHideMsg", true, TabGroup.NeutralRoles, false).SetParent(Options.CustomRoleSpawnChances[CustomRoles.Pirate])
             .SetColor(Color.green);
-        SuccessfulDuelsToWin = IntegerOptionItem.Create(Id + 11, "SuccessfulDuelsToWin", new(1, 99, 1), 2, TabGroup.NeutralRoles, false).SetParent(Options.CustomRoleSpawnChances[CustomRoles.Pirate])
+        SuccessfulDuelsToWin = IntegerOptionItem.Create(Id + 11, "SuccessfulDuelsToWin", new(1, 20, 1), 2, TabGroup.NeutralRoles, false).SetParent(Options.CustomRoleSpawnChances[CustomRoles.Pirate])
             .SetValueFormat(OptionFormat.Times);
     }
 
@@ -67,7 +67,7 @@ public static class Pirate
         var pc = Utils.GetPlayerById(playerIdList[0]);
         var tpc = Utils.GetPlayerById(PirateTarget);
         if (!tpc.IsAlive()) return;
-        new LateTask(() =>
+        _ = new LateTask(() =>
         {
             Utils.SendMessage(GetString("PirateMeetingMsg"), pc.PlayerId, Utils.ColorString(Utils.GetRoleColor(CustomRoles.Pirate), GetString("PirateTitle")));
             Utils.SendMessage(GetString("PirateTargetMeetingMsg"), tpc.PlayerId, Utils.ColorString(Utils.GetRoleColor(CustomRoles.Pirate), GetString("PirateTitle")));
@@ -88,7 +88,8 @@ public static class Pirate
         Logger.Msg($"{killer.GetNameWithRole()} chose a target {target.GetNameWithRole()}", "Pirate");
         PirateTarget = target.PlayerId;
         DuelDone.Add(PirateTarget, false);
-        killer.RpcGuardAndKill(killer);
+        if (!Options.DisableShieldAnimations.GetBool()) killer.RpcGuardAndKill(killer);
+        else killer.SetKillCooldown();
         return false;
     }
     public static string GetPlunderedMark(byte target, bool isMeeting)
@@ -174,7 +175,7 @@ public static class Pirate
 
             if (DuelDone[pc.PlayerId])
             {
-                new LateTask(() =>
+                _ = new LateTask(() =>
                 {
                     if (!isUI) Utils.SendMessage(GetString("DuelAlreadyDone"), pc.PlayerId);
                     else pc.ShowPopUp(GetString("DuelAlreadyDone"));
@@ -193,7 +194,7 @@ public static class Pirate
                 else
                 {
                     targetChose = rpsOption;
-                    //new LateTask(() =>
+                    //_ = new LateTask(() =>
                     //{
                     //    if (!isUI) Utils.SendMessage(String.Format(GetString("TargetDuelDone"), OptionList[pirateChose]), pc.PlayerId);
                     //    else pc.ShowPopUp(String.Format(GetString("TargetDuelDone"), OptionList[pirateChose]));
@@ -202,7 +203,7 @@ public static class Pirate
                     //DuelDone[pc.PlayerId] = true;
                     //return true;
                 }
-                new LateTask(() =>
+                _ = new LateTask(() =>
                 {
                     if (!isUI) Utils.SendMessage(String.Format(GetString("DuelDone"), OptionList[rpsOption]), pc.PlayerId);
                     else pc.ShowPopUp(String.Format(GetString("DuelDone"), OptionList[rpsOption]));

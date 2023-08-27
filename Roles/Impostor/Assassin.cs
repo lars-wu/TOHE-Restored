@@ -95,11 +95,11 @@ internal static class Assassin
             var target = Utils.GetPlayerById(MarkedPlayer[pc.PlayerId]);
             MarkedPlayer.Remove(pc.PlayerId);
             SendRPC(pc.PlayerId);
-            new LateTask(() =>
+            _ = new LateTask(() =>
             {
                 if (!(target == null || !target.IsAlive() || Pelican.IsEaten(target.PlayerId) || target.inVent || !GameStates.IsInTask))
                 {
-                    Utils.TP(pc.NetTransform, target.GetTruePosition());
+                    pc.RpcTeleport(target.transform.position);
                     pc.ResetKillCooldown();
                     pc.RpcCheckAndMurder(target);
                 }

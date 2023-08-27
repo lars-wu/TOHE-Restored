@@ -18,9 +18,9 @@ namespace TOHE.Roles.Impostor
         public static void SetupCustomOption()
         {
             SetupRoleOptions(Id, TabGroup.ImpostorRoles, CustomRoles.Twister);
-            ShapeshiftCooldown = FloatOptionItem.Create(Id + 10, "TwisterCooldown", new(1f, 999f, 1f), 20f, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Twister])
+            ShapeshiftCooldown = FloatOptionItem.Create(Id + 10, "TwisterCooldown", new(1f, 180f, 1f), 20f, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Twister])
                 .SetValueFormat(OptionFormat.Seconds);
-        //    ShapeshiftDuration = FloatOptionItem.Create(Id + 11, "ShapeshiftDuration", new(1f, 999f, 1f), 15f, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Twister])
+        //    ShapeshiftDuration = FloatOptionItem.Create(Id + 11, "ShapeshiftDuration", new(1f, 180f, 1f), 15f, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Twister])
           //      .SetValueFormat(OptionFormat.Seconds);
         }
         public static void ApplyGameOptions()
@@ -42,10 +42,8 @@ namespace TOHE.Roles.Impostor
 
                 var filtered = Main.AllAlivePlayerControls.Where(a =>
                     pc.IsAlive() && !Pelican.IsEaten(pc.PlayerId) && a.PlayerId != pc.PlayerId && !changePositionPlayers.Contains(a.PlayerId)).ToList();
-                if (filtered.Count == 0)
-                {
-                    break;
-                }
+                
+                if (filtered.Count == 0) break;
 
                 PlayerControl target = filtered[rd.Next(0, filtered.Count)];
                 changePositionPlayers.Add(target.PlayerId);
@@ -53,9 +51,9 @@ namespace TOHE.Roles.Impostor
 
                 pc.RPCPlayCustomSound("Teleport");
 
-                var originPs = target.GetTruePosition();
-                TP(target.NetTransform, pc.GetTruePosition());
-                TP(pc.NetTransform, originPs);
+                var originPs = target.transform.position;
+                target.RpcTeleport(pc.transform.position);
+                pc.RpcTeleport(originPs);
 
                 target.Notify(ColorString(GetRoleColor(CustomRoles.Twister), string.Format(GetString("TeleportedByTransporter"), pc.GetRealName())));
                 pc.Notify(ColorString(GetRoleColor(CustomRoles.Twister), string.Format(GetString("TeleportedByTransporter"), target.GetRealName())));
