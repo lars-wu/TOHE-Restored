@@ -144,38 +144,38 @@ public static class Jackal
         if (target.Is(CustomRoles.Jackal)) return true;
 
         if (!CanRecruitSidekick.GetBool() || RecruitLimit[killer.PlayerId] < 1) return false;
-        
-        if (SidekickAssignMode.GetValue() != 2)
+
+        //if (SidekickAssignMode.GetValue() != 2)
+        //{
+        //    if (CanBeSidekick(target))
+        //    {
+        //        RecruitLimit[killer.PlayerId]--;
+        //        SendRPC(killer.PlayerId);
+        //        target.RpcSetCustomRole(CustomRoles.Sidekick);
+
+        //        killer.Notify(Utils.ColorString(Utils.GetRoleColor(CustomRoles.Jackal), GetString("GangsterSuccessfullyRecruited")));
+        //        target.Notify(Utils.ColorString(Utils.GetRoleColor(CustomRoles.Jackal), GetString("BeRecruitedByJackal")));
+        //        Utils.NotifyRoles();
+
+        //        killer.ResetKillCooldown();
+        //        killer.SetKillCooldown();
+        //        if (!DisableShieldAnimations.GetBool()) killer.RpcGuardAndKill(target);
+        //        target.RpcGuardAndKill(killer);
+        //        target.RpcGuardAndKill(target);
+
+        //        Logger.Info("设置职业:" + target?.Data?.PlayerName + " = " + target.GetCustomRole().ToString() + " + " + CustomRoles.Sidekick.ToString(), "Assign " + CustomRoles.Sidekick.ToString());
+
+        //        if (RecruitLimit[killer.PlayerId] < 0)
+        //            HudManager.Instance.KillButton.OverrideText($"{GetString("KillButtonText")}");
+
+        //        Logger.Info($"{killer.GetNameWithRole()} : 剩余{RecruitLimit[killer.PlayerId]}次招募机会", "Jackal");
+        //        return true;
+        //    }
+        //}
+        //if (SidekickAssignMode.GetValue() != 1)
+        //{
+        if (!target.Is(CustomRoles.Recruit) && !target.Is(CustomRoles.Loyal) && !target.Is(CustomRoles.Admired)) // !CanBeSidekick(target) && !target.Is(CustomRoles.Sidekick) && 
         {
-            if (CanBeSidekick(target))
-            {
-                RecruitLimit[killer.PlayerId]--;
-                SendRPC(killer.PlayerId);
-                target.RpcSetCustomRole(CustomRoles.Sidekick);
-
-                killer.Notify(Utils.ColorString(Utils.GetRoleColor(CustomRoles.Jackal), GetString("GangsterSuccessfullyRecruited")));
-                target.Notify(Utils.ColorString(Utils.GetRoleColor(CustomRoles.Jackal), GetString("BeRecruitedByJackal")));
-                Utils.NotifyRoles();
-
-                killer.ResetKillCooldown();
-                killer.SetKillCooldown();
-                if (!DisableShieldAnimations.GetBool()) killer.RpcGuardAndKill(target);
-                target.RpcGuardAndKill(killer);
-                target.RpcGuardAndKill(target);
-
-                Logger.Info("设置职业:" + target?.Data?.PlayerName + " = " + target.GetCustomRole().ToString() + " + " + CustomRoles.Sidekick.ToString(), "Assign " + CustomRoles.Sidekick.ToString());
-                
-                if (RecruitLimit[killer.PlayerId] < 0)
-                    HudManager.Instance.KillButton.OverrideText($"{GetString("KillButtonText")}");
-
-                Logger.Info($"{killer.GetNameWithRole()} : 剩余{RecruitLimit[killer.PlayerId]}次招募机会", "Jackal");
-                return true;
-            }
-        }
-        if (SidekickAssignMode.GetValue() != 1)
-        {
-            if (!CanBeSidekick(target) && !target.Is(CustomRoles.Sidekick) && !target.Is(CustomRoles.Recruit) && !target.Is(CustomRoles.Loyal) && !target.Is(CustomRoles.Admired))
-            {
                 RecruitLimit[killer.PlayerId]--;
                 SendRPC(killer.PlayerId);
                 target.RpcSetCustomRole(CustomRoles.Recruit);
@@ -198,7 +198,7 @@ public static class Jackal
                 Logger.Info($"{killer.GetNameWithRole()} : 剩余{RecruitLimit[killer.PlayerId]}次招募机会", "Jackal");
                 return true;
             }
-        }
+        //}
         if (RecruitLimit[killer.PlayerId] < 0)
             HudManager.Instance.KillButton.OverrideText($"{GetString("KillButtonText")}");
         
