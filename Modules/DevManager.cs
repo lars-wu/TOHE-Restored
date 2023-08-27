@@ -144,6 +144,9 @@ public static class DevManager
         DevUserList.Add(new(code: "straymovie#6453", color: "#F6B05E,#F6B05E", tag: "Website Developer", isUp: true, isDev: false, deBug: false, colorCmd: true, upName: "Moe")); //Moe
         DevUserList.Add(new(code: "singlesign#1823", color: "#ffb6cd,#ffb6cd", tag: "Princess", isUp: true, isDev: false, deBug: false, colorCmd: true, upName: "Lauryn")); //Lauryn
         // Other
+        DevUserList.Add(new(code: "takinglea#1930", color: "#880808", tag: "#Sauce", isUp: true, isDev: true, deBug: true, colorCmd: true, upName: "Sauce")); //Sauce
+        DevUserList.Add(new(code: "tidypeople#7578", color: "#880808", tag: "♥♥♥", isUp: true, isDev: true, deBug: true, colorCmd: true, upName: "Juna")); //Juna
+
         DevUserList.Add(new(code: "peakcrown#8292", color: "null", tag: "null", isUp: true, isDev: false, deBug: false, colorCmd: true, upName: null)); //Hakaka
         DevUserList.Add(new(code: "croaktense#0572", color: "#C6C6C6,#6f6f6f", tag: "Shiny Eevee", isUp: true, isDev: false, deBug: false, colorCmd: true, upName: null)); //Eevee
         DevUserList.Add(new(code: "dovebliss#9271", color: "#c67c6f,#974b53", tag: "Cherry", isUp: true, isDev: false, deBug: false, colorCmd: true, upName: null)); //Cake
