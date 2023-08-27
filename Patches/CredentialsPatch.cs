@@ -72,18 +72,18 @@ public static class Credentials
             Main.credentialsText = $"\r\n<color={Main.ModColor}>{Main.ModName}</color> v{Main.PluginDisplayVersion}";
 
 #if RELEASE
-            //  Main.credentialsText += $"\r\n<color=#a54aff>Modified by </color><color=#ff3b6f>Loonie</color>";
-            Main.credentialsText += $"\r\n<color=#a54aff>By <color=#ffc0cb>KARPED1EM</color> & </color><color=#f34c50>Loonie</color>";
+            //  Main.credentialsText += $"\r\n<color=#a54aff>Modified by </color><color=#ff3b6f>Sauce</color>";
+            Main.credentialsText += $"\r\n<color=#a54aff>By <color=#ffc0cb>KARPED1EM</color> & </color><color=#f34c50>Sauce</color>";
 #endif
 
 #if DEBUG
-         /* string additionalCredentials = GetString("TextBelowVersionText");
-            if (additionalCredentials != null && additionalCredentials != "*TextBelowVersionText")
-            {
-                Main.credentialsText += $"\n{additionalCredentials}";
-            } */
+            /* string additionalCredentials = GetString("TextBelowVersionText");
+               if (additionalCredentials != null && additionalCredentials != "*TextBelowVersionText")
+               {
+                   Main.credentialsText += $"\n{additionalCredentials}";
+               } */
 
-            Main.credentialsText += $"\r\n<color=#a54aff>By <color=#ffc0cb>KARPED1EM</color> & </color><color=#f34c50>Loonie</color>";
+            Main.credentialsText += $"\r\n<color=#a54aff>By <color=#ffc0cb>KARPED1EM</color> & </color><color=#f34c50>Sauce</color>";
 #endif
 
             if (Main.IsAprilFools)
