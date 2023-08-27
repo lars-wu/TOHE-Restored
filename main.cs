@@ -379,6 +379,7 @@ public class Main : BasePlugin
                 {CustomRoles.Crusader, "#C65C39"},
                 {CustomRoles.Reverie, "#00BFFF"},
                 {CustomRoles.Monitor, "#7223DA"},
+                {CustomRoles.Enigma, "#676798"},
                 //第三陣営役職
                 {CustomRoles.Arsonist, "#ff6633"},
                 {CustomRoles.Agitater, "#F4A460"},
@@ -725,6 +726,7 @@ public enum CustomRoles
     Reverie,
     Lookout,
     Monitor,
+    Enigma,
     //Neutral
     Arsonist,
     Agitater,
