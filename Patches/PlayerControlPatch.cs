@@ -564,12 +564,12 @@ class CheckMurderPatch
                     return false;
             }
         }
-        if (killer.Is(CustomRoles.Werewolf) && !target.Is(CustomRoles.Glitch) && !target.Is(CustomRoles.Pestilence))
+    /*    if (killer.Is(CustomRoles.Werewolf) && !target.Is(CustomRoles.Glitch) && !target.Is(CustomRoles.Pestilence))
         {
                 Main.AllPlayerKillCooldown[killer.PlayerId] = Werewolf.KillCooldownAfterKilling.GetFloat();
                 Main.PlayerStates[target.PlayerId].deathReason = PlayerState.DeathReason.Mauled;
         //    RPC.PlaySoundRPC(killer.PlayerId, Sounds.KillSound);
-        }
+        } */
 
 
 
@@ -702,6 +702,24 @@ class CheckMurderPatch
             //    Main.AllPlayerSpeed[killer.PlayerId] = Options.CultivatorSpeed.GetFloat();
             //}
         }
+
+            if (killer.Is(CustomRoles.Werewolf))
+            {
+                Logger.Info("Werewolf Kill", "Mauled");
+                foreach (var player in Main.AllPlayerControls)
+                {
+                    if (!player.IsAlive() || Pelican.IsEaten(player.PlayerId)) continue;
+                    if (player == killer) continue;
+                    if (player.Is(CustomRoles.Pestilence)) continue;
+                    if (Vector2.Distance(killer.transform.position, player.transform.position) <= Werewolf.MaulRadius.GetFloat())
+                    {
+                        Main.PlayerStates[player.PlayerId].deathReason = PlayerState.DeathReason.Mauled;
+                        player.SetRealKiller(killer);
+                        player.RpcMurderPlayerV3(player);
+                    }
+                }
+            }
+
 
         //==キル処理==
         __instance.RpcMurderPlayerV3(target);
@@ -953,7 +971,7 @@ class CheckMurderPatch
                         }
                     }
                 break;
-            case CustomRoles.NSerialKiller:
+    /*        case CustomRoles.NSerialKiller:
             if (NSerialKiller.ReflectHarmfulInteractions.GetBool())
             {
                 if (killer.Is(CustomRoles.Deputy))
@@ -981,7 +999,7 @@ class CheckMurderPatch
                     Main.PlayerStates[killer.PlayerId].deathReason = PlayerState.DeathReason.Misfire;
                 }
             }
-            break;
+            break; */
             case CustomRoles.TimeMaster:
                 if (Main.TimeMasterInProtect.ContainsKey(target.PlayerId) && killer.PlayerId != target.PlayerId)
                     if (Main.TimeMasterInProtect[target.PlayerId] + Options.TimeMasterSkillDuration.GetInt() >= Utils.GetTimeStamp(DateTime.UtcNow))
@@ -3463,15 +3481,17 @@ class PlayerControlSetRolePatch
         {
             var targetIsKiller = target.Is(CustomRoleTypes.Impostor) || Main.ResetCamPlayerList.Contains(target.PlayerId);
             var ghostRoles = new Dictionary<PlayerControl, RoleTypes>();
+            
             foreach (var seer in Main.AllPlayerControls)
             {
                 var self = seer.PlayerId == target.PlayerId;
                 var seerIsKiller = seer.Is(CustomRoleTypes.Impostor) || Main.ResetCamPlayerList.Contains(seer.PlayerId);
+
                 if (target.Is(CustomRoles.EvilSpirit))
                 {
                     ghostRoles[seer] = RoleTypes.GuardianAngel;
                 }
-                else if((self && targetIsKiller) || (!seerIsKiller && (target.Is(CustomRoleTypes.Impostor) || Main.ResetCamPlayerList.Contains(target.PlayerId) || (target.Is(CustomRoles.Pickpocket)) || (target.Is(CustomRoles.Medusa)) || (target.Is(CustomRoles.Amnesiac)) || (target.Is(CustomRoles.Ritualist)) || (target.Is(CustomRoles.Refugee)))))
+                else if ((self && targetIsKiller) || (!seerIsKiller && target.Is(CustomRoleTypes.Impostor)))
                 {
                     ghostRoles[seer] = RoleTypes.ImpostorGhost;
                 }
