@@ -831,7 +831,7 @@ class MeetingHudStartPatch
         {
             _ = new LateTask(() =>
             {
-                Utils.SendMessage(GetString("Warning.TemporaryAntiBlackoutFix"), 255, Utils.ColorString(Color.blue, GetString("AntiBlackoutFixTitle")));
+                //Utils.SendMessage(GetString("Warning.TemporaryAntiBlackoutFix"), 255, Utils.ColorString(Color.blue, GetString("AntiBlackoutFixTitle")));
 
             }, 5f, "Warning NeutralOverrideExiledPlayer");
         }
