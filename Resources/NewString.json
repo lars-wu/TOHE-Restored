@@ -48419,6 +48419,24 @@
         "11": "",
         "15": ""
     },
+    "EnigmaClueStage1Tasks": {
+        "13": "",
+        "0": "Number of Tasks to complete to see Stage 1 <color=#676798>Clues</color>",
+        "5": "",
+        "14": "",
+        "12": "",
+        "1": "",
+        "2": "",
+        "3": "",
+        "4": "",
+        "6": "",
+        "7": "",
+        "8": "",
+        "9": "",
+        "10": "",
+        "11": "",
+        "15": ""
+    },
     "EnigmaClueStage2Tasks": {
         "13": "",
         "0": "Number of Tasks to complete to see Stage 2 <color=#676798>Clues</color>",
@@ -48817,7 +48835,7 @@
     },
     "EnigmaClueColor2": {
         "13": "",
-        "0": "",
+        "0": "The Killer has a dark color!",
         "5": "",
         "14": "",
         "12": "",
@@ -48835,7 +48853,7 @@
     },
     "EnigmaClueLocation": {
         "13": "",
-        "0": "The Killer has a dark color!",
+        "0": "The Last Room the Killer was in is {0}!",
         "5": "",
         "14": "",
         "12": "",
@@ -48853,7 +48871,7 @@
     },
     "EnigmaClueStatus1": {
         "13": "",
-        "0": "The Last Room the Killer was in is {0}!",
+        "0": "The Killer is currently inside a Vent!",
         "5": "",
         "14": "",
         "12": "",
@@ -48871,24 +48889,6 @@
     },
     "EnigmaClueStatus2": {
         "13": "",
-        "0": "The Killer is currently inside a Vent!",
-        "5": "",
-        "14": "",
-        "12": "",
-        "1": "",
-        "2": "",
-        "3": "",
-        "4": "",
-        "6": "",
-        "7": "",
-        "8": "",
-        "9": "",
-        "10": "",
-        "11": "",
-        "15": ""
-    },
-    "EnigmaClueStatus3": {
-        "13": "",
         "0": "The Killer is currently on a Ladder!",
         "5": "",
         "14": "",
@@ -48905,7 +48905,7 @@
         "11": "",
         "15": ""
     },
-    "EnigmaClueStage2Tasks": {
+    "EnigmaClueStatus3": {
         "13": "",
         "0": "The Killer is already Dead!",
         "5": "",
