@@ -11,16 +11,19 @@ namespace TOHE;
 public static class AntiBlackout
 {
     ///<summary>
-    ///追放処理を上書きするかどうか
+    ///Whether to override the expulsion process due to one Impostor and Neutral killers / Covens
     ///</summary>
-    public static bool OverrideExiledPlayer => IsRequired && IsSingleImpostor;
-    //public static bool OverrideExiledPlayer => IsRequired && (IsSingleImpostor || Diff_CrewImp == 1);
+    public static bool ImpostorOverrideExiledPlayer => IsRequired && (IsSingleImpostor || Diff_CrewImp == 1);
     ///<summary>
-    ///インポスターが一人しか存在しない設定かどうか
+    ///Whether to override the expulsion process due to Neutral Killers or Covens
     ///</summary>
-    public static bool IsSingleImpostor => (Main.RealOptionsData != null ? Main.RealOptionsData.GetInt(Int32OptionNames.NumImpostors) : Main.NormalOptions.NumImpostors) <= 1;
+    public static bool NeutralOverrideExiledPlayer => Options.TemporaryAntiBlackoutFix.GetBool() && CountNeutralKiller > 1 && !(IsSingleImpostor || Diff_CrewImp == 1);
     ///<summary>
-    ///AntiBlackout内の処理が必要であるかどうか
+    ///Whether there is only one impostors present in the setting
+    ///</summary>
+    public static bool IsSingleImpostor => Main.RealOptionsData != null ? Main.RealOptionsData.GetInt(Int32OptionNames.NumImpostors) <= 1 : Main.NormalOptions.NumImpostors <= 1;
+    ///<summary>
+    ///Whether processing within AntiBlackout is required
     ///</summary>
     public static bool IsRequired => Options.NoGameEnd.GetBool()
         // Neutrals
@@ -33,9 +36,9 @@ public static class AntiBlackout
         || Gamer.IsEnable || Succubus.IsEnable
         || NWitch.IsEnable || Maverick.IsEnable
         || Shade.IsEnable || RuthlessRomantic.IsEnable
-        || Spiritcaller.IsEnable || CustomRoles.Arsonist.RoleExist()
-        || PlagueBearer.IsEnable || CustomRoles.Pestilence.RoleExist()
-        || CustomRoles.Sidekick.RoleExist() || Occultist.IsEnable
+        || Spiritcaller.IsEnable || Occultist.IsEnable
+        || PlagueBearer.IsEnable || CustomRoles.Pestilence.RoleExist(true)
+        || CustomRoles.Sidekick.RoleExist(true) || (CustomRoles.Arsonist.RoleExist(true) && Options.ArsonistKeepsGameGoing.GetBool())
         // Covens
         || Banshee.IsEnable || CovenLeader.IsEnable
         || HexMaster.IsEnable || Jinx.IsEnable
@@ -43,20 +46,40 @@ public static class AntiBlackout
         || PotionMaster.IsEnable || Wraith.IsEnable
         || Necromancer.IsEnable;
     ///<summary>
-    ///インポスター以外の人数とインポスターの人数の差
+    ///Difference between the number of non-impostors and the number of imposters
     ///</summary>
     public static int Diff_CrewImp
     {
         get
         {
-            int numImpostors = 0;
             int numCrewmates = 0;
+            int numImpostors = 0;
+
             foreach (var pc in Main.AllPlayerControls)
             {
                 if (pc.Data.Role.IsImpostor) numImpostors++;
                 else numCrewmates++;
             }
+
+            Logger.Info($" {numCrewmates}", "AntiBlackout Num Crewmates");
+            Logger.Info($" {numImpostors}", "AntiBlackout Num Impostors");
             return numCrewmates - numImpostors;
+        }
+    }
+    public static int CountNeutralKiller
+    {
+        get
+        {
+            int numNeutrals = 0;
+
+            foreach (var pc in Main.AllPlayerControls)
+            {
+                if ((pc.GetCustomRole().IsNK() && !pc.Is(CustomRoles.Arsonist)) || pc.GetCustomRole().IsCoven()) numNeutrals++;
+                else if (pc.Is(CustomRoles.Arsonist) && Options.ArsonistKeepsGameGoing.GetBool()) numNeutrals++;
+            }
+
+            Logger.Info($" {numNeutrals}", "AntiBlackout Num Neutrals");
+            return numNeutrals;
         }
     }
     public static bool IsCached { get; private set; } = false;
@@ -103,7 +126,7 @@ public static class AntiBlackout
     {
         logger.Info($"SendGameData is called from {callerMethodName}");
         MessageWriter writer = MessageWriter.Get(SendOption.Reliable);
-        // 書き込み {}は読みやすさのためです。
+        // The writing {} is for readability.
         writer.StartMessage(5); //0x05 GameData
         {
             writer.Write(AmongUsClient.Instance.GameId);
@@ -122,7 +145,7 @@ public static class AntiBlackout
     }
     public static void OnDisconnect(GameData.PlayerInfo player)
     {
-        // 実行条件: クライアントがホストである, IsDeadが上書きされている, playerが切断済み
+        // Execution conditions: Client is the host, IsDead is overridden, player is already disconnected
         if (!AmongUsClient.Instance.AmHost || !IsCached || !player.Disconnected) return;
         isDeadCache[player.PlayerId] = (true, true);
         player.IsDead = player.Disconnected = false;
@@ -130,13 +153,13 @@ public static class AntiBlackout
     }
 
     ///<summary>
-    ///一時的にIsDeadを本来のものに戻した状態でコードを実行します
-    ///<param name="action">実行内容</param>
+    ///Execute the code with IsDead temporarily set back to what it should be
+    ///<param name="action">Execution details</param>
     ///</summary>
     public static void TempRestore(Action action)
     {
         logger.Info("==Temp Restore==");
-        //IsDeadが上書きされた状態でTempRestoreが実行されたかどうか
+        // Whether TempRestore was executed with IsDead overwritten
         bool before_IsCached = IsCached;
         try
         {
@@ -145,7 +168,7 @@ public static class AntiBlackout
         }
         catch (Exception ex)
         {
-            logger.Warn("AntiBlackout.TempRestore内で例外が発生しました");
+            logger.Warn("An exception occurred within AntiBlackout.TempRestore");
             logger.Exception(ex);
         }
         finally

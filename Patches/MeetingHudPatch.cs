@@ -63,12 +63,13 @@ class CheckForEndVotingPatch
                         VotedForId = pva.VotedFor
                     });
                     states = statesList.ToArray();
-                    if (AntiBlackout.OverrideExiledPlayer)
+
+                    if (AntiBlackout.NeutralOverrideExiledPlayer || AntiBlackout.ImpostorOverrideExiledPlayer)
                     {
-                        __instance.RpcVotingComplete(states, null, true);
+                        __instance.RpcVotingComplete(states.ToArray(), null, true);
                         ExileControllerWrapUpPatch.AntiBlackout_LastExiled = voteTarget.Data;
                     }
-                    else __instance.RpcVotingComplete(states, voteTarget.Data, false); //通常処理
+                    else __instance.RpcVotingComplete(states.ToArray(), voteTarget.Data, false); //通常処理
 
                     Logger.Info($"{voteTarget.GetNameWithRole()} 被独裁者驱逐", "Dictator");
                     CheckForDeathOnExile(PlayerState.DeathReason.Vote, pva.VotedFor);
@@ -313,12 +314,12 @@ class CheckForEndVotingPatch
             exiledPlayer?.Object.SetRealKiller(null);
 
             //RPC
-            if (AntiBlackout.OverrideExiledPlayer)
+            if (AntiBlackout.NeutralOverrideExiledPlayer || AntiBlackout.ImpostorOverrideExiledPlayer)
             {
-                __instance.RpcVotingComplete(states, null, true);
+                __instance.RpcVotingComplete(states.ToArray(), null, true);
                 ExileControllerWrapUpPatch.AntiBlackout_LastExiled = exiledPlayer;
             }
-            else __instance.RpcVotingComplete(states, exiledPlayer, tie); //通常処理
+            else __instance.RpcVotingComplete(states.ToArray(), exiledPlayer, tie); // Normal processing
 
             CheckForDeathOnExile(PlayerState.DeathReason.Vote, exileId);
 
@@ -824,13 +825,25 @@ class MeetingHudStartPatch
             Utils.SendMessage(string.Format(GetString("Message.SyncButtonLeft"), Options.SyncedButtonCount.GetFloat() - Options.UsedButtonCount));
             Logger.Info("紧急会议剩余 " + (Options.SyncedButtonCount.GetFloat() - Options.UsedButtonCount) + " 次使用次数", "SyncButtonMode");
         }
-        if (AntiBlackout.OverrideExiledPlayer)
+
+        // AntiBlackout Message
+        if (AntiBlackout.NeutralOverrideExiledPlayer)
+        {
+            _ = new LateTask(() =>
+            {
+                Utils.SendMessage(GetString("Warning.TemporaryAntiBlackoutFix"), 255, Utils.ColorString(Color.blue, GetString("AntiBlackoutFixTitle")));
+
+            }, 5f, "Warning NeutralOverrideExiledPlayer");
+        }
+        else if (AntiBlackout.ImpostorOverrideExiledPlayer)
         {
             _ = new LateTask(() =>
             {
                 Utils.SendMessage(GetString("Warning.OverrideExiledPlayer"), 255, Utils.ColorString(Color.red, GetString("DefaultSystemMessageTitle")));
-            }, 5f, "Warning OverrideExiledPlayer");
+
+            }, 5f, "Warning ImpostorOverrideExiledPlayer");
         }
+
         if (MeetingStates.FirstMeeting) TemplateManager.SendTemplate("OnFirstMeeting", noErr: true);
         TemplateManager.SendTemplate("OnMeeting", noErr: true);
 
@@ -1106,13 +1119,13 @@ class MeetingHudStartPatch
 
             //医生护盾提示
             if (seer.PlayerId == target.PlayerId && (Medic.InProtect(seer.PlayerId) || Medic.TempMarkProtected == seer.PlayerId) && (Medic.WhoCanSeeProtect.GetInt() == 0 || Medic.WhoCanSeeProtect.GetInt() == 2))
-                sb.Append(Utils.ColorString(Utils.GetRoleColor(CustomRoles.Medic), " ●"));
+                sb.Append(Utils.ColorString(Utils.GetRoleColor(CustomRoles.Medic), "✚"));
 
             if (seer.Is(CustomRoles.Medic) && (Medic.InProtect(target.PlayerId) || Medic.TempMarkProtected == target.PlayerId) && (Medic.WhoCanSeeProtect.GetInt() == 0 || Medic.WhoCanSeeProtect.GetInt() == 1))
-                sb.Append(Utils.ColorString(Utils.GetRoleColor(CustomRoles.Medic), " ●"));
+                sb.Append(Utils.ColorString(Utils.GetRoleColor(CustomRoles.Medic), "✚"));
 
             if (seer.Data.IsDead && Medic.InProtect(target.PlayerId) && !seer.Is(CustomRoles.Medic))
-                sb.Append(Utils.ColorString(Utils.GetRoleColor(CustomRoles.Medic), " ●"));
+                sb.Append(Utils.ColorString(Utils.GetRoleColor(CustomRoles.Medic), "✚"));
 
             //赌徒提示
             sb.Append(Totocalcio.TargetMark(seer, target));

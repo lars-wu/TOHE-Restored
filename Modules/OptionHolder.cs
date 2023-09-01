@@ -627,6 +627,9 @@ public static class Options
     public static OptionItem DisableDevicesIgnoreCrewmates;
     public static OptionItem DisableDevicesIgnoreAfterAnyoneDied;
 
+    // Temporary Settings
+    public static OptionItem TemporaryAntiBlackoutFix;
+
     // Maps
     public static OptionItem RandomMapsMode;
     public static OptionItem SkeldChance;
@@ -804,10 +807,12 @@ public static class Options
     public static OptionItem AutoKickStopWords;
     public static OptionItem AutoKickStopWordsAsBan;
     public static OptionItem AutoKickStopWordsTimes;
+    public static OptionItem KickOtherPlatformPlayer;
     public static OptionItem OptKickAndroidPlayer;
-    //public static OptionItem OptKickXboxPlayer;
-    //public static OptionItem OptKickPlayStationPlayer;
-    //public static OptionItem OptKickNintendoPlayer;
+    public static OptionItem OptKickIphonePlayer;
+    public static OptionItem OptKickXboxPlayer;
+    public static OptionItem OptKickPlayStationPlayer;
+    public static OptionItem OptKickNintendoPlayer;
     public static OptionItem ApplyDenyNameList;
     public static OptionItem KickPlayerFriendCodeNotExist;
     public static OptionItem KickLowLevelPlayer;
@@ -1419,6 +1424,14 @@ public static class Options
             .SetValueFormat(OptionFormat.Times);
 
         Tracker.SetupCustomOption();
+        SetupSingleRoleOptions(8550, TabGroup.CrewmateRoles, CustomRoles.Witness, 1);
+        WitnessCD = FloatOptionItem.Create(8552, "AbilityCD", new(0f, 60f, 2.5f), 15f, TabGroup.CrewmateRoles, false)
+            .SetParent(CustomRoleSpawnChances[CustomRoles.Witness])
+            .SetValueFormat(OptionFormat.Seconds);
+        WitnessTime = IntegerOptionItem.Create(8553, "WitnessTime", new(1, 30, 1), 10, TabGroup.CrewmateRoles, false)
+            .SetParent(CustomRoleSpawnChances[CustomRoles.Witness])
+            .SetValueFormat(OptionFormat.Seconds);
+
 
         TextOptionItem.Create(100008, "RoleType.CrewKilling", TabGroup.CrewmateRoles)
             .SetGameMode(CustomGameMode.Standard)
@@ -1467,13 +1480,6 @@ public static class Options
         GGTryHideMsg = BooleanOptionItem.Create(8613, "GuesserTryHideMsg", true, TabGroup.CrewmateRoles, false)
             .SetParent(CustomRoleSpawnChances[CustomRoles.NiceGuesser])
             .SetColor(Color.green);
-        SetupSingleRoleOptions(8550, TabGroup.CrewmateRoles, CustomRoles.Witness, 1);
-        WitnessCD = FloatOptionItem.Create(8552, "AbilityCD", new(0f, 60f, 2.5f), 15f, TabGroup.CrewmateRoles, false)
-            .SetParent(CustomRoleSpawnChances[CustomRoles.Witness])
-            .SetValueFormat(OptionFormat.Seconds);
-        WitnessTime = IntegerOptionItem.Create(8553, "WitnessTime", new(1, 30, 1), 10, TabGroup.CrewmateRoles, false)
-            .SetParent(CustomRoleSpawnChances[CustomRoles.Witness])
-            .SetValueFormat(OptionFormat.Seconds);
 
         TextOptionItem.Create(100009, "RoleType.CrewPower", TabGroup.CrewmateRoles)
             .SetGameMode(CustomGameMode.Standard)
@@ -1566,7 +1572,6 @@ public static class Options
             .SetColor(new Color32(127, 140, 141, byte.MaxValue));
      //   Baker.SetupCustomOption();
         Collector.SetupCustomOption();
-        Succubus.SetupCustomOption();
         SetupRoleOptions(11400, TabGroup.NeutralRoles, CustomRoles.Phantom);
         PhantomCanVent = BooleanOptionItem.Create(11410, "CanVent", false, TabGroup.NeutralRoles, false)
             .SetParent(CustomRoleSpawnChances[CustomRoles.Phantom]);
@@ -1597,6 +1602,7 @@ public static class Options
             .SetParent(CustomRoleSpawnChances[CustomRoles.Revolutionist])
             .SetValueFormat(OptionFormat.Seconds);
         SoulCollector.SetupCustomOption();
+        Succubus.SetupCustomOption();
         SetupRoleOptions(11500, TabGroup.NeutralRoles, CustomRoles.Terrorist);
         CanTerroristSuicideWin = BooleanOptionItem.Create(11510, "CanTerroristSuicideWin", false, TabGroup.NeutralRoles, false)
             .SetParent(CustomRoleSpawnChances[CustomRoles.Terrorist]);
@@ -2195,10 +2201,23 @@ public static class Options
 
         #region 系统设置
 
+        TemporaryAntiBlackoutFix = BooleanOptionItem.Create(44427, "TemporaryAntiBlackoutFix", true, TabGroup.SystemSettings, false)
+            .SetHeader(true)
+            .SetColor(Color.red);
         KickLowLevelPlayer = IntegerOptionItem.Create(19300, "KickLowLevelPlayer", new(0, 100, 1), 0, TabGroup.SystemSettings, false)
             .SetValueFormat(OptionFormat.Level)
             .SetHeader(true);
-        OptKickAndroidPlayer = BooleanOptionItem.Create(19301, "OptKickAndroidPlayer", false, TabGroup.SystemSettings, false);
+        KickOtherPlatformPlayer = BooleanOptionItem.Create(19350, "KickOtherPlatformPlayer", false, TabGroup.SystemSettings, false);
+        OptKickAndroidPlayer = BooleanOptionItem.Create(19351, "OptKickAndroidPlayer", false, TabGroup.SystemSettings, false)
+            .SetParent(KickOtherPlatformPlayer);
+        OptKickIphonePlayer = BooleanOptionItem.Create(19352, "OptKickIphonePlayer", false, TabGroup.SystemSettings, false)
+            .SetParent(KickOtherPlatformPlayer);
+        OptKickXboxPlayer = BooleanOptionItem.Create(19353, "OptKickXboxPlayer", false, TabGroup.SystemSettings, false)
+            .SetParent(KickOtherPlatformPlayer);
+        OptKickPlayStationPlayer = BooleanOptionItem.Create(19354, "OptKickPlayStationPlayer", false, TabGroup.SystemSettings, false)
+            .SetParent(KickOtherPlatformPlayer);
+        OptKickNintendoPlayer = BooleanOptionItem.Create(19355, "OptKickNintendoPlayer", false, TabGroup.SystemSettings, false)
+            .SetParent(KickOtherPlatformPlayer); //Switch
         KickPlayerFriendCodeNotExist = BooleanOptionItem.Create(19302, "KickPlayerFriendCodeNotExist", false, TabGroup.SystemSettings, true);
         ApplyDenyNameList = BooleanOptionItem.Create(19303, "ApplyDenyNameList", true, TabGroup.SystemSettings, true);
         ApplyBanList = BooleanOptionItem.Create(19304, "ApplyBanList", true, TabGroup.SystemSettings, true);

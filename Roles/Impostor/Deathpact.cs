@@ -56,15 +56,14 @@ namespace TOHE.Roles.Impostor
             DeathpactTime = new();
             ActiveDeathpacts = new();
         }
-
-        public static bool IsEnable => playerIdList.Any();
-
         public static void Add(byte playerId)
         {
             playerIdList.Add(playerId);
             PlayersInDeathpact.TryAdd(playerId, new List<PlayerControl>());
             DeathpactTime.TryAdd(playerId, 0);
         }
+
+        public static bool IsEnable => playerIdList.Any();
 
         public static void ApplyGameOptions()
         {
@@ -191,6 +190,7 @@ namespace TOHE.Roles.Impostor
 
         public static string GetDeathpactPlayerArrow(PlayerControl seer, PlayerControl target = null)
         {
+            if (!IsEnable) return "";
             if (GameStates.IsMeeting) return "";
             if (!ShowArrowsToOtherPlayersInPact.GetBool()) return "";
             if (target != null && seer.PlayerId != target.PlayerId) return "";
