@@ -14543,6 +14543,24 @@
         "11": "",
         "15": ""
     },
+    "EnigmaInfoLong": {
+        "13": "",
+        "0": "(Crewmates):\nAs the Enigma, you get a random clue about the killer's identity in each meeting. The more tasks you complete, the more precise the clues become.",
+        "5": "",
+        "14": "",
+        "12": "",
+        "1": "",
+        "2": "",
+        "3": "",
+        "4": "",
+        "6": "",
+        "7": "",
+        "8": "",
+        "9": "",
+        "10": "",
+        "11": "",
+        "15": ""
+    },
     "WitnessInfoLong": {
         "13": "(船员阵营）:\\n目击者对某人使用击杀按钮时，你会知道他是否在最后 X 秒内被击杀。(X取决于设置）。如果该玩家没使用击杀，会显示个√。相反，使用击杀的玩家会显示⚠",
         "0": "(Crewmates):\\nAs the Witness, when you use your kill button on someone, you will know if they killed in the last X seconds or not. (X depends on the settings)",
@@ -19709,8 +19727,8 @@
         "11": "",
         "15": ""
     },
-	"KickOtherPlatformPlayer": {
-		"13": "踢出使用非PC的玩家",
+    "KickOtherPlatformPlayer": {
+        "13": "踢出使用非PC的玩家",
         "0": "Kick Non-PC players",
         "5": "",
         "14": "踢出使用非電腦平台遊玩的玩家",
@@ -19726,7 +19744,7 @@
         "10": "",
         "11": "",
         "15": ""
-	},
+    },
     "OptKickAndroidPlayer": {
         "13": "踢出使用安卓手机的玩家",
         "0": "Kick Android players",
@@ -19745,7 +19763,7 @@
         "11": "",
         "15": ""
     },
-	"OptKickIphonePlayer": {
+    "OptKickIphonePlayer": {
         "13": "踢出使用苹果手机的玩家",
         "0": "Kick iOS players",
         "5": "",
