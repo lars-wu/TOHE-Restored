@@ -829,11 +829,11 @@ class MeetingHudStartPatch
         // AntiBlackout Message
         if (AntiBlackout.NeutralOverrideExiledPlayer)
         {
-            _ = new LateTask(() =>
-            {
-                //Utils.SendMessage(GetString("Warning.TemporaryAntiBlackoutFix"), 255, Utils.ColorString(Color.blue, GetString("AntiBlackoutFixTitle")));
+            //_ = new LateTask(() =>
+            //{
+            //    Utils.SendMessage(GetString("Warning.TemporaryAntiBlackoutFix"), 255, Utils.ColorString(Color.blue, GetString("AntiBlackoutFixTitle")));
 
-            }, 5f, "Warning NeutralOverrideExiledPlayer");
+            //}, 5f, "Warning NeutralOverrideExiledPlayer");
         }
         else if (AntiBlackout.ImpostorOverrideExiledPlayer)
         {
