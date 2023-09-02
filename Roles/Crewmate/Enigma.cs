@@ -256,7 +256,7 @@ namespace TOHE.Roles.Crewmate
                         case 3:
                             if (showStageClue)
                             {
-                                string tmpName = killerName.Where(a => a.ToString() != letter).ToString();
+                                string tmpName = killerName.Replace(letter, string.Empty);
                                 if (!string.IsNullOrEmpty(tmpName))
                                 { 
                                     letter2 = tmpName[rd.Next(0, tmpName.Length - 1)].ToString();
