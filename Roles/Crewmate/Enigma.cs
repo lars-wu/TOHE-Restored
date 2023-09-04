@@ -148,6 +148,8 @@ namespace TOHE.Roles.Crewmate
             GameData.PlayerOutfit killerOutfit;
             string killerName;
 
+            Logger.Info($"stage:{stage}, clueType:{clueType}, killer:{killer.GetRealName()}", "EnigmaClue");
+
             switch (clueType)
             {
                 case EnigmaClueType.HatClue:
