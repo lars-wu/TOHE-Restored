@@ -7,6 +7,7 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using Object = UnityEngine.Object;
 using static TOHE.Translator;
+using static TOHE.Credentials;
 
 namespace TOHE;
 
@@ -17,7 +18,16 @@ public static class MainMenuManagerPatch
     private static PassiveButton gitHubButton;
     private static PassiveButton discordButton;
     private static PassiveButton websiteButton;
-    private static PassiveButton patreonButton;
+    //private static PassiveButton patreonButton;
+
+    [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.LateUpdate)), HarmonyPostfix]
+    public static void Postfix(MainMenuManager __instance)
+    {
+        if (__instance == null) return;
+        __instance.playButton.transform.gameObject.SetActive(Options.IsLoaded);
+        if (TitleLogoPatch.LoadingHint != null)
+            TitleLogoPatch.LoadingHint.SetActive(!Options.IsLoaded);
+    }
 
     [HarmonyPatch(nameof(MainMenuManager.Start)), HarmonyPostfix, HarmonyPriority(Priority.Normal)]
     public static void StartPostfix(MainMenuManager __instance)
