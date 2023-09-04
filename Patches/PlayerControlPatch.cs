@@ -1302,9 +1302,9 @@ class MurderPlayerPatch
             var rp = pcList[IRandom.Instance.Next(0, pcList.Count)];
             if (!rp.Is(CustomRoles.Pestilence))
             {
-            Main.PlayerStates[rp.PlayerId].deathReason = PlayerState.DeathReason.Revenge;
-            rp.SetRealKiller(target);
-            rp.RpcMurderPlayerV3(rp);
+                Main.PlayerStates[rp.PlayerId].deathReason = PlayerState.DeathReason.Revenge;
+                rp.SetRealKiller(target);
+                rp.RpcMurderPlayerV3(rp);
             }
         }
 
@@ -2134,7 +2134,8 @@ class FixedUpdatePatch
             BountyHunter.FixedUpdate(player);
             Seeker.FixedUpdate(player);
             SerialKiller.FixedUpdate(player);
-            if (GameStates.IsInTask)
+            
+            if (PlagueBearer.IsEnable && GameStates.IsInTask)
                 if (player.Is(CustomRoles.PlagueBearer) && PlagueBearer.IsPlaguedAll(player))
                 {
                     player.RpcSetCustomRole(CustomRoles.Pestilence);
@@ -2146,7 +2147,7 @@ class FixedUpdatePatch
                     PlagueBearer.playerIdList.Remove(player.PlayerId);
                 }
 
-            if (GameStates.IsInTask && Agitater.IsEnable && Agitater.AgitaterHasBombed && Agitater.CurrentBombedPlayer == player.PlayerId)
+            if (Agitater.IsEnable && GameStates.IsInTask && Agitater.AgitaterHasBombed && Agitater.CurrentBombedPlayer == player.PlayerId)
             {
                 if (!player.IsAlive())
                 {
@@ -2178,8 +2179,8 @@ class FixedUpdatePatch
             }
 
 
-            #region 女巫处理
-            if (GameStates.IsInTask && Main.WarlockTimer.ContainsKey(player.PlayerId))//処理を1秒遅らせる
+            #region Warlock Timer
+            if (CustomRoles.Warlock.RoleExist() && GameStates.IsInTask && Main.WarlockTimer.ContainsKey(player.PlayerId))//処理を1秒遅らせる
             {
                 if (player.IsAlive())
                 {
@@ -2197,11 +2198,10 @@ class FixedUpdatePatch
                     Main.WarlockTimer.Remove(player.PlayerId);
                 }
             }
-            //ターゲットのリセット
             #endregion
 
-            #region 纵火犯浇油处理
-            if (GameStates.IsInTask && Main.ArsonistTimer.ContainsKey(player.PlayerId))//アーソニストが誰かを塗っているとき
+            #region Arsonist Timer
+            if (CustomRoles.Arsonist.RoleExist() && GameStates.IsInTask && Main.ArsonistTimer.ContainsKey(player.PlayerId))//アーソニストが誰かを塗っているとき
             {
                 if (!player.IsAlive() || Pelican.IsEaten(player.PlayerId))
                 {
@@ -2248,8 +2248,8 @@ class FixedUpdatePatch
             }
             #endregion
 
-            #region 革命家拉人处理
-            if (GameStates.IsInTask && Main.RevolutionistTimer.ContainsKey(player.PlayerId))//当革命家拉拢一个玩家时
+            #region Revolutionist Timer
+            if (CustomRoles.Revolutionist.RoleExist() && GameStates.IsInTask && Main.RevolutionistTimer.ContainsKey(player.PlayerId))//当革命家拉拢一个玩家时
             {
                 if (!player.IsAlive() || Pelican.IsEaten(player.PlayerId))
                 {
@@ -2301,7 +2301,7 @@ class FixedUpdatePatch
                     }
                 }
             }
-            if (GameStates.IsInTask && player.IsDrawDone() && player.IsAlive())
+            if (CustomRoles.Revolutionist.RoleExist() && GameStates.IsInTask && player.IsDrawDone() && player.IsAlive())
             {
                 if (Main.RevolutionistStart.ContainsKey(player.PlayerId)) //如果存在字典
                 {
@@ -2348,6 +2348,11 @@ class FixedUpdatePatch
             Farseer.OnPostFix(player);
             Addict.FixedUpdate(player);
             Deathpact.OnFixedUpdate(player);
+            Pelican.OnFixedUpdate();
+            Swooper.OnFixedUpdate(player);
+            Wraith.OnFixedUpdate(player);
+            Shade.OnFixedUpdate(player);
+            Chameleon.OnFixedUpdate(player);
 
             if (!lowLoad)
             {
@@ -2403,6 +2408,7 @@ class FixedUpdatePatch
                     CustomWinnerHolder.ResetAndSetWinner(CustomWinner.Mario); //马里奥这个多动症赢了
                     CustomWinnerHolder.WinnerIds.Add(player.PlayerId);
                 }
+
                 if (GameStates.IsInTask && player.Is(CustomRoles.Vulture) && Vulture.BodyReportCount[player.PlayerId] >= Vulture.NumberOfReportsToWin.GetInt())
                 {
                     Vulture.BodyReportCount[player.PlayerId] = Vulture.NumberOfReportsToWin.GetInt();
@@ -2413,24 +2419,19 @@ class FixedUpdatePatch
                 if (Main.AllKillers.TryGetValue(player.PlayerId, out var ktime) && ktime + Options.WitnessTime.GetInt() < Utils.GetTimeStamp()) 
                     Main.AllKillers.Remove(player.PlayerId);
 
-                Pelican.OnFixedUpdate();
                 BallLightning.OnFixedUpdate();
-                Swooper.OnFixedUpdate(player);
-                Wraith.OnFixedUpdate(player);
-                Shade.OnFixedUpdate(player);
-                Chameleon.OnFixedUpdate(player);
                 BloodKnight.OnFixedUpdate(player);
                 Banshee.OnFixedUpdate(player);
                 Wildling.OnFixedUpdate(player);
                 Spiritcaller.OnFixedUpdate(player);
                 Pitfall.OnFixedUpdate(player);
 
-                if (GameStates.IsInTask && player.IsAlive() && Options.LadderDeath.GetBool()) FallFromLadder.FixedUpdate(player);
+                if (Options.LadderDeath.GetBool() && GameStates.IsInTask && player.IsAlive()) FallFromLadder.FixedUpdate(player);
 
-                if (GameStates.IsInGame) LoversSuicide();
+                if (CustomRoles.Lovers.IsEnable() && GameStates.IsInGame) LoversSuicide();
 
-                #region 傀儡师处理
-                if (GameStates.IsInTask && Main.PuppeteerList.ContainsKey(player.PlayerId))
+                #region Puppeteer List
+                if (CustomRoles.Puppeteer.RoleExist(true) && GameStates.IsInTask && Main.PuppeteerList.ContainsKey(player.PlayerId))
                 {
                     if (!player.IsAlive() || Pelican.IsEaten(player.PlayerId))
                     {
@@ -2452,7 +2453,7 @@ class FixedUpdatePatch
                                 }
                             }
                         }
-                        if (targetDistance.Count() != 0)
+                        if (targetDistance.Any())
                         {
                             var min = targetDistance.OrderBy(c => c.Value).FirstOrDefault();//一番値が小さい
                             PlayerControl target = Utils.GetPlayerById(min.Key);
@@ -2473,7 +2474,7 @@ class FixedUpdatePatch
                         }
                     }
                 }
-                if (GameStates.IsInTask && Main.CovenLeaderList.ContainsKey(player.PlayerId))
+                if (CustomRoles.CovenLeader.RoleExist(true) && GameStates.IsInTask && Main.CovenLeaderList.ContainsKey(player.PlayerId))
                 {
                     if (!player.IsAlive() || Pelican.IsEaten(player.PlayerId))
                     {
@@ -2495,7 +2496,7 @@ class FixedUpdatePatch
                                 }
                             }
                         }
-                        if (targetDistance.Count() != 0)
+                        if (targetDistance.Any())
                         {
                             var min = targetDistance.OrderBy(c => c.Value).FirstOrDefault();//一番値が小さい
                             PlayerControl target = Utils.GetPlayerById(min.Key);
@@ -2523,7 +2524,7 @@ class FixedUpdatePatch
                         }
                     }
                 }
-                if (GameStates.IsInTask && Main.TaglockedList.ContainsKey(player.PlayerId))
+                if (CustomRoles.NWitch.RoleExist(true) && GameStates.IsInTask && Main.TaglockedList.ContainsKey(player.PlayerId))
                 {
                     if (!player.IsAlive() || Pelican.IsEaten(player.PlayerId))
                     {
@@ -2545,7 +2546,7 @@ class FixedUpdatePatch
                                 }
                             }
                         }
-                        if (targetDistance.Count() != 0)
+                        if (targetDistance.Any())
                         {
                             var min = targetDistance.OrderBy(c => c.Value).FirstOrDefault();//一番値が小さい
                             PlayerControl target = Utils.GetPlayerById(min.Key);
@@ -2566,7 +2567,7 @@ class FixedUpdatePatch
                         }
                     }
                 }
-                if (GameStates.IsInTask && Main.ShroudList.ContainsKey(player.PlayerId))
+                if (CustomRoles.Shroud.RoleExist(true) && GameStates.IsInTask && Main.ShroudList.ContainsKey(player.PlayerId))
                 {
                     if (!player.IsAlive() || Pelican.IsEaten(player.PlayerId))
                     {
@@ -2991,7 +2992,7 @@ class FixedUpdatePatch
     //FIXME: 役職クラス化のタイミングで、このメソッドは移動予定
     public static void LoversSuicide(byte deathId = 0x7f, bool isExiled = false)
     {
-        if (Options.LoverSuicide.GetBool() && CustomRoles.Lovers.IsEnable() && Main.isLoversDead == false)
+        if (Options.LoverSuicide.GetBool() && Main.isLoversDead == false)
         {
             foreach (var loversPlayer in Main.LoversPlayers)
             {
@@ -3058,15 +3059,12 @@ class EnterVentPatch
         HexMaster.OnEnterVent(pc);
         Occultist.OnEnterVent(pc);
 
-        if (Options.MayorHasPortableButton.GetBool())
+        if (pc.Is(CustomRoles.Mayor) && Options.MayorHasPortableButton.GetBool())
         {
-            if (pc.Is(CustomRoles.Mayor))
+            if (Main.MayorUsedButtonCount.TryGetValue(pc.PlayerId, out var count) && count < Options.MayorNumOfUseButton.GetInt())
             {
-                if (Main.MayorUsedButtonCount.TryGetValue(pc.PlayerId, out var count) && count < Options.MayorNumOfUseButton.GetInt())
-                {
-                    pc?.MyPhysics?.RpcBootFromVent(__instance.Id);
-                    pc?.ReportDeadBody(null);
-                }
+                pc?.MyPhysics?.RpcBootFromVent(__instance.Id);
+                pc?.ReportDeadBody(null);
             }
         }
       /*  if (pc.Is(CustomRoles.Wraith)) // THIS WAS FOR WEREWOLF TESTING PURPOSES, PLEASE IGNORE
@@ -3096,11 +3094,6 @@ class EnterVentPatch
             Main.MarioVentCount.TryAdd(pc.PlayerId, 0);
             Main.MarioVentCount[pc.PlayerId]++;
             Utils.NotifyRoles(SpecifySeer: pc);
-            if (pc.AmOwner)
-            {
-           //     if (Main.MarioVentCount[pc.PlayerId] % 5 == 0) CustomSoundsManager.Play("MarioCoin");
-           //     else CustomSoundsManager.Play("MarioJump");
-            }
             if (AmongUsClient.Instance.AmHost && Main.MarioVentCount[pc.PlayerId] >= Options.MarioVentNumWin.GetInt())
             {
                 CustomWinnerHolder.ResetAndSetWinner(CustomWinner.Mario); //马里奥这个多动症赢了
