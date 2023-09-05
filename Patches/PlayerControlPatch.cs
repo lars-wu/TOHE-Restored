@@ -9,6 +9,7 @@ using Hazel;
 using InnerNet;
 using UnityEngine;
 using TOHE.Modules;
+using TOHE.Patches;
 using TOHE.Roles.AddOns.Crewmate;
 using TOHE.Roles.Crewmate;
 using TOHE.Roles.Impostor;
@@ -3321,10 +3322,8 @@ public static class PlayerControlDiePatch
     public static void Postfix(PlayerControl __instance)
     {
         if (!AmongUsClient.Instance.AmHost) return;
-        if (!GameStates.IsInGame) return;
-        if (!Options.RemovePetsAtDeadPlayers.GetBool()) return;
 
-        __instance.RpcSetPet("");
+        __instance.RpcRemovePet();
     }
 }
 [HarmonyPatch(typeof(GameData), nameof(GameData.CompleteTask))]
