@@ -239,9 +239,9 @@ namespace TOHE.Roles.Crewmate
                             randomLetter = Letters.Where(a => a != letter).ToArray()[rd.Next(0, Letters.Count - 2)];
                             random = rd.Next(1, 2);
                             if (random == 1) 
-                                return string.Format(string.Format(GetString("EnigmaClueName1"), letter, randomLetter));
+                                return string.Format(GetString("EnigmaClueName1"), letter, randomLetter);
                             else 
-                                return string.Format(string.Format(GetString("EnigmaClueName1"), randomLetter, letter));
+                                return string.Format(GetString("EnigmaClueName1"), randomLetter, letter);
                         case 2:
                             if (showStageClue)
                             {
@@ -252,9 +252,9 @@ namespace TOHE.Roles.Crewmate
                             randomLetter = Letters.Where(a => a != letter).ToArray()[rd.Next(0, Letters.Count - 2)];
                             random = rd.Next(1, 2);
                             if (random == 1)
-                                return string.Format(string.Format(GetString("EnigmaClueName1"), letter, randomLetter));
+                                return string.Format(GetString("EnigmaClueName1"), letter, randomLetter);
                             else
-                                return string.Format(string.Format(GetString("EnigmaClueName1"), randomLetter, letter));
+                                return string.Format(GetString("EnigmaClueName1"), randomLetter, letter);
                         case 3:
                             if (showStageClue)
                             {
@@ -275,9 +275,9 @@ namespace TOHE.Roles.Crewmate
                             randomLetter = Letters.Where(a => a != letter).ToArray()[rd.Next(0, Letters.Count - 2)];
                             random = rd.Next(1, 2);
                             if (random == 1)
-                                return string.Format(string.Format(GetString("EnigmaClueName1"), letter, randomLetter));
+                                return string.Format(GetString("EnigmaClueName1"), letter, randomLetter);
                             else
-                                return string.Format(string.Format(GetString("EnigmaClueName1"), randomLetter, letter));
+                                return string.Format(GetString("EnigmaClueName1"), randomLetter, letter);
                     }
 
                     break;
@@ -312,7 +312,7 @@ namespace TOHE.Roles.Crewmate
 
                         case 3:
                             if (showStageClue)
-                                return string.Format(string.Format(GetString("EnigmaClueNameLength2")), length);
+                                return string.Format(GetString("EnigmaClueNameLength2"), length);
 
                             if (rd.Next(0, 100) < EnigmaClueStage2Probability.GetInt())
                             {
@@ -330,7 +330,7 @@ namespace TOHE.Roles.Crewmate
 
                     Logger.Info($"msg:{GetString("EnigmaClueNameLength1")} start: {start}, end: {end}", "EnigmaClue");
 
-                    return string.Format(string.Format(GetString("EnigmaClueNameLength1")), start, end);
+                    return string.Format(GetString("EnigmaClueNameLength1"), start, end);
                 case EnigmaClueType.ColorClue:
                     killerOutfit = Camouflage.PlayerSkins[killer.PlayerId];
 
