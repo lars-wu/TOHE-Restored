@@ -328,6 +328,8 @@ namespace TOHE.Roles.Crewmate
                             break;
                     }
 
+                    Logger.Info($"msg:{GetString("EnigmaClueNameLength1")} start: {start}, end: {end}", "EnigmaClue");
+
                     return string.Format(string.Format(GetString("EnigmaClueNameLength1")), start, end);
                 case EnigmaClueType.ColorClue:
                     killerOutfit = Camouflage.PlayerSkins[killer.PlayerId];
