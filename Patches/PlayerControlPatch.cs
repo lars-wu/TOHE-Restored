@@ -2350,10 +2350,6 @@ class FixedUpdatePatch
             Addict.FixedUpdate(player);
             Deathpact.OnFixedUpdate(player);
             Pelican.OnFixedUpdate();
-            Swooper.OnFixedUpdate(player);
-            Wraith.OnFixedUpdate(player);
-            Shade.OnFixedUpdate(player);
-            Chameleon.OnFixedUpdate(player);
 
             if (!lowLoad)
             {
@@ -2426,6 +2422,10 @@ class FixedUpdatePatch
                 Wildling.OnFixedUpdate(player);
                 Spiritcaller.OnFixedUpdate(player);
                 Pitfall.OnFixedUpdate(player);
+                Swooper.OnFixedUpdate(player);
+                Wraith.OnFixedUpdate(player);
+                Shade.OnFixedUpdate(player);
+                Chameleon.OnFixedUpdate(player);
 
                 if (Options.LadderDeath.GetBool() && GameStates.IsInTask && player.IsAlive()) FallFromLadder.FixedUpdate(player);
 
