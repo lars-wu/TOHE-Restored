@@ -506,6 +506,9 @@ class CheckMurderPatch
                     if (Pursuer.CanBeClient(target) && Pursuer.CanSeel(killer.PlayerId))
                         Pursuer.SeelToClient(killer, target);
                     return false;
+                case CustomRoles.ChiefOfPolice:
+                    ChiefOfPolice.OnCheckMurder(killer, target);
+                    return false;
             }
         }
 
@@ -1647,6 +1650,7 @@ class ReportDeadBodyPatch
             if (target == null) //拍灯事件
             {
                 if (__instance.Is(CustomRoles.Jester) && !Options.JesterCanUseButton.GetBool()) return false;
+                if (__instance.Is(CustomRoles.Swapper) && !Swapper.CanStartMeeting.GetBool()) return false;
             }
             if (target != null) //拍灯事件
             {
@@ -3107,7 +3111,7 @@ class EnterVentPatch
         Main.LastEnteredVent.Remove(pc.PlayerId);
         Main.LastEnteredVent.Add(pc.PlayerId, __instance);
         Main.LastEnteredVentLocation.Remove(pc.PlayerId);
-        Main.LastEnteredVentLocation.Add(pc.PlayerId, new Vector2(pc.transform.position.x, pc.transform.position.y));
+        Main.LastEnteredVentLocation.Add(pc.PlayerId, pc.GetTruePosition());
 
         Swooper.OnEnterVent(pc, __instance);
         Wraith.OnEnterVent(pc, __instance);
