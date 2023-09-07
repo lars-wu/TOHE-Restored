@@ -967,6 +967,12 @@ public static class Utils
             case CustomRoles.Spiritcaller:
                 ProgressText.Append(Spiritcaller.GetSpiritLimit());
                 break;
+            case CustomRoles.Swapper:
+                ProgressText.Append(Swapper.GetSwappermax(playerId));
+                break;
+            case CustomRoles.ChiefOfPolice:
+                ProgressText.Append(ChiefOfPolice.GetSkillLimit(playerId));
+                break; 
             default:
                 //タスクテキスト
                 var taskState = Main.PlayerStates?[playerId].GetTaskState();
@@ -2279,6 +2285,12 @@ public static class Utils
                             if (!seer.IsAlive() && target.IsAlive())
                                 TargetPlayerName = ColorString(GetRoleColor(CustomRoles.Retributionist), target.PlayerId.ToString()) + " " + TargetPlayerName;
                             break;
+
+                        case CustomRoles.Swapper:
+                            if (seer.IsAlive() && target.IsAlive())
+                                TargetPlayerName = ColorString(GetRoleColor(CustomRoles.Swapper), target.PlayerId.ToString()) + " " + TargetPlayerName;
+                            break;
+                    
                     }
 
                   // ========= Only During Meeting =========
@@ -2321,7 +2333,7 @@ public static class Utils
                                 var GetTragetId = ColorString(GetRoleColor(seer.GetCustomRole()), target.PlayerId.ToString()) + " " + TargetPlayerName;
 
                                 //Crewmates
-                                if (Options.CrewmatesCanGuess.GetBool() && seer.GetCustomRole().IsCrewmate() && !seer.Is(CustomRoles.Judge) && !seer.Is(CustomRoles.ParityCop) && !seer.Is(CustomRoles.Lookout))
+                                if (Options.CrewmatesCanGuess.GetBool() && seer.GetCustomRole().IsCrewmate() && !seer.Is(CustomRoles.Judge) && !seer.Is(CustomRoles.ParityCop) && !seer.Is(CustomRoles.Lookout) && !seer.Is(CustomRoles.Swapper))
                                     TargetPlayerName = GetTragetId;
 
                                 else if (seer.Is(CustomRoles.NiceGuesser) && !Options.CrewmatesCanGuess.GetBool())
