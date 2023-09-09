@@ -312,6 +312,9 @@ internal class ChangeRoleSettings
             CustomWinnerHolder.Reset();
             AntiBlackout.Reset();
             NameNotifyManager.Reset();
+            SabotageSystemTypeRepairDamagePatch.Initialize();
+            DoorsReset.Initialize();
+
             IRandom.SetInstanceById(Options.RoleAssigningAlgorithm.GetValue());
 
             MeetingStates.MeetingCalled = false;
