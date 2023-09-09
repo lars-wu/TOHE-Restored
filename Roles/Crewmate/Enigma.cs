@@ -148,13 +148,10 @@ namespace TOHE.Roles.Crewmate
             GameData.PlayerOutfit killerOutfit;
             string killerName;
 
-            Logger.Info($"stage:{stage}, clueType:{clueType}, killer:{killer.GetRealName()}", "EnigmaClue");
-
             switch (clueType)
             {
                 case EnigmaClueType.HatClue:
                     killerOutfit = Camouflage.PlayerSkins[killer.PlayerId];
-                    Logger.Info($"{killerOutfit.HatId}", "EnigmaClue");
                     if (killerOutfit.HatId == "hat_EmptyHat")
                         return GetString("EnigmaClueHat2");
 
@@ -172,7 +169,6 @@ namespace TOHE.Roles.Crewmate
                     break;
                 case EnigmaClueType.VisorClue:
                     killerOutfit = Camouflage.PlayerSkins[killer.PlayerId];
-                    Logger.Info($"{killerOutfit.VisorId}", "EnigmaClue");
                     if (killerOutfit.VisorId == "visor_EmptyVisor")
                         return GetString("EnigmaClueVisor2");
 
@@ -190,7 +186,6 @@ namespace TOHE.Roles.Crewmate
                     break;
                 case EnigmaClueType.SkinClue:
                     killerOutfit = Camouflage.PlayerSkins[killer.PlayerId];
-                    Logger.Info($"{killerOutfit.SkinId}", "EnigmaClue");
                     if (killerOutfit.SkinId == "skin_EmptySkin")
                         return GetString("EnigmaClueSkin2");
 
@@ -208,7 +203,6 @@ namespace TOHE.Roles.Crewmate
                     break;
                 case EnigmaClueType.PetClue:
                     killerOutfit = Camouflage.PlayerSkins[killer.PlayerId];
-                    Logger.Info($"{killerOutfit.PetId}", "EnigmaClue");
                     if (killerOutfit.PetId == "pet_EmptyPet")
                         return GetString("EnigmaCluePet2");
 
@@ -231,8 +225,6 @@ namespace TOHE.Roles.Crewmate
                     string randomLetter;
                     int random;
 
-                    Logger.Info($"Letter1 {letter}", "EnigmaClue");
-
                     switch (stage)
                     {
                         case 1:
@@ -245,7 +237,6 @@ namespace TOHE.Roles.Crewmate
                         case 2:
                             if (showStageClue)
                             {
-                                Logger.Info($"letter = {letter}", "EnigmaClue");
                                 return string.Format(GetString("EnigmaClueName2"), letter);
                             }
 
@@ -262,7 +253,6 @@ namespace TOHE.Roles.Crewmate
                                 if (!string.IsNullOrEmpty(tmpName))
                                 { 
                                     letter2 = tmpName[rd.Next(0, tmpName.Length - 1)].ToString();
-                                    Logger.Info($"tmpName {tmpName} Letter2 {letter2}", "EnigmaClue");
                                 }
 
                                 return string.Format(GetString("EnigmaClueName3"), letter, letter2);
@@ -292,7 +282,6 @@ namespace TOHE.Roles.Crewmate
                     {
                         case 1:
                             start = length - rd.Next(1, length) - 2;
-                            start = start < 0 ? 0 : start;
                             end = length + rd.Next(1, length) + 2;
                             break;
 
@@ -305,7 +294,6 @@ namespace TOHE.Roles.Crewmate
                             else
                             {
                                 start = length - rd.Next(1, length) - 2;
-                                start = start < 0 ? 0 : start;
                                 end = length + rd.Next(1, length) + 2;
                             }
                             break;
@@ -322,13 +310,13 @@ namespace TOHE.Roles.Crewmate
                             else
                             {
                                 start = length - rd.Next(1, length) - 2;
-                                start = start < 0 ? 0 : start;
                                 end = length + rd.Next(1, length) + 2;
                             }
                             break;
                     }
 
-                    Logger.Info($"msg:{GetString("EnigmaClueNameLength1")} start: {start}, end: {end}", "EnigmaClue");
+                    start = start < 0 ? 0 : start;
+                    end = end > 8 ? 8 : end;
 
                     return string.Format(GetString("EnigmaClueNameLength1"), start, end);
                 case EnigmaClueType.ColorClue:
