@@ -129,6 +129,7 @@ public class ModNewsHistory
                             "\n     - Bomber" +
                             "\n     - Medic" +
                             "\n     - Jackal" +
+                            "\n     - Trapster" +
                             "\n     - Mare (is now an add-on)\n\r" +
 
                         "\n\r<b>【Bug Fixes】</b>" +
@@ -146,6 +147,7 @@ public class ModNewsHistory
                             "\n     - Fixed bug where role Tracefinder sometime did not have arrows" +
                             "\n     - Fixed bug when setting \"Neutrals Win Together\" doesn't work" +
                             "\n     - Fixed Bug When Some Neutrals Cant Click Sabotage Button (Host)" +
+                            "\n     - Fixed Bug When Puppeteer and Witch Dont Sees Target Mark" +
                             "\n     - Fixed Zoom" +
                             "\n     - Some fixes black screen" +
                             "\n     - Some Fix for Sheriff" +
@@ -175,6 +177,7 @@ public class ModNewsHistory
                             "\n     - Setting for Oracle that determines the chance of showing an incorrect result" +
                             "\n     - Settings for Mechanic that determine how many uses it takes to fix Reactor/O2 and Lights/Comms" +
                             "\n     - Setting for Swooper, Wraith, Chameleon, and Shade that determines if the player can vent normally when invisibility is on cooldown" +
+                            "\n     - Setting: Bait Can Be Reported Under All Conditions" +
                             "\n     - Chameleon uses the engineer vent cooldown" +
                             "\n     - Vampire and Poisoner now have their cooldowns reset when the bitten/poisoned player dies\n\r" +
 
@@ -203,7 +206,7 @@ public class ModNewsHistory
                             "\n     - Tasks from a crewmate lover now count towards a task win" +
                             "\n     - Infected players now die after a meeting if there's no alive Infectious" +
                             "\n     - Body reports during camouflage is now separated" +
-                            "\n     - Vector, Egoist, Revolutionist, Provocateur, Guesser are no longer experimental" +
+                            "\n     - Trapster, Vector, Egoist, Revolutionist, Provocateur, Guesser are no longer experimental" +
                             "\n     - Added ability to change settings by 5 instead of 1 when holding the Left/Right Shift key" +
                             "\n     - All ability cooldowns are now reset after meetings" +
                             "\n     - Lovers сan not become Sunnyboy" +
@@ -367,6 +370,7 @@ public class ModNewsHistory
                             "\n     - Бомбер" +
                             "\n     - Медик" +
                             "\n     - Шакал" +
+                            "\n     - Ловец" +
                             "\n     - Ночной (теперь это атрибут)\n\r" +
 
                         "\n\r<b>【Исправление Багов】</b>" +
@@ -383,6 +387,7 @@ public class ModNewsHistory
                             "\n     - Исправлена ​​ошибка, из-за которой у роли Искателя иногда не было стрелок" +
                             "\n     - Исправлена ​​ошибка, из-за которой настройка «Нейтралы побеждают вместе» не работала." +
                             "\n     - Исправлена ​​ошибка, когда некоторые нейтральные роли не могли нажать кнопку саботажа (Хост)." +
+                            "\n     - Исправлена ​​ошибка, когда Кукловод и Заклинатель не могли видеть марку у цели." +
                             "\n     - Исправлен сломанный Зум" +
                             "\n     - Некоторые исправления черного экрана (И некоторая защита)" +
                             "\n     - Некоторые исправления у Шерифа" +
@@ -413,6 +418,7 @@ public class ModNewsHistory
                             "\n     - Настройка Оракла, определяющая вероятность отображения неверного результата" +
                             "\n     - Настройки для Ремонтника позволет отнять количество способности при починке саботажа Реактора/O2 и Свет/Связь" +
                             "\n     - Настройка для Невидимки, Wraith, Хамелеона и Shade которая позволяет прыгать в вентиляцию когда невидимость находится в откате" +
+                            "\n     - Настройка: Байт может быть зарепорчен при любых условиях" +
                             "\n     - Хамелеон использует откат вентиляции инженера" +
                             "\n     - Откат Вампира и Отравителя теперь сбрасывается, когда укушенный/отравленный игрок умирает\n\r" +
 
@@ -441,7 +447,7 @@ public class ModNewsHistory
                             "\n     - Задания от Членов Экипажа Любовников теперь засчитываются в счет победы по заданиям" +
                             "\n     - Зараженные игроки теперь умирают после встречи, если в живых нет Заразного" +
                             "\n     - Репорт трупа во время камуфляжа теперь разделены" +
-                            "\n     - Вектор, Эгоист, Революционист, Провокатор, Угадыватель больше не являются эксперементальными ролями" +
+                            "\n     - Ловец, Вектор, Эгоист, Революционист, Провокатор, Угадыватель больше не являются эксперементальными ролями" +
                             "\n     - Добавлена ​​возможность менять настройки на 5 вместо 1 при удержании Левого/Правого Shift." +
                             "\n     - Откат всех способностей теперь сбрасывается после встреч" +
                             "\n     - Любовники больше не могут стать Солнечным Мальчиком" +

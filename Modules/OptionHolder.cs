@@ -18,7 +18,6 @@ namespace TOHE;
 public enum CustomGameMode
 {
     Standard = 0x01,
-    SoloKombat = 0x02,
     All = int.MaxValue
 }
 
@@ -52,13 +51,12 @@ public static class Options
     public static CustomGameMode CurrentGameMode
         => GameMode.GetInt() switch
         {
-            1 => CustomGameMode.SoloKombat,
             _ => CustomGameMode.Standard
         };
 
     public static readonly string[] gameModes =
     {
-        "Standard", "SoloKombat"
+        "Standard"
     };
 
     // MapActive
@@ -224,6 +222,7 @@ public static class Options
     public static OptionItem WorkaholicVisibleToEveryone;
     public static OptionItem WorkaholicGiveAdviceAlive;
     public static OptionItem BaitNotification;
+    public static OptionItem BaitCanBeReportedUnderAllConditions;
     public static OptionItem DoctorVisibleToEveryone;
     public static OptionItem JackalWinWithSidekick;
     public static OptionItem ArsonistDouseTime;
@@ -488,6 +487,10 @@ public static class Options
     public static OptionItem CrewCanBeDoubleShot;
     public static OptionItem NeutralCanBeDoubleShot;
     public static OptionItem MimicCanSeeDeadRoles;
+
+    // Trapster
+    public static OptionItem TrapConsecutiveBodies;
+    public static OptionItem TrapTrapsterBody;
 
     //public static OptionItem NSerialKillerKillCD;
     //public static OptionItem NSerialKillerHasImpostorVision;
@@ -928,7 +931,7 @@ public static class Options
         roleCounts = new Dictionary<CustomRoles, int>();
         roleSpawnChances = new Dictionary<CustomRoles, float>();
 
-        foreach (var role in Enum.GetValues(typeof(CustomRoles)).Cast<CustomRoles>())
+        foreach (var role in CustomRolesHelper.AllRoles)
         {
             roleCounts.Add(role, 0);
             roleSpawnChances.Add(role, 0);
@@ -978,6 +981,7 @@ public static class Options
 
         // 游戏模式
         GameMode = StringOptionItem.Create(1, "GameMode", gameModes, 0, TabGroup.GameSettings, false)
+            .SetHidden(true)
             .SetHeader(true);
 
         #region 职业详细设置
@@ -1171,6 +1175,14 @@ public static class Options
 
         Sniper.SetupCustomOption();
         Witch.SetupCustomOption(); //spellcaster
+        SetupRoleOptions(16500, TabGroup.ImpostorRoles, CustomRoles.BoobyTrap);
+        BTKillCooldown = FloatOptionItem.Create(16515, "KillCooldown", new(2.5f, 180f, 2.5f), 30f, TabGroup.ImpostorRoles, false)
+            .SetParent(CustomRoleSpawnChances[CustomRoles.BoobyTrap])
+            .SetValueFormat(OptionFormat.Seconds);
+        TrapConsecutiveBodies = BooleanOptionItem.Create(16516, "TrapConsecutiveBodies", true, TabGroup.ImpostorRoles, false)
+            .SetParent(CustomRoleSpawnChances[CustomRoles.BoobyTrap]);
+        TrapTrapsterBody = BooleanOptionItem.Create(16517, "TrapTrapsterBody", true, TabGroup.ImpostorRoles, false)
+            .SetParent(CustomRoleSpawnChances[CustomRoles.BoobyTrap]);
         SetupRoleOptions(10025, TabGroup.ImpostorRoles, CustomRoles.Underdog);
         UnderdogMaximumPlayersNeededToKill = IntegerOptionItem.Create(10030, "UnderdogMaximumPlayersNeededToKill", new(1, 15, 1), 5, TabGroup.ImpostorRoles, false)
             .SetParent(CustomRoleSpawnChances[CustomRoles.Underdog])
@@ -1238,7 +1250,7 @@ public static class Options
         MinerSSCD = FloatOptionItem.Create(3614, "ShapeshiftCooldown", new(1f, 180f, 1f), 15f, TabGroup.ImpostorRoles, false)
             .SetParent(CustomRoleSpawnChances[CustomRoles.Miner])
             .SetValueFormat(OptionFormat.Seconds);
-        SetupRoleOptions(3900, TabGroup.ImpostorRoles, CustomRoles.Puppeteer);
+        Puppeteer.SetupCustomOption();
         SetupRoleOptions(4000, TabGroup.ImpostorRoles, CustomRoles.Scavenger);
         ScavengerKillCooldown = FloatOptionItem.Create(4010, "KillCooldown", new(5f, 180f, 2.5f), 40f, TabGroup.ImpostorRoles, false)
             .SetParent(CustomRoleSpawnChances[CustomRoles.Scavenger])
@@ -1760,10 +1772,13 @@ public static class Options
         BaitDelayMax = FloatOptionItem.Create(13714, "BaitDelayMax", new(0f, 10f, 1f), 0f, TabGroup.Addons, false)
             .SetParent(CustomRoleSpawnChances[CustomRoles.Bait])
             .SetValueFormat(OptionFormat.Seconds);
-        BaitDelayNotify = BooleanOptionItem.Create(13715, "BaitDelayNotify", true, TabGroup.Addons, false)
+        BaitDelayNotify = BooleanOptionItem.Create(13715, "BaitDelayNotify", false, TabGroup.Addons, false)
             .SetParent(CustomRoleSpawnChances[CustomRoles.Bait]);
         BaitNotification = BooleanOptionItem.Create(13716, "BaitNotification", false, TabGroup.Addons, false)
             .SetParent(CustomRoleSpawnChances[CustomRoles.Bait]);
+        BaitCanBeReportedUnderAllConditions = BooleanOptionItem.Create(13717, "BaitCanBeReportedUnderAllConditions", false, TabGroup.Addons, false)
+            .SetParent(CustomRoleSpawnChances[CustomRoles.Bait]);
+
         SetupAdtRoleOptions(13800, CustomRoles.Trapper, canSetNum: true);
         ImpCanBeTrapper = BooleanOptionItem.Create(13810, "ImpCanBeTrapper", true, TabGroup.Addons, false)
             .SetParent(CustomRoleSpawnChances[CustomRoles.Trapper]);
@@ -2120,12 +2135,6 @@ public static class Options
         ZombieSpeedReduce = FloatOptionItem.Create(16411, "ZombieSpeedReduce", new(0.0f, 1.0f, 0.1f), 0.1f, TabGroup.OtherRoles, false)
             .SetParent(CustomRoleSpawnChances[CustomRoles.Zombie])
             .SetValueFormat(OptionFormat.Multiplier);
-        SetupRoleOptions(16500, TabGroup.OtherRoles, CustomRoles.BoobyTrap);
-        BTKillCooldown = FloatOptionItem.Create(16510, "KillCooldown", new(2.5f, 180f, 2.5f), 20f, TabGroup.OtherRoles, false)
-            .SetParent(CustomRoleSpawnChances[CustomRoles.BoobyTrap])
-            .SetValueFormat(OptionFormat.Seconds);
-        TrapOnlyWorksOnTheBodyBoobyTrap = BooleanOptionItem.Create(16511, "TrapOnlyWorksOnTheBodyBoobyTrap", true, TabGroup.OtherRoles, false)
-            .SetParent(CustomRoleSpawnChances[CustomRoles.BoobyTrap]);
         SetupRoleOptions(16600, TabGroup.OtherRoles, CustomRoles.Capitalism);
         CapitalismSkillCooldown = FloatOptionItem.Create(16610, "CapitalismSkillCooldown", new(2.5f, 180f, 2.5f), 20f, TabGroup.OtherRoles, false)
             .SetParent(CustomRoleSpawnChances[CustomRoles.Capitalism])
@@ -2322,10 +2331,6 @@ public static class Options
         #endregion 
 
         #region 游戏设置
-
-        //SoloKombat
-        SoloKombatManager.SetupCustomOption();
-
 
         //驱逐相关设定
         TextOptionItem.Create(100023, "MenuTitle.Ejections", TabGroup.GameSettings)
