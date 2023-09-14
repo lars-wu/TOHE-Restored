@@ -57,10 +57,6 @@ internal class ChangeRoleSettings
             Main.RetributionistRevenged = new();
             Main.isCurseAndKill = new();
             Main.isCursed = false;
-            Main.PuppeteerList = new();
-            Main.CovenLeaderList = new();
-            Main.TaglockedList = new();
-            Main.ShroudList = new();
             Main.DetectiveNotify = new();
             Main.SleuthNotify = new();
             Main.ForCrusade = new();
@@ -194,6 +190,7 @@ internal class ChangeRoleSettings
             FireWorks.Init();
             Sniper.Init();
             TimeThief.Init();
+            Puppeteer.Init();
         //    Mare.Init();
             Witch.Init();
             HexMaster.Init();
@@ -291,7 +288,6 @@ internal class ChangeRoleSettings
             Wildling.Init();
             Morphling.Init();
             ParityCop.Init(); // *giggle* party cop
-            Baker.Init();
             Spiritcaller.Init();
             Lurker.Init();
             PlagueBearer.Init();
@@ -308,7 +304,6 @@ internal class ChangeRoleSettings
             ChiefOfPolice.Init();
             Enigma.Init();
 
-            SoloKombatManager.Init();
             CustomWinnerHolder.Reset();
             AntiBlackout.Reset();
             NameNotifyManager.Reset();
@@ -447,14 +442,6 @@ internal class SelectRolesPatch
                 Main.PlayerStates[pc.PlayerId].SetMainRole(role);
             }
 
-            // 个人竞技模式用
-            if (Options.CurrentGameMode == CustomGameMode.SoloKombat)
-            {
-                foreach (var pair in Main.PlayerStates)
-                    ExtendedPlayerControl.RpcSetCustomRole(pair.Key, pair.Value.MainRole);
-                goto EndOfSelectRolePatch;
-            }
-
             var rd = IRandom.Instance;
 
             foreach (var kv in RoleResult)
@@ -522,6 +509,9 @@ internal class SelectRolesPatch
                     case CustomRoles.Camouflager:
                         Camouflager.Add(pc.PlayerId);
                         break;
+                    case CustomRoles.Puppeteer:
+                        Puppeteer.Add();
+                        break;
                     case CustomRoles.Sniper:
                         Sniper.Add(pc.PlayerId);
                         break;
@@ -570,9 +560,6 @@ internal class SelectRolesPatch
                         break;
                     case CustomRoles.Sidekick:
                         Sidekick.Add(pc.PlayerId);
-                        break;
-                    case CustomRoles.Baker:
-                        Baker.Add(pc.PlayerId);
                         break;
                     case CustomRoles.Poisoner:
                         Poisoner.Add(pc.PlayerId);
@@ -894,8 +881,6 @@ internal class SelectRolesPatch
                 }
             }
 
-        EndOfSelectRolePatch:
-
             HudManager.Instance.SetHudActive(true);
       //      HudManager.Instance.Chat.SetVisible(true);
             List<PlayerControl> AllPlayers = new();
@@ -920,9 +905,6 @@ internal class SelectRolesPatch
                 case CustomGameMode.Standard:
                     GameEndChecker.SetPredicateToNormal();
                     break;
-                case CustomGameMode.SoloKombat:
-                    GameEndChecker.SetPredicateToSoloKombat();
-                    break;
             }
 
             GameOptionsSender.AllSenders.Clear();
@@ -934,7 +916,7 @@ internal class SelectRolesPatch
             }
 
             // ResetCamが必要なプレイヤーのリストにクラス化が済んでいない役職のプレイヤーを追加
-            Main.ResetCamPlayerList.AddRange(Main.AllPlayerControls.Where(p => p.GetCustomRole() is CustomRoles.Arsonist or CustomRoles.Ritualist or CustomRoles.Revolutionist or CustomRoles.Sidekick or CustomRoles.Shaman or CustomRoles.KB_Normal).Select(p => p.PlayerId));
+            Main.ResetCamPlayerList.AddRange(Main.AllPlayerControls.Where(p => p.GetCustomRole() is CustomRoles.Arsonist or CustomRoles.Ritualist or CustomRoles.Revolutionist or CustomRoles.Sidekick or CustomRoles.Shaman).Select(p => p.PlayerId));
             Utils.CountAlivePlayers(true);
             Utils.SyncAllSettings();
             SetColorPatch.IsAntiGlitchDisabled = false;

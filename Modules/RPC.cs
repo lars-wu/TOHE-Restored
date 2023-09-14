@@ -12,6 +12,7 @@ using TOHE.Roles.Crewmate;
 using TOHE.Roles.Impostor;
 using TOHE.Roles.Neutral;
 using static TOHE.Translator;
+using static UnityEngine.RemoteConfigSettingsHelper;
 
 namespace TOHE;
 
@@ -120,14 +121,8 @@ enum CustomRPC
     SetSeekerTarget,
     SetSeekerPoints,
     SetPoliceLimlit,
-
-    //SoloKombat
-    SyncKBPlayer,
-    SyncKBBackCountdown,
-    SyncKBNameNotify,
     SetPotionMaster,
     SetChameleonTimer,
-    DoPoison,
     SetAdmireLimit,
     SetRememberLimit,
 }
@@ -234,9 +229,10 @@ internal class RPCHandlerPatch
                         Main.playerVersion[__instance.PlayerId] = Main.playerVersion[0];
 
                     // Kick Unmached Player Start
-                    if (AmongUsClient.Instance.AmHost && tag != $"{ThisAssembly.Git.Commit}({ThisAssembly.Git.Branch})")
+                    if (AmongUsClient.Instance.AmHost)
                     {
-                        if (forkId != Main.ForkId)
+                        if (!IsVersionMatch(__instance.PlayerId))
+                        {
                             _ = new LateTask(() =>
                             {
                                 if (__instance?.Data?.Disconnected is not null and not true)
@@ -247,6 +243,7 @@ internal class RPCHandlerPatch
                                     AmongUsClient.Instance.KickPlayer(__instance.GetClientId(), false);
                                 }
                             }, 5f, "Kick");
+                        }
                     }
                     // Kick Unmached Player End
                 }
@@ -264,10 +261,15 @@ internal class RPCHandlerPatch
                 RPC.RpcVersionCheck();
                 break;
             case CustomRPC.SyncCustomSettings:
-                foreach (var co in OptionItem.AllOptions)
-                {
-                    co.SetValue(reader.ReadInt32());
-                }
+                if (AmongUsClient.Instance.AmHost) break;
+                List<OptionItem> list = new();
+                var startAmount = reader.ReadInt32();
+                var lastAmount = reader.ReadInt32();
+                for (var i = startAmount; i < OptionItem.AllOptions.Count && i <= lastAmount; i++)
+                    list.Add(OptionItem.AllOptions[i]);
+                Logger.Info($"{startAmount}-{lastAmount}:{list.Count}/{OptionItem.AllOptions.Count}", "SyncCustomSettings");
+                foreach (var co in list) co.SetValue(reader.ReadInt32());
+                OptionShower.GetText();
                 break;
             case CustomRPC.SetDeathReason:
                 RPC.GetDeathReason(reader);
@@ -487,20 +489,11 @@ internal class RPCHandlerPatch
                 float time = reader.ReadSingle();
                 PlayerControl.LocalPlayer.SetKillTimer(time);
                 break;
-            case CustomRPC.SyncKBPlayer:
-                SoloKombatManager.ReceiveRPCSyncKBPlayer(reader);
-                break;
             case CustomRPC.SyncAllPlayerNames:
                 Main.AllPlayerNames = new();
                 int num = reader.ReadInt32();
                 for (int i = 0; i < num; i++)
                     Main.AllPlayerNames.TryAdd(reader.ReadByte(), reader.ReadString());
-                break;
-            case CustomRPC.SyncKBBackCountdown:
-                SoloKombatManager.ReceiveRPCSyncBackCountdown(reader);
-                break;
-            case CustomRPC.SyncKBNameNotify:
-                SoloKombatManager.ReceiveRPCSyncNameNotify(reader);
                 break;
             case CustomRPC.SetMorticianArrow:
                 Mortician.ReceiveRPC(reader);
@@ -590,9 +583,6 @@ internal class RPCHandlerPatch
             case CustomRPC.SetVultureArrow:
                 Vulture.ReceiveRPC(reader);
                 break;
-            case CustomRPC.DoPoison:
-                Baker.ReceiveRPC(reader);
-                break;
             case CustomRPC.SetSpiritcallerSpiritLimit:
                 Spiritcaller.ReceiveRPC(reader);
                 break;
@@ -619,26 +609,69 @@ internal class RPCHandlerPatch
                 break;
         }
     }
+
+    private static bool IsVersionMatch(Byte PlayerId)
+    {
+        if (Main.VersionCheat.Value) return true;
+        Version version = Main.playerVersion[PlayerId].version;
+        string tag = Main.playerVersion[PlayerId].tag;
+        string forkId = Main.playerVersion[PlayerId].forkId;
+        
+        if (version != Main.version
+            || tag != $"{ThisAssembly.Git.Commit}({ThisAssembly.Git.Branch})"
+            || forkId != Main.ForkId)
+            return false;
+
+        return true;
+    }
 }
 
 internal static class RPC
 {
     //SyncCustomSettingsRPC Sender
-    public static void SyncCustomSettingsRPC()
+    public static void SyncCustomSettingsRPC(int targetId = -1)
     {
-        if (!AmongUsClient.Instance.AmHost) return;
-        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, 80, Hazel.SendOption.Reliable, -1);
-        foreach (var co in OptionItem.AllOptions)
+        if (targetId != -1)
         {
-            writer.Write(co.GetValue());
+            var client = Utils.GetClientById(targetId);
+            if (client == null || client.Character == null || !Main.playerVersion.ContainsKey(client.Character.PlayerId)) return;
         }
+        if (!AmongUsClient.Instance.AmHost || PlayerControl.AllPlayerControls.Count <= 1 || (AmongUsClient.Instance.AmHost == false && PlayerControl.LocalPlayer == null)) return;
+        var amount = OptionItem.AllOptions.Count;
+        int divideBy = amount / 10;
+        for (var i = 0; i <= 10; i++)
+            SyncOptionsBetween(i * divideBy, (i + 1) * divideBy, targetId);
+    }
+    public static void SyncCustomSettingsRPCforOneOption(OptionItem option)
+    {
+        List<OptionItem> allOptions = new(OptionItem.AllOptions);
+        var placement = allOptions.IndexOf(option);
+        if (placement != -1)
+            SyncOptionsBetween(placement, placement);
+    }
+    static void SyncOptionsBetween(int startAmount, int lastAmount, int targetId = -1)
+    {
+        if (targetId != -1)
+        {
+            var client = Utils.GetClientById(targetId);
+            if (client == null || client.Character == null || !Main.playerVersion.ContainsKey(client.Character.PlayerId)) return;
+        }
+        if (!AmongUsClient.Instance.AmHost || PlayerControl.AllPlayerControls.Count <= 1 || (AmongUsClient.Instance.AmHost == false && PlayerControl.LocalPlayer == null)) return;
+        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, 80, SendOption.Reliable, targetId);
+        List<OptionItem> list = new();
+        writer.Write(startAmount);
+        writer.Write(lastAmount);
+        for (var i = startAmount; i < OptionItem.AllOptions.Count && i <= lastAmount; i++)
+            list.Add(OptionItem.AllOptions[i]);
+        Logger.Info($"{startAmount}-{lastAmount}:{list.Count}/{OptionItem.AllOptions.Count}", "SyncCustomSettings");
+        foreach (var co in list) writer.Write(co.GetValue());
         AmongUsClient.Instance.FinishRpcImmediately(writer);
     }
     public static void PlaySoundRPC(byte PlayerID, Sounds sound)
     {
         if (AmongUsClient.Instance.AmHost)
             PlaySound(PlayerID, sound);
-        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.PlaySound, Hazel.SendOption.Reliable, -1);
+        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.PlaySound, SendOption.Reliable, -1);
         writer.Write(PlayerID);
         writer.Write((byte)sound);
         AmongUsClient.Instance.FinishRpcImmediately(writer);
@@ -765,6 +798,9 @@ internal static class RPC
                 break;
             case CustomRoles.TimeThief:
                 TimeThief.Add(targetId);
+                break;
+            case CustomRoles.Puppeteer:
+                Puppeteer.Add();
                 break;
             case CustomRoles.Sniper:
                 Sniper.Add(targetId);
@@ -956,9 +992,6 @@ internal static class RPC
             case CustomRoles.ParityCop:
                 ParityCop.Add(targetId);
                 break;
-            case CustomRoles.Baker:
-                Baker.Add(targetId);
-                break;
             case CustomRoles.Councillor:
                 Councillor.Add(targetId);
                 break;
@@ -1131,7 +1164,7 @@ internal static class RPC
     }
     public static void RpcDoSpell(byte targetId, byte killerId)
     {
-        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.DoSpell, Hazel.SendOption.Reliable, -1);
+        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.DoSpell, SendOption.Reliable, -1);
         writer.Write(targetId);
         writer.Write(killerId);
         AmongUsClient.Instance.FinishRpcImmediately(writer);
@@ -1139,7 +1172,7 @@ internal static class RPC
     public static void SyncLoversPlayers()
     {
         if (!AmongUsClient.Instance.AmHost) return;
-        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetLoversPlayers, Hazel.SendOption.Reliable, -1);
+        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetLoversPlayers, SendOption.Reliable, -1);
         writer.Write(Main.LoversPlayers.Count);
         foreach (var lp in Main.LoversPlayers)
         {
@@ -1177,7 +1210,7 @@ internal static class RPC
         }
         else
         {
-            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetCurrentDousingTarget, Hazel.SendOption.Reliable, -1);
+            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetCurrentDousingTarget, SendOption.Reliable, -1);
             writer.Write(arsonistId);
             writer.Write(targetId);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
@@ -1191,7 +1224,7 @@ internal static class RPC
         }
         else
         {
-            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetCurrentDrawTarget, Hazel.SendOption.Reliable, -1);
+            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetCurrentDrawTarget, SendOption.Reliable, -1);
             writer.Write(arsonistId);
             writer.Write(targetId);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
@@ -1205,7 +1238,7 @@ internal static class RPC
         }
         else
         {
-            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetCurrentRevealTarget, Hazel.SendOption.Reliable, -1);
+            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetCurrentRevealTarget, SendOption.Reliable, -1);
             writer.Write(arsonistId);
             writer.Write(targetId);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
@@ -1235,7 +1268,7 @@ internal static class RPC
         state.RealKiller.Item2 = killerId;
 
         if (!AmongUsClient.Instance.AmHost) return;
-        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetRealKiller, Hazel.SendOption.Reliable, -1);
+        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetRealKiller, SendOption.Reliable, -1);
         writer.Write(targetId);
         writer.Write(killerId);
         AmongUsClient.Instance.FinishRpcImmediately(writer);
@@ -1257,3 +1290,4 @@ internal class StartRpcImmediatelyPatch
         RPC.SendRpcLogger(targetNetId, callId, targetClientId);
     }
 }
+
