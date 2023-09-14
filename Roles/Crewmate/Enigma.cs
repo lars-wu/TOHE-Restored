@@ -97,6 +97,11 @@ namespace TOHE.Roles.Crewmate
             foreach (var playerId in playerIdList)
             {
                 var enigmaPlayer = Utils.GetPlayerById(playerId);
+                if (enigmaPlayer == null)
+                {
+                    continue;
+                }
+
                 int tasksCompleted = enigmaPlayer.GetPlayerTaskState().CompletedTasksCount;
                 int stage = 0;
                 bool showStageClue = false;
