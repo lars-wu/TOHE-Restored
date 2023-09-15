@@ -26,7 +26,7 @@ namespace TOHE.Roles.Crewmate
             CustomRoles.Brakar, // Tiebreaker
             CustomRoles.Necroview,
             CustomRoles.Bewilder,
-            CustomRoles.Burst,
+            //CustomRoles.Burst,
             CustomRoles.Sleuth,
             CustomRoles.Autopsy,
             CustomRoles.Lucky
@@ -35,9 +35,9 @@ namespace TOHE.Roles.Crewmate
         private static readonly List<CustomRoles> harmfulAddons = new List<CustomRoles>
         {
             CustomRoles.Oblivious,
-            CustomRoles.Sunglasses,
+            //CustomRoles.Sunglasses,
             CustomRoles.VoidBallot,
-            CustomRoles.Fragile,
+            //CustomRoles.Fragile,
             CustomRoles.Unreportable, // Disregarded
             //CustomRoles.Avanger, // Avenger
             //CustomRoles.Diseased,
@@ -47,7 +47,7 @@ namespace TOHE.Roles.Crewmate
         private static readonly List<CustomRoles> neutralAddons = new List<CustomRoles>
         {
             CustomRoles.Guesser,
-            CustomRoles.Diseased,
+            //CustomRoles.Diseased,
             CustomRoles.Antidote,
             CustomRoles.Aware,
             CustomRoles.Gravestone,
