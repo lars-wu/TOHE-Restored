@@ -145,34 +145,34 @@ public static class Jackal
 
         if (!CanRecruitSidekick.GetBool() || RecruitLimit[killer.PlayerId] < 1) return false;
         
-        if (SidekickAssignMode.GetValue() != 2)
-        {
-            if (CanBeSidekick(target))
-            {
-                RecruitLimit[killer.PlayerId]--;
-                SendRPC(killer.PlayerId);
-                target.RpcSetCustomRole(CustomRoles.Sidekick);
+        //if (SidekickAssignMode.GetValue() != 2)
+        //{
+        //    if (CanBeSidekick(target))
+        //    {
+        //        RecruitLimit[killer.PlayerId]--;
+        //        SendRPC(killer.PlayerId);
+        //        target.RpcSetCustomRole(CustomRoles.Sidekick);
 
-                killer.Notify(Utils.ColorString(Utils.GetRoleColor(CustomRoles.Jackal), GetString("GangsterSuccessfullyRecruited")));
-                target.Notify(Utils.ColorString(Utils.GetRoleColor(CustomRoles.Jackal), GetString("BeRecruitedByJackal")));
-                Utils.NotifyRoles();
+        //        killer.Notify(Utils.ColorString(Utils.GetRoleColor(CustomRoles.Jackal), GetString("GangsterSuccessfullyRecruited")));
+        //        target.Notify(Utils.ColorString(Utils.GetRoleColor(CustomRoles.Jackal), GetString("BeRecruitedByJackal")));
+        //        Utils.NotifyRoles();
 
-                killer.ResetKillCooldown();
-                killer.SetKillCooldown();
-                killer.RpcGuardAndKill(target);
-                target.RpcGuardAndKill(killer);
-                target.RpcGuardAndKill(target);
+        //        killer.ResetKillCooldown();
+        //        killer.SetKillCooldown();
+        //        killer.RpcGuardAndKill(target);
+        //        target.RpcGuardAndKill(killer);
+        //        target.RpcGuardAndKill(target);
 
-                Logger.Info("设置职业:" + target?.Data?.PlayerName + " = " + target.GetCustomRole().ToString() + " + " + CustomRoles.Sidekick.ToString(), "Assign " + CustomRoles.Sidekick.ToString());
+        //        Logger.Info("设置职业:" + target?.Data?.PlayerName + " = " + target.GetCustomRole().ToString() + " + " + CustomRoles.Sidekick.ToString(), "Assign " + CustomRoles.Sidekick.ToString());
                 
-                if (RecruitLimit[killer.PlayerId] < 0)
-                    HudManager.Instance.KillButton.OverrideText($"{GetString("KillButtonText")}");
+        //        if (RecruitLimit[killer.PlayerId] < 0)
+        //            HudManager.Instance.KillButton.OverrideText($"{GetString("KillButtonText")}");
 
-                Logger.Info($"{killer.GetNameWithRole()} : 剩余{RecruitLimit[killer.PlayerId]}次招募机会", "Jackal");
-                return true;
-            }
-        }
-        if (SidekickAssignMode.GetValue() != 1)
+        //        Logger.Info($"{killer.GetNameWithRole()} : 剩余{RecruitLimit[killer.PlayerId]}次招募机会", "Jackal");
+        //        return true;
+        //    }
+        //}
+        //if (SidekickAssignMode.GetValue() != 1)
         {
             if (!CanBeSidekick(target) && !target.Is(CustomRoles.Sidekick) && !target.Is(CustomRoles.Recruit) && !target.Is(CustomRoles.Loyal) && !target.Is(CustomRoles.Admired))
             {
