@@ -174,7 +174,7 @@ public static class Jackal
         //}
         //if (SidekickAssignMode.GetValue() != 1)
         {
-            if (!CanBeSidekick(target) && !target.Is(CustomRoles.Sidekick) && !target.Is(CustomRoles.Recruit) && !target.Is(CustomRoles.Loyal) && !target.Is(CustomRoles.Admired))
+            if (!target.Is(CustomRoles.Sidekick) && !target.Is(CustomRoles.Recruit) && !target.Is(CustomRoles.Loyal) && !target.Is(CustomRoles.Admired)) // !CanBeSidekick(target) && 
             {
                 RecruitLimit[killer.PlayerId]--;
                 SendRPC(killer.PlayerId);
