@@ -13,20 +13,22 @@ namespace TOHE.Roles.Impostor
         private static readonly int Id = 4400;
 
         private static OptionItem ShapeshiftCooldown;
-    //    private static OptionItem ShapeshiftDuration;
+        private static OptionItem ShapeshiftDuration;
+        private static OptionItem HideTwistedPlayerNames;
 
         public static void SetupCustomOption()
         {
             SetupRoleOptions(Id, TabGroup.ImpostorRoles, CustomRoles.Twister);
             ShapeshiftCooldown = FloatOptionItem.Create(Id + 10, "TwisterCooldown", new(1f, 999f, 1f), 20f, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Twister])
                 .SetValueFormat(OptionFormat.Seconds);
-        //    ShapeshiftDuration = FloatOptionItem.Create(Id + 11, "ShapeshiftDuration", new(1f, 999f, 1f), 15f, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Twister])
-          //      .SetValueFormat(OptionFormat.Seconds);
+            ShapeshiftDuration = FloatOptionItem.Create(Id + 11, "ShapeshiftDuration", new(1f, 999f, 1f), 10f, TabGroup.ImpostorRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Twister])
+                .SetValueFormat(OptionFormat.Seconds);
+            HideTwistedPlayerNames = BooleanOptionItem.Create(Id + 12, "TwisterHideTwistedPlayerNames", true, TabGroup.OtherRoles, false).SetParent(CustomRoleSpawnChances[CustomRoles.Twister]);
         }
         public static void ApplyGameOptions()
         {
             AURoleOptions.ShapeshifterCooldown = ShapeshiftCooldown.GetFloat();
-            AURoleOptions.ShapeshifterDuration = 1f;
+            AURoleOptions.ShapeshifterDuration = ShapeshiftDuration.GetFloat();
         }
         public static void TwistPlayers(PlayerControl shapeshifter)
         {
@@ -57,8 +59,11 @@ namespace TOHE.Roles.Impostor
                 TP(target.NetTransform, pc.GetTruePosition());
                 TP(pc.NetTransform, originPs);
 
-                target.Notify(ColorString(GetRoleColor(CustomRoles.Twister), string.Format(GetString("TeleportedByTransporter"), pc.GetRealName())));
-                pc.Notify(ColorString(GetRoleColor(CustomRoles.Twister), string.Format(GetString("TeleportedByTransporter"), target.GetRealName())));
+                if (!HideTwistedPlayerNames.GetBool())
+                {
+                    target.Notify(ColorString(GetRoleColor(CustomRoles.Twister), string.Format(GetString("TeleportedByTransporter"), pc.GetRealName())));
+                    pc.Notify(ColorString(GetRoleColor(CustomRoles.Twister), string.Format(GetString("TeleportedByTransporter"), target.GetRealName())));
+                }
             }
         }
     }
