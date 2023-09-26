@@ -18,12 +18,14 @@
 
         public static OptionItem ArrowsPointingToDeadBody;
         public static OptionItem LeaveDeadBodyUnreportable;
+        public static OptionItem InformKillerBeingTracked;
 
         public static void SetupCustomOption()
         {
             SetupRoleOptions(Id, TabGroup.CrewmateRoles, CustomRoles.Bloodhound);
             ArrowsPointingToDeadBody = BooleanOptionItem.Create(Id + 10, "BloodhoundArrowsPointingToDeadBody", true, TabGroup.CrewmateRoles, false).SetParent(Options.CustomRoleSpawnChances[CustomRoles.Bloodhound]);
             LeaveDeadBodyUnreportable = BooleanOptionItem.Create(Id + 11, "BloodhoundLeaveDeadBodyUnreportable", true, TabGroup.CrewmateRoles, false).SetParent(Options.CustomRoleSpawnChances[CustomRoles.Bloodhound]);
+            InformKillerBeingTracked = BooleanOptionItem.Create(Id + 12, "BloodhoundInformKillerBeingTracked", true, TabGroup.CrewmateRoles, false).SetParent(Options.CustomRoleSpawnChances[CustomRoles.Bloodhound]);
         }
         public static void Init()
         {
@@ -113,6 +115,11 @@
             if (LeaveDeadBodyUnreportable.GetBool())
             {
                 UnreportablePlayers.Add(target.PlayerId);
+            }
+
+            if (InformKillerBeingTracked.GetBool())
+            {
+                killer.Notify(GetString("BloodhoundIsTrackingYou"));
             }
         }
 
