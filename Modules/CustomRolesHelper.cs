@@ -427,7 +427,7 @@ internal static class CustomRolesHelper
             CustomRoles.NSerialKiller or
             CustomRoles.Werewolf or
  //           CustomRoles.Ritualist or
-            CustomRoles.Arsonist or
+            CustomRoles.Gamer or
             CustomRoles.Pickpocket or
             CustomRoles.Traitor or
             CustomRoles.Shroud or
@@ -450,7 +450,7 @@ internal static class CustomRolesHelper
             CustomRoles.Shaman or
             CustomRoles.NWitch or
             CustomRoles.CursedSoul or
-            CustomRoles.Gamer or
+            CustomRoles.Arsonist or
             CustomRoles.Doomsayer or
             CustomRoles.Executioner or
             CustomRoles.Innocent or
@@ -491,7 +491,7 @@ internal static class CustomRolesHelper
     {
         return role is
             CustomRoles.CursedSoul or
-            CustomRoles.Gamer or
+            CustomRoles.Arsonist or
             CustomRoles.Doomsayer or
             CustomRoles.Executioner or
             CustomRoles.Innocent or
